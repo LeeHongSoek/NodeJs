@@ -35,6 +35,7 @@ app.get('/club/:clubSn', function (req, res) {
     res.send(`clubSn is (${clubSn})`);
 });
 
+//
 
 app.set('views', __dirname+'/views');
 app.set('view engine','ejs');
