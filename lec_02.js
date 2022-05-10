@@ -1,3 +1,5 @@
+// https://tacademy.skplanet.com/live/player/onlineLectureDetail.action?seq=134
+
 // readline 사용
 var readline = require('readline'); 
 var r = readline.createInterface({ input:process.stdin, output:process.stdout }); 
