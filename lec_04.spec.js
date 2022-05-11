@@ -15,7 +15,8 @@ describe('Get /users',() => {
             .end((err,res)=>{
                 if(err) throw err
                 
-                console.log('res.body 는.. : ',res.body)
+                console.log('res.body 는.. : ',res.body)  // users 출력..
+
                 res.body.should.be.instanceof(Array)  // res.body 가 배열임을 확인한다.
                 res.body.forEach(user => {
                     user.should.have.property('name')  // user의 속성 중 name이 반드시 있어야한다.
