@@ -8,7 +8,6 @@ https://www.youtube.com/playlist?list=PL9mhQYIlKEhfEAgBlIhl7iBKJcHGekml1
 
 https://tacademy.skplanet.com/live/player/onlineLectureDetail.action?seq=134
 
-
 **T아카데미 온라인 강의- [토크ON세미나]Node.js 기반의 REST API 서버 개발 (총7강)
 **[https://tacademy.skplanet.com/live/pl...](https://www.youtube.com/redirect?event=playlist_description&redir_token=QUFFLUhqbHUyNFBGZTU3X2ZUVHZNMm9qUmZQczdRTWx0Z3xBQ3Jtc0tsTmtwazV5SUp5cEJOb01MRFpIVTdLNEE3US1nelpqbWtUQTRDTnJ3VDdPVDIwTWNhSEg5SC1kX0t0bk16Mjc1M3FQNGVXNVpVS1VhWDNUOUFLd0pqUEVvOWRCdUpISjdWbko1cy12NVdYaWZOY3I4WQ&q=https%3A%2F%2Ftacademy.skplanet.com%2Flive%2Fplayer%2FonlineLectureDetail.action%3Fseq%3D134)
 
