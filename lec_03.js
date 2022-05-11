@@ -49,14 +49,15 @@ const server = app.listen(port, () => console.log(`Example app listening on port
 
 // get 요청 라우팅 예제
 app.get("/root", function(req, res){
-    console.log("called root")
-    res.send("Hello world!")
+    console.log("routing /root")
+    res.send("<H>Hello world!</H>")
 })
+
 // curl localhost:3000/subs -v 404에러 확인
 app.get("/error", function(req, res){
-    console.log("called error")
+    console.log("routing /error")
     throw Error(' 여기서 임의로 에러를 발생시켜 보았습니다..!')
-    res.send("Hello world! - sub")
+    res.send("<H>Hello error!</H>")
 })
 
 const users = {name: 'Alice'}

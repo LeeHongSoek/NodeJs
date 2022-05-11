@@ -44,3 +44,10 @@ app.use(logger('dev'))
 app.use(mw)
 app.use(errorMw)
 
+
+// get 요청 라우팅 예제
+app.get("/root", function(req, res){
+    console.log("routing /root")
+    res.send("<H>Hello world!</H>")
+})
+
