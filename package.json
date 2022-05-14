@@ -15,8 +15,8 @@
         "supertest": "^6.2.3"
     },
     "scripts": {
-        "start": "node ./index.js",
-        "test": "mocha ./lec_04.spec.js"
+        "start": "node ./bin/www.js",
+        "test": "mocha ./lec_05.spec.js"
     },
     "repository": {
         "type": "git",
