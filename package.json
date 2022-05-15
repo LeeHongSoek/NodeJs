@@ -16,7 +16,7 @@
     },
     "scripts": {
         "start": "node ./bin/www.js",
-        "test": "mocha ./lec_05.spec.js"
+        "test": "mocha ./lec_06.spec.js"
     },
     "repository": {
         "type": "git",
