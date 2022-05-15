@@ -7,9 +7,9 @@ const users = [{id:1, name: 'Alice'},
                {id:3, name: 'Chris'}
               ] 
 
-app.get("/", (req, res) => { res.send('hello world!')}) 
+app.get('/', (req, res) => { res.send('hello world!')}) 
 
-app.get("/users", (req, res) => { 
+app.get('/users', (req, res) => { 
     req.query.limit = req.query.limit || 10 //  10, "10", "ten" 
     const limit = parseInt(req.query.limit, 10 )
     
