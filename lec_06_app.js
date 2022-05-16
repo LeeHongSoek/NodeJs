@@ -45,7 +45,8 @@ app.get('/users/:id', (req, res) => {
 
 app.delete('/users', (req, res) => {
     if(users.length >0) {
-        users = users.slice(0,0)
+        //users = users.slice(0,0)
+        users = []
         console.log(users)
         return res.status(204).end()
     }
