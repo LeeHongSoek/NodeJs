@@ -3,9 +3,9 @@ const app = express();
 
 // 사용자 정보가 배열 형태로 구성 (웹으로 호출될때마다 초기화가 된다.)
 let users = [{id:1, name: 'Alice'},
-               {id:2, name: 'Bek'},
-               {id:3, name: 'Chris'}
-              ] 
+             {id:2, name: 'Bek'},
+             {id:3, name: 'Chris'}
+            ] 
 
 app.get('/', (req, res) => { res.send('hello world!')}) 
 
@@ -22,7 +22,6 @@ app.get('/users', (req, res) => {
         res.json(users.slice(0,limit))  // user를 리턴
     }    
 })
-
 
 app.get('/users/:id', (req, res) => {
     // id 값을 얻어낸다
@@ -64,6 +63,5 @@ app.delete('/users/:id', (req, res) => {
 
     return res.status(204).end()
 })
-
 
 module.exports = app
