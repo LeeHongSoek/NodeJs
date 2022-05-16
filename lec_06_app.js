@@ -42,6 +42,19 @@ app.get('/users/:id', (req, res) => {
     res.json(user)
 })
 
+
+app.delete('/users', (req, res) => {
+    if(users.length >0) {
+        users = users.slice(0,0)
+        console.log(users)
+        return res.status(204).end()
+    }
+    else {
+        console.log(users)
+        return res.status(404).end()
+    }
+})
+
 app.delete('/users/:id', (req, res) => {
     // id 값을 얻어낸다
     const id = parseInt( req.params.id ,10)
