@@ -1,4 +1,6 @@
-const express = require("express");
+const express = require('express');
+const logger = require('morgan')
+const bodyParser = require('body-parser')
 const app = express();
 
 // 사용자 정보가 배열 형태로 구성 (웹으로 호출될때마다 초기화가 된다.)
@@ -6,6 +8,10 @@ let users = [{id:1, name: 'Alice'},
              {id:2, name: 'Bek'},
              {id:3, name: 'Chris'}
             ] 
+
+app.use(logger('dev'))            
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.get('/', (req, res) => { res.send('hello world!')}) 
 
@@ -78,4 +84,22 @@ app.delete('/users/:id', (req, res) => {
     return res.status(204).end()
 })
 
+app.post('/users', (req, res) => {    
+    const name = req.body.name
+    if (!name)  // 이름이 없다면 400을 리턴한다
+    {
+        return res.status(400).end()        
+    }    
+
+    const found = users.filter(user => user.name === name).length // 중복된이름이 있다면 1
+    if (found){
+        return res.status(409).end()
+    }
+
+    const id = Date.now()
+    const user = {id, name}
+
+    users.push(user)
+    res.status(201).json(user)
+})
 module.exports = app

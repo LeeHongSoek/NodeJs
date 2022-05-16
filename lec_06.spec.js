@@ -1,4 +1,5 @@
 const assert = require('assert')
+const { download } = require('express/lib/response')
 const should = require('should')
 const request = require('supertest')
 const { runInNewContext } = require('vm')
@@ -76,7 +77,7 @@ describe('DELETE /users/:id', () => {
     describe('성공', () => {
         it('id:1을 삭제하고 204를 응답한다.',(done) => {
             request(app)
-                .delete('/users/1')
+                .delete('/users/1') // Alice를 삭제한다.
                 .expect(204)
                 .end(done)
         } )
@@ -93,6 +94,32 @@ describe('DELETE /users/:id', () => {
                 .delete('/users/9')
                 .expect(404)
                 .end(done)
+        })
+    })
+})
+
+describe('POST /users ', () => {
+    describe('성공', () => {
+        it('201을 응답, 생성한 유저 객체를 응답', done => {
+            request(app)
+                .post('/users').send({name: 'Daniel'})
+                .expect(201)
+                .end((err, res) => {
+                    res.body.should.have.property('name','Daniel')
+                    done()
+                })                 
+        })
+    })
+    describe('실패', () => {
+        it('name이 없으면 400 응답', done => {
+            request(app)
+                .post('/users').send({})
+                .expect(400).end(done)
+        })
+        it('name이 중복이면 409 응답', done => {
+            request(app)
+                .post('/users').send({name: 'Chris'})
+                .expect(409).end(done)
         })
     })
 })
