@@ -23,3 +23,47 @@ Node.js 기반 백엔드 개발에 관심있는 대학(원)생, 취업준비생
 
 이 밖에 다양한 IT 강좌를 T아카데미 홈페이지(tacademy.skplanet.com) 및 유투브 채널 (Skplanet Tacademy)에서 만나보실 수 있습니다.
 [https://tacademy.skplanet.co](https://www.youtube.com/redirect?event=playlist_description&redir_token=QUFFLUhqbm5zeVB4WFROR0sxWkZ5cFBsN2lZS0RIOTg1Z3xBQ3Jtc0tsN3h5c1BRWmZkZDN0eTF2MHdWVVRWQURHTkFwaHRnMjJ5Nnl6eDFSREQ2bG91OGlTeThvZk45YngyVkZfS0JqbzdIek93cFdSaEQ1S3hyUEQwZmtYTjZ0bEdHSVk5aG5PbDJDU2VvWVg5d2ZRbmQ2Zw&q=https%3A%2F%2Ftacademy.skplanet.com)
+
+
+
+
+// 서버자원 호출
+
+app.get // 자원을 조회
+
+app.post // 자원을 생성
+
+app.delete  // 자원을 삭제
+
+app.put // 자원을 갱신
+
+app.patch // 자원을 갱신
+
+
+HTTP 상태코드
+
+• 1xx: 아직 처리중
+
+• 2xx: 자, 여기있어!
+
+• 3xx: 잘 가~ (redirect)
+
+• 4xx: 니가 문제임
+
+• 5xx: 내가 문제임
+
+• 200: 성공(success), GET, PUT
+
+• 201: 작성됨(created), POST
+
+• 204: 내용 없음 (No Conent), DELETE
+
+• 400: 잘못된 요청 (Bad Request)
+
+• 401: 권한 없음 (Unauthorized)
+
+• 404: 찾을 수 없음 (Not found)
+
+• 409: 충돌 (Conflict)
+
+• 500: 서버 에러 (Interel server error)
