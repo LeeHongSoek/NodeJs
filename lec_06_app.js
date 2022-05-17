@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require('express')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
-const app = express();
+const app = express()
 
 // 사용자 정보가 배열 형태로 구성 (웹으로 호출될때마다 초기화가 된다.)
 let users = [{id:1, name: 'Alice'},

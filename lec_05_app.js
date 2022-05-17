@@ -1,5 +1,5 @@
-const express = require("express");
-const app = express();
+const express = require("express")
+const app = express()
 
 // 사용자 정보가 배열 형태로 구성
 const users = [{id:1, name: 'Alice'},

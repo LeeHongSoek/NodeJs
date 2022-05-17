@@ -1,7 +1,5 @@
-// https://tacademy.skplanet.com/live/player/onlineLectureDetail.action?seq=134
- 
-const express = require("express");
-const app = express();
+const express = require("express")
+const app = express()
 
 // EXPRESS 서버구동
 //const server = app.listen(3000, () => console.log(`Example app listening on port ${port}`) )
