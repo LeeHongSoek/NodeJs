@@ -5,8 +5,8 @@
 // 아래 URL을 클릭하시면 로그인 되어있는 계정으로 바로 설정 가능합니다.
 // https://myaccount.google.com/lesssecureapps
 
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
+var nodemailer = require('nodemailer')
+var smtpTransport = require('nodemailer-smtp-transport')
  
 var transporter = nodemailer.createTransport(smtpTransport({
   service: 'natemail',
@@ -15,21 +15,21 @@ var transporter = nodemailer.createTransport(smtpTransport({
     user: 'lhs0806@nate.com',
     pass: 'leehs1181!'
   }
-}));
+}))
  
 var mailOptions = {
   from: '이홍석 <lhs0806@nate.com>',
   to: 'lhs0806@gmail.com',
   subject: 'Node.js[nodemailer]을 사용한 test메일',
   text: ' test메일 의 내용입니다.'
-};
+}
  
 transporter.sendMail(mailOptions, function(error, info){
   if (error) {
-    console.log(error);
+    console.log(error)
   } else {
-    console.log('Email sent: ' + info.response);
+    console.log('Email sent: ' + info.response)
   }
-});  
+})  
 
 ///--------------------
