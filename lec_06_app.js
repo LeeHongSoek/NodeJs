@@ -88,7 +88,7 @@ app.delete('/users/:id', (req, res) => {
     return res.status(204).end()
 })
 
-// 일반데이터로 POST 하기     >curl -X POST localhost:3000/users/ -d "name=HongSoek"  
+// 일반데이터로 POST 하기     >curl -X POST localhost:3000/users -d "name=HongSoek"  
 // JSON형식 데이터로 POST하기 >curl -X POST localhost:3000/users -H "Content-Type: application/json" -d "{\"name\":\"Lee_Json\"}"
 app.post('/users', (req, res) => {    
     console.log(req.body)
