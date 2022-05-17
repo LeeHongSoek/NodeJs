@@ -13,8 +13,10 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
+// 사용예 : >curl localhost:3000/
 app.get('/', (req, res) => { res.send('hello world!')}) 
 
+// 사용예 : >curl localhost:3000/users
 app.get('/users', (req, res) => { 
     req.query.limit = req.query.limit || 10 //  10, "10", "ten" 
     const limit = parseInt(req.query.limit, 10 )
@@ -29,6 +31,7 @@ app.get('/users', (req, res) => {
     }    
 })
 
+// 사용예 : >curl localhost:3000/users/1
 app.get('/users/:id', (req, res) => {
     // id 값을 얻어낸다
     const id = parseInt( req.params.id ,10)
@@ -48,7 +51,7 @@ app.get('/users/:id', (req, res) => {
     res.json(user)
 })
 
-
+// 사용예 : >curl -X DELETE localhost:3000/users
 app.delete('/users', (req, res) => {
     if(users.length >0) {
         //users = users.slice(0,0)
@@ -62,6 +65,7 @@ app.delete('/users', (req, res) => {
     }
 })
 
+// 사용예 : >curl -X DELETE localhost:3000/users/1
 app.delete('/users/:id', (req, res) => {
     // id 값을 얻어낸다
     const id = parseInt( req.params.id ,10)
@@ -84,7 +88,10 @@ app.delete('/users/:id', (req, res) => {
     return res.status(204).end()
 })
 
+// 일반데이터로 POST 하기     >curl -X POST localhost:3000/users/ -d "name=HongSoek"  
+// JSON형식 데이터로 POST하기 >curl -X POST localhost:3000/users -H "Content-Type: application/json" -d "{\"name\":\"Lee_Json\"}"
 app.post('/users', (req, res) => {    
+    console.log(req.body)
     const name = req.body.name
     if (!name)  // 이름이 없다면 400을 리턴한다
     {
