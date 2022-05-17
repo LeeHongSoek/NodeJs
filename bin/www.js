@@ -1,4 +1,4 @@
-const app = require('../lec_06_app')
+const app = require('../lec_07_app')
 
 // EXPRESS 서버구동
 const port = 3000
