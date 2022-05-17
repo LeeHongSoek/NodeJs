@@ -1,4 +1,3 @@
-// https://tacademy.skplanet.com/live/player/onlineLectureDetail.action?seq=134
 
 // readline 사용
 var readline = require('readline'); 
@@ -9,35 +8,6 @@ r.question("종료를 하려면 Return키를 누르시요\n", function(answer) {
     server.close();
     process.exit();
 });
-
-
-/*
-// 서버자원 호출 
-
-app.get // 자원을 조회
-app.post // 자원을 생성
-app.delete  // 자원을 삭제
-app.put // 자원을 갱신
-app.patch // 자원을 갱신
-
-HTTP 상태코드
-
-• 1xx: 아직 처리중
-• 2xx: 자, 여기있어!
-• 3xx: 잘 가~ (redirect)
-• 4xx: 니가 문제임
-• 5xx: 내가 문제임
-
-• 200: 성공(success), GET, PUT
-• 201: 작성됨(created), POST
-• 204: 내용 없음 (No Conent), DELETE
-• 400: 잘못된 요청 (Bad Request)
-• 401: 권한 없음 (Unauthorized)
-• 404: 찾을 수 없음 (Not found)
-• 409: 충돌 (Conflict)
-• 500: 서버 에러 (Interel server error)
-
-*/
 
 const express = require("express");
 const app = express();
