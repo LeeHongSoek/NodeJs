@@ -65,8 +65,6 @@ HTTP 상태코드
 • 500: 서버 에러 (Interel server error)
 
 
-
-
 ## 1xx (조건부 응답)[[편집](https://ko.wikipedia.org/w/index.php?title=HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C&action=edit&section=1 "부분 편집: 1xx (조건부 응답)")]
 
 요청을 받았으며 작업을 계속한다.^[[1]](https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C#cite_note-RFC_2616-1)^
