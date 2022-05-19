@@ -65,9 +65,9 @@ HTTP 상태코드
 • 500: 서버 에러 (Interel server error)
 
 
-## 1xx (조건부 응답)[[편집](https://ko.wikipedia.org/w/index.php?title=HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C&action=edit&section=1 "부분 편집: 1xx (조건부 응답)")]
+## 1xx (조건부 응답)
 
-요청을 받았으며 작업을 계속한다.^[[1]](https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C#cite_note-RFC_2616-1)^
+요청을 받았으며 작업을 계속한다.
 
 이 상태의 상태 코드는 상태-라인과 선택적 헤더(컴퓨터에서 출력될 때 각 페이지 맨 윗부분에 자동으로 붙는 부분)만을 포함하는 임시의 응답을 나타내고 빈 라인에 의해서 종결된다. HTTP/1.0이래로 어떤 1XX 상태 코드들도 정의 되지 않았다. 서버들은 1XX 응답을 실험적인 상태를 제외하고 HTTP/1.0 클라이언트(서버에 연결된 컴퓨터)로 보내면 안 된다.
 
@@ -75,7 +75,7 @@ HTTP 상태코드
 * 101(프로토콜 전환): 요청자가 서버에 프로토콜 전환을 요청했으며 서버는 이를 승인하는 중이다.
 * 102(처리, [RFC 2518](https://tools.ietf.org/html/rfc2518))
 
-## 2xx (성공)[[편집](https://ko.wikipedia.org/w/index.php?title=HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C&action=edit&section=2 "부분 편집: 2xx (성공)")]
+## 2xx (성공)
 
 이 클래스의 상태 코드는 클라이언트가 요청한 동작을 수신하여 이해했고 승낙했으며 성공적으로 처리했음을 가리킨다.
 
@@ -90,7 +90,7 @@ HTTP 상태코드
 * 208(이미 보고됨, [RFC 5842](https://tools.ietf.org/html/rfc5842))
 * 226 IM Used ([RFC 3229](https://tools.ietf.org/html/rfc3229))
 
-## 3xx (리다이렉션 완료)[[편집](https://ko.wikipedia.org/w/index.php?title=HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C&action=edit&section=3 "부분 편집: 3xx (리다이렉션 완료)")]
+## 3xx (리다이렉션 완료)
 
 클라이언트는 요청을 마치기 위해 추가 동작을 취해야 한다.^[[1]](https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C#cite_note-RFC_2616-1)^
 
@@ -103,7 +103,7 @@ HTTP 상태코드
 * 307(임시 리다이렉션): 현재 서버가 다른 위치의 페이지로 요청에 응답하고 있지만 요청자는 향후 요청 시 원래 위치를 계속 사용해야 한다.
 * 308(영구 리다이렉션, RFC에서 실험적으로 승인됨)
 
-## 4xx (요청 오류)[[편집](https://ko.wikipedia.org/w/index.php?title=HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C&action=edit&section=4 "부분 편집: 4xx (요청 오류)")]
+## 4xx (요청 오류)
 
 4xx 클래스의 상태 코드는 클라이언트에 오류가 있음을 나타낸다.
 
@@ -147,7 +147,7 @@ HTTP 상태코드
 * 497(HTTP to HTTPS, Nginx)
 * 499(클라이언트가 요청을 닫음, Nginx)
 
-## 5xx (서버 오류)[[편집](https://ko.wikipedia.org/w/index.php?title=HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C&action=edit&section=5 "부분 편집: 5xx (서버 오류)")]
+## 5xx (서버 오류)
 
 서버가 유효한 요청을 명백하게 수행하지 못했음을 나타낸다.^[[1]](https://ko.wikipedia.org/wiki/HTTP_%EC%83%81%ED%83%9C_%EC%BD%94%EB%93%9C#cite_note-RFC_2616-1)^
 
