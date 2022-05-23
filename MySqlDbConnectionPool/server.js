@@ -19,27 +19,27 @@ mysql.getConnection((err, connection) => {
 })
 */
 app.get('/',(req, res) => {
-    const sql = '\n\
+    const sql = '\n\n\
     select Host, User \n\
-      from user \
+      from userz \n\
     '
     try {
         mysql.getConnection((err, connection) => {
             if(err) {
-                console.log('MySQL 데이터베이스 접속이 실패되었습니다. 설정을 확인 하세요.')  
+                console.log('MySQL 데이터베이스 접속이 실패되었습니다 : '+err)  
                 // res.status().send() 해도 전송되지 않는다.. 이미 error 이기 때문에..              
                 throw err
             }
             else {
                 connection.query(sql, (err, result, fields) => {
                     if(err) {
-                        console.log('connection pool에 에러 발생 / '+err)
-                        res.status(500).send('message: 서버에러!')
+                        console.log('connection pool에 에러 발생 : '+err)
+                        res.status(500).send('message: 서버에러 : '+err)
                     }
                     else
                     {
-                        console.log('실행 / '+sql)
-                        console.log('결과Row수 / '+result.length)
+                        console.log('실행 : '+sql)
+                        console.log('결과Row수 : '+result.length)
                         if(result.length === 0){
                             res.status(400).send({
                                 seccess: true, 
