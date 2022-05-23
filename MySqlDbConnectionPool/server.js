@@ -28,17 +28,16 @@ app.get('/',(req, res) => {
                 else
                 {
                     if(result.length === 0){
-                        res.status(400).send('쿼리의 내용이 없읍니다.')
-                        /*
                         res.status(400).send({
                             seccess: true, 
+                            message: '쿼리의 내용이 없읍니다.',
                             result
                         })
-                        */
                     }
                     else{
                         res.status(200).send({
                             success : true,
+                            message: '('+result.length+')개의 레코드를 리턴합니다.',
                             result
                         });
                     }
