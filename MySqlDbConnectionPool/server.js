@@ -7,48 +7,61 @@ const mysql = require('./db/db')
 app = express()
 
 const port = process.env.WEB_PORT || 3000
-
+/*
 mysql.getConnection((err, connection) => {
-    if(!err) {
-        console.log('MySQL 데이터베이스에 정상적으로 접속되었습니다.')
+    if(err) {
+        console.log('MySQL 데이터베이스 접속이 실패되었습니다. 설정을 확인 하세요.')
     }
-    connection.release()
+    else {
+        console.log('MySQL 데이터베이스에 정상적으로 접속되었습니다.')
+        connection.release()
+    }    
 })
-
+*/
 app.get('/',(req, res) => {
-    const sql = 'select Host, User from user'
+    const sql = '\n\
+    select Host, User \n\
+      from user \
+    '
     try {
         mysql.getConnection((err, connection) => {
-            if(err) throw err
-            connection.query(sql, (err, result, fields) => {
-                if(err) {
-                    console.log('connection pool에 에러 발생 / '+err)
-                    res.status(500).send('message: 서버에러!')
-                }
-                else
-                {
-                    if(result.length === 0){
-                        res.status(400).send({
-                            seccess: true, 
-                            message: '쿼리의 내용이 없읍니다.',
-                            result
-                        })
+            if(err) {
+                console.log('MySQL 데이터베이스 접속이 실패되었습니다. 설정을 확인 하세요.')  
+                // res.status().send() 해도 전송되지 않는다.. 이미 error 이기 때문에..              
+                throw err
+            }
+            else {
+                connection.query(sql, (err, result, fields) => {
+                    if(err) {
+                        console.log('connection pool에 에러 발생 / '+err)
+                        res.status(500).send('message: 서버에러!')
                     }
-                    else{
-                        res.status(200).send({
-                            success : true,
-                            message: '('+result.length+')개의 레코드를 리턴합니다.',
-                            result
-                        });
+                    else
+                    {
+                        console.log('실행 / '+sql)
+                        console.log('결과Row수 / '+result.length)
+                        if(result.length === 0){
+                            res.status(400).send({
+                                seccess: true, 
+                                message: '쿼리의 내용이 없읍니다.',
+                                result
+                            })
+                        }
+                        else{
+                            res.status(200).send({
+                                success : true,
+                                message: '('+result.length+')개의 레코드를 리턴합니다.',
+                                result
+                            });
+                        }
                     }
-                }
-            })
-            connection.release()
+                })
+                connection.release()
+            }
         })        
     }
     catch(err){
-        console.log('connection_pool GET Error / '+err)
-        res.status(500).send('message : Internal Server Error')
+        console.log('connection_pool GET Error / '+err)        
     }
 })
 
