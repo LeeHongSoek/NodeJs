@@ -3,7 +3,6 @@ const path = require('path')
 // npm i dotenv
 require('dotenv').config({path: path.join(__dirname, './env/server.env')})
 const mysql = require('./db/db')
-
 app = express()
 
 const port = process.env.WEB_PORT || 3000
@@ -19,22 +18,25 @@ mysql.getConnection((err, connection) => {
 })
 */
 app.get('/',(req, res) => {
-    const sql = '\n\n\
-    select Host, User \n\
-      from userz \n\
-    '
+    
+    const sql = `
+                 select Host 
+                      , User 
+                   from user 
+                  where 1=1 
+                `
     try {
-        mysql.getConnection((err, connection) => {
+        mysql.getConnection((err, connection) => {            
             if(err) {
                 console.log('MySQL 데이터베이스 접속이 실패되었습니다 : '+err)  
-                // res.status().send() 해도 전송되지 않는다.. 이미 error 이기 때문에..              
+                res.status(500).send('message: 접속에러 : '+err)
                 throw err
             }
             else {
                 connection.query(sql, (err, result, fields) => {
                     if(err) {
-                        console.log('connection pool에 에러 발생 : '+err)
-                        res.status(500).send('message: 서버에러 : '+err)
+                        console.log('sql에 에러 발생 : '+err)
+                        res.status(500).send('message: sql에러 : '+err)
                     }
                     else
                     {
@@ -50,7 +52,7 @@ app.get('/',(req, res) => {
                         else{
                             res.status(200).send({
                                 success : true,
-                                message: '('+result.length+')개의 레코드를 리턴합니다.',
+                                message: `${result.length}개의 레코드를 리턴합니다.`,
                                 result
                             });
                         }
