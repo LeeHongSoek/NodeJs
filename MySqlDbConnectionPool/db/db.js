@@ -13,4 +13,8 @@ const connection = {
     connectionLimit: 30
 }
 
-module.exports = mysql.createPool(connection)
+const pool = mysql.createPool(connection)
+
+
+
+module.exports = pool

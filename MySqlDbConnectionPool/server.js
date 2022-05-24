@@ -2,71 +2,73 @@ const express = require('express')
 const path = require('path')
 // npm i dotenv
 require('dotenv').config({path: path.join(__dirname, './env/server.env')})
-const mysql = require('./db/db')
+const pool = require('./db/db')
 app = express()
 
 const port = process.env.WEB_PORT || 3000
-/*
-mysql.getConnection((err, connection) => {
+
+let mysal_coonected = false // 접속 성공여부를 저장
+
+pool.getConnection((err, connection) => {
     if(err) {
-        console.log('MySQL 데이터베이스 접속이 실패되었습니다. 설정을 확인 하세요.')
+        console.log(`MySql 데이터베이스 접속이 실패되었습니다 : ${err}`)
+        mysal_coonected = false
     }
     else {
-        console.log('MySQL 데이터베이스에 정상적으로 접속되었습니다.')
+        mysal_coonected = true 
+        console.log('MySql 데이터베이스에 정상적으로 접속되었습니다.')
         connection.release()
     }    
 })
-*/
-app.get('/',(req, res) => {
-    
-    const sql = `
-                 select Host 
-                      , User 
-                   from user 
-                  where 1=1 
-                `
-    try {
-        mysql.getConnection((err, connection) => {            
-            if(err) {
-                console.log(`MySQL 데이터베이스 접속이 실패되었습니다 : ${err}`)
-                res.status(500).send(`message: 접속에러 : ${err}`)
-                throw err
-            }
-            else {
-                connection.query(sql, (err, result, fields) => {
-                    if(err) {
-                        console.log(`sql에 에러 발생 : ${err}`)
-                        res.status(500).send(`message: sql에러 : ${err}`)
-                    }
-                    else
-                    {
-                        console.log(`실행 : ${sql}`)
-                        console.log(`Row수 : ${result.length}`)
-                        console.log(`result : ${ JSON.stringify(result,null,2)}`)
 
-                        if(result.length === 0){
-                            res.status(400).send({
-                                seccess: true, 
-                                message: '쿼리의 내용이 없읍니다.',
-                                result
-                            })
-                        }
-                        else{
-                            res.status(200).send({
-                                success : true,
-                                message: `${result.length}개의 레코드를 리턴합니다.`,
-                                result
-                            });
-                        }
+app.get('/',(req, res) => {    
+    res.send('홈페이지..')
+})
+
+app.get('/list',(req, res) => {    
+    if (mysal_coonected === false) {
+        console.log(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
+        return res.send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
+    }
+
+    pool.getConnection((err, connection) => {            
+            const sql = `
+                    select Host 
+                        , User 
+                    from user 
+                    where 1=1 
+                    `
+            connection.query(sql, (err, result, fields) => {
+                if(err) {
+                    console.log(`sql에 에러 발생 : ${err}`)
+                    res.status(500).send(`message: sql에러 : ${err}`)
+                }
+                else
+                {
+                    console.log(`실행 : ${sql}`)
+                    console.log(`Row수 : ${result.length}`)
+                    console.log(`result : ${ JSON.stringify(result,null,2)}`)
+
+                    if(result.length === 0){
+                        res.status(400).send({
+                            seccess: true, 
+                            message: '쿼리의 내용이 없읍니다.',
+                            result
+                        })
                     }
-                })
-                connection.release()
-            }
-        })        
-    }
-    catch(err){
-        console.log(`connection_pool GET Error : ${err}`)
-    }
+                    else{
+                        res.status(200).send({
+                            success : true,
+                            message: `${result.length}개의 레코드를 리턴합니다.`,
+                            result
+                        });
+                    }
+                }
+            })
+            connection.release()
+
+    })    
+ 
 })
 
 server = app.listen(port, () => console.log(`Server Start Listening on port ${port}`))
