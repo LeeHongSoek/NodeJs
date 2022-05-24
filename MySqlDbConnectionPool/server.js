@@ -28,20 +28,22 @@ app.get('/',(req, res) => {
     try {
         mysql.getConnection((err, connection) => {            
             if(err) {
-                console.log('MySQL 데이터베이스 접속이 실패되었습니다 : '+err)  
-                res.status(500).send('message: 접속에러 : '+err)
+                console.log(`MySQL 데이터베이스 접속이 실패되었습니다 : ${err}`)
+                res.status(500).send(`message: 접속에러 : ${err}`)
                 throw err
             }
             else {
                 connection.query(sql, (err, result, fields) => {
                     if(err) {
-                        console.log('sql에 에러 발생 : '+err)
-                        res.status(500).send('message: sql에러 : '+err)
+                        console.log(`sql에 에러 발생 : ${err}`)
+                        res.status(500).send(`message: sql에러 : ${err}`)
                     }
                     else
                     {
-                        console.log('실행 : '+sql)
-                        console.log('결과Row수 : '+result.length)
+                        console.log(`실행 : ${sql}`)
+                        console.log(`Row수 : ${result.length}`)
+                        console.log(`result : ${result}`)
+
                         if(result.length === 0){
                             res.status(400).send({
                                 seccess: true, 
@@ -63,7 +65,7 @@ app.get('/',(req, res) => {
         })        
     }
     catch(err){
-        console.log('connection_pool GET Error / '+err)        
+        console.log(`connection_pool GET Error : ${err}`)
     }
 })
 
