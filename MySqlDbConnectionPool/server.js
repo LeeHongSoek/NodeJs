@@ -42,7 +42,7 @@ app.get('/',(req, res) => {
                     {
                         console.log(`실행 : ${sql}`)
                         console.log(`Row수 : ${result.length}`)
-                        console.log(`result : ${result}`)
+                        console.log(`result : ${ JSON.stringify(result,null,2)}`)
 
                         if(result.length === 0){
                             res.status(400).send({
