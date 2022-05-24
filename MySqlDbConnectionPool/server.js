@@ -22,20 +22,26 @@ pool.getConnection((err, connection) => {
 })
 
 app.get('/',(req, res) => {    
-    res.send('홈페이지..')
+    return res.status(500).send(`지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
 })
 
 app.get('/list',(req, res) => {    
     if (mysal_coonected === false) {
         console.log(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
-        return res.send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
+        return res.status(500).send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
     }
 
     pool.getConnection((err, connection) => {            
             const sql = `
-                    select Host 
-                        , User 
-                    from user 
+                    select employeeNumber
+                         , lastName
+                         , firstName
+                         , extension
+                         , email
+                         , officeCode
+                         , reportsTo
+                         , jobTitle
+                     from employees 
                     where 1=1 
                     `
             connection.query(sql, (err, result, fields) => {
