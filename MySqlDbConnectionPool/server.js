@@ -28,7 +28,7 @@ app.get('/',(req, res) => {
 app.get('/list',(req, res) => {    
     if (mysal_coonected === false) {
         console.log(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
-        return res.status(400).send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
+        return res.status(500).send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
     }
 
     pool.getConnection((err, connection) => {            
