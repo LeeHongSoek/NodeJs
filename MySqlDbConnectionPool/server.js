@@ -139,4 +139,4 @@ r.question("종료를 하려면 Return키를 누르시요\n", function(answer) {
     process.exit()
 }) 
 
-//  pc 에서 수정3 했음 그리고..
+//  lonovo 에서 수정3 했음 그리고..
