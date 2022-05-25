@@ -23,7 +23,7 @@ pool.getConnection((err, connection) => {
 
 app.get('/',(req, res) => {    
     console.log(` / 호출 : 지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
-    return res.status(500).send(`지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
+    return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
 })
 
 app.get('/list',(req, res) => {    
