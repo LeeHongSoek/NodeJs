@@ -5,6 +5,10 @@ require('dotenv').config({path: path.join(__dirname, './env/server.env')})
 const pool = require('./db/db')
 app = express()
 
+app.set('views', __dirname+'/views');
+app.set('view engine','ejs');
+app.engine('html', require('ejs').renderFile); // npm install ejs ---save
+
 const port = process.env.WEB_PORT || 3000
 
 let mysal_coonected = false // 접속 성공여부를 저장
@@ -25,6 +29,49 @@ app.get('/',(req, res) => {
     console.log(` / 호출 : 지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
     return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
 })
+
+
+app.get('/home', function(req, res){
+    if (mysal_coonected === false) {
+        console.log(` /home 호출 : 이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
+        return res.status(500).send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
+    }
+
+    pool.getConnection((err, connection) => {            
+            const sql = `
+                           select employeeNumber
+                                , lastName
+                                , firstName
+                                , extension
+                                , email
+                                , officeCode
+                                , reportsTo
+                                , jobTitle
+                             from employees 
+                             where 1=1 
+                        `
+            connection.query(sql, (err, result, fields) => {
+                if(err) {
+                    console.log(` /home 호출 : sql에 에러 발생 : ${err}`)
+                    res.status(500).send(`message: sql에러 : ${err}`)
+                }
+                else
+                {
+                    console.log(`실행 : ${sql}`)
+                    console.log(`Row수 : ${result.length}`)
+                    console.log(`result : ${ JSON.stringify(result,null,2)}`)
+
+                    res.render('index',{title:"직원리스트", result: result});
+
+                    console.log(` /home 호출 : sql 정싱실행!`)
+                }
+            })
+            connection.release()
+
+    })    
+    
+})
+
 
 app.get('/list',(req, res) => {    
     if (mysal_coonected === false) {
