@@ -1,6 +1,5 @@
 
-// npm install -S mysql
-const mysql = require('mysql')
+const mysql = require('mysql') // npm install -S mysql
 const path = require('path')
 require('dotenv').config({path:path.join(__dirname, '../env/server.env')})
 

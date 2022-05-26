@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express') // npm install express ---save
 const path = require('path')
 require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // npm i dotenv
 const pool = require('./db/db')
