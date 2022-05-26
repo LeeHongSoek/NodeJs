@@ -1,17 +1,16 @@
 const express = require('express')
 const path = require('path')
-// npm i dotenv
-require('dotenv').config({path: path.join(__dirname, './env/server.env')})
+require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // npm i dotenv
 const pool = require('./db/db')
-app = express()
 
+app = express()
 app.set('views', __dirname+'/views');
 app.set('view engine','ejs');
 app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
 const port = process.env.WEB_PORT || 3000
 
-let mysal_coonected = false // 접속 성공여부를 저장
+let mysal_coonected = false // 접속 성공여부를 저장 true/false
 
 pool.getConnection((err, connection) => {
     if(err) {
@@ -29,7 +28,6 @@ app.get('/',(req, res) => {
     console.log(` / 호출 : 지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
     return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${mysal_coonected} 입니다.`)
 })
-
 
 app.get('/home', function(req, res){
     if (mysal_coonected === false) {
@@ -57,13 +55,13 @@ app.get('/home', function(req, res){
                 }
                 else
                 {
-                    console.log(`실행 : ${sql}`)
-                    console.log(`Row수 : ${result.length}`)
-                    console.log(`result : ${ JSON.stringify(result,null,2)}`)
+                    console.info(`실행 : ${sql}`)
+                    console.info(`Row수 : ${result.length}`)
+                    console.info(`result : ${ JSON.stringify(result,null,2)}`)
 
                     res.render('index',{title:"직원리스트", result: result});
 
-                    console.log(` /home 호출 : sql 정싱실행!`)
+                    console.info(` /home 호출 : sql 정싱실행!`)
                 }
             })
             connection.release()
@@ -121,15 +119,12 @@ app.get('/list',(req, res) => {
                 }
             })
             connection.release()
-
-    })    
- 
+    })     
 })
 
 server = app.listen(port, () => console.log(`Server Start Listening on port ${port}`))
 
 //
-
 var readline = require('readline')
 var r = readline.createInterface({ input:process.stdin, output:process.stdout }) 
 r.question("종료를 하려면 Return키를 누르시요\n", function(answer) { 
@@ -138,5 +133,3 @@ r.question("종료를 하려면 Return키를 누르시요\n", function(answer) {
     r.close() // 반드시 close()를 해줘야 합니다. 
     process.exit()
 }) 
-
-//  lonovo 에서 수정3 했음 그리고..
