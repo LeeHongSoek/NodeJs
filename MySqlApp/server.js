@@ -70,7 +70,6 @@ app.get('/home', function(req, res){
     
 })
 
-
 app.get('/list',(req, res) => {    
     if (mysal_coonected === false) {
         console.log(` /list 호출 : 이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
