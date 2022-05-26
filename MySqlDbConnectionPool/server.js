@@ -33,26 +33,26 @@ app.get('/',(req, res) => {
 
 app.get('/home', function(req, res){
     if (mysal_coonected === false) {
-        console.log(` /list 호출 : 이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
+        console.log(` /home 호출 : 이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)        
         return res.status(500).send(`이미 MySql 데이터베이스 접속이 실패되어 있습니다.`)            
     }
 
     pool.getConnection((err, connection) => {            
             const sql = `
-                    select employeeNumber
-                         , lastName
-                         , firstName
-                         , extension
-                         , email
-                         , officeCode
-                         , reportsTo
-                         , jobTitle
-                     from employees 
-                    where 1=1 
-                    `
+                           select employeeNumber
+                                , lastName
+                                , firstName
+                                , extension
+                                , email
+                                , officeCode
+                                , reportsTo
+                                , jobTitle
+                             from employees 
+                             where 1=1 
+                        `
             connection.query(sql, (err, result, fields) => {
                 if(err) {
-                    console.log(` /list 호출 : sql에 에러 발생 : ${err}`)
+                    console.log(` /home 호출 : sql에 에러 발생 : ${err}`)
                     res.status(500).send(`message: sql에러 : ${err}`)
                 }
                 else
@@ -63,7 +63,7 @@ app.get('/home', function(req, res){
 
                     res.render('index',{title:"직원리스트", result: result});
 
-                    console.log(` /list 호출 : sql 정싱실행!`)
+                    console.log(` /home 호출 : sql 정싱실행!`)
                 }
             })
             connection.release()
