@@ -9,6 +9,22 @@ const connection = {
     database        : process.env.DB_DATABASE,
     connectionLimit : 30
 }
-const mysql = require('mysql') // npm install -S mysql
 
-module.exports = mysql.createPool(connection)
+pool = require('mysql').createPool(connection) // npm install -S mysql
+pool.isConnected = false
+pool.chkConnection = function () {
+    pool.getConnection((err, connection) => {
+        if(err) {
+            console.log(`MySql 데이터베이스 접속이 실패되었습니다 : ${err}`)
+            pool.isConnected = false
+        }
+        else {
+            console.log('MySql 데이터베이스에 정상적으로 접속되었습니다.')
+            pool.isConnected = true 
+    
+            connection.release()
+        }    
+    })
+}
+
+module.exports = pool
