@@ -74,12 +74,12 @@ router.use('/:employeeNumber', (req, res) => {
                 
             }
             if (req.method === 'DELETE') {
-                connection.query(deleteSql, [req.params.employeeNumber], (err, result, fields) => {
+                connection.query(deleteSql, [req.params.employeeNumber], (err,rows, fields) => {
 
                     res.status(200).send({
                         success : true,
-                        message: `${result}개의 레코드를 리턴합니다.`,
-                        result
+                        message: `${rows.affectedRows} 개의 레코드를 리턴합니다.`,
+                        rows
                     });
                     /*
                     if(err) {
