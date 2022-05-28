@@ -15,7 +15,7 @@ pool.isConnected = false
 pool.chkConnection = function () {
     pool.getConnection((err, connection) => {
         if(err) {
-            console.log(`MySql 데이터베이스 접속이 실패되었습니다 : ${err}`)
+            console.log(`MySql 데이터베이스 접속이 실패되었습니다 : ${err}`)            
             pool.isConnected = false
         }
         else {

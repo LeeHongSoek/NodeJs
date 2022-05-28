@@ -59,32 +59,19 @@
     <table class="type02">
         <caption><%=title%></caption>
         <tr>
-          <th>employee<br>Number</th>
-          <th>lastName</th>
-          <th>firstName</th>
-          <th>extension</th>
-          <th>email</th>
-          <th>officeCode</th>
-          <th>reportsTo</th>
-          <th>jobTitle</th>
+          <th>Employee<br>Number</th>
+          <th>Lastname</th>
+          <th>Firstname</th>
+          <th>Extension</th>
+          <th>Email</th>
+          <th>Officecode</th>
+          <th>Reportsto</th>
+          <th>Jobtitle</th>
           <th>&nbsp;</th>
         </tr>
-        <% result.forEach((result, index)=>{ %>
-          <tr>
-            <td class="center"><%=result.employeeNumber%></td>
-            <td><%=result.lastName%></td>
-            <td><%=result.firstName%></td>
-            <td><%=result.extension%></td>
-            <td><%=result.email%></td>
-            <td class="center"><%=result.officeCode%></td>
-            <td class="center"><%=result.reportsTo%></td>
-            <td><%=result.jobTitle%></td>
-            <td>
-              <input type="button" onclick="javascript:location.href='/updateMemo?id=<%=result.employeeNumber%>'" value="Edit">
-              <input type="button" onclick="javascript:location.href='/deleteMemo?id=<%=result.employeeNumber%>'" value="Del">
-            </td>
-          </tr>
-        <% }) %>
+        <tr>
+          <td colspan="9">자료없음</td>
+        </tr>
       </table>
 </body>
 </html>
