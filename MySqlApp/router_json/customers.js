@@ -1,48 +1,7 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const pool = require('../database/connection')                                 
-
-const searchs =  [ {name: 'customerName',    nameKor: '상호명',    isListView: true,   maxLength: 50 },
-                   {name: 'contactLastName', nameKor: '담당자_성', isListView: true,   maxLength: 50 }
-                 ]  
-
-const selectSql = `
-                       SELECT customerNumber
-                            , customerName
-                            , contactLastName
-                            , contactFirstName
-                            , phone
-                            , addressLine1
-                            , addressLine2
-                            , city
-                            , state
-                            , postalCode
-                            , country
-                            , salesRepEmployeeNumber
-                            , creditLimit
-                         FROM customers
-                        WHERE del = 'N' `
-const selectSqlOne = `
-                       SELECT customerNumber
-                            , customerName
-                            , contactLastName
-                            , contactFirstName
-                            , phone
-                            , addressLine1
-                            , addressLine2
-                            , city
-                            , state
-                            , postalCode
-                            , country
-                            , salesRepEmployeeNumber
-                            , creditLimit
-                         FROM customers
-                        WHERE del = 'N'
-                          AND customerNumber = ?  `
-const deleteSqlOne = `
-                       UPDATE customers 
-                          SET del = 'Y'   
-                        WHERE customerNumber = ?  `
+const table_info = require('../../router_data/customers')
 
 // 사용예 : >curl -X GET localhost:3000/json/customers
 router.use('/', (req, res) => {
@@ -61,14 +20,14 @@ router.use('/', (req, res) => {
 
     pool.getConnection((err, connection) => {                   
 
-        var sql = selectSql
-        var keys = Object.keys(req.query); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-        for (var i=0; i<keys.length; i++) {
-            var key = keys[i];
-            console.log("key : " + key + ", value : " + req.query[key])
-            for(var j=i;j<searchs.length;j++) {
-                if ((key === searchs[j].name) && (req.query[key] !='')) {
-                    sql = sql + `\n       AND  ${key} like '${req.query[key]}%' `
+        var sql = table_info.selectSql
+        var keys1 = Object.keys(req.query); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+        for (var key1 in keys1) {
+            console.log("key : " + key1 + ", value : " + req.query[key1])
+            var keys2 = Object.keys(table_info.searchs); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+            for (var key2 in keys2) {
+                if ((key1 === key2) && (req.query[key1] !='')) {
+                    sql = sql + `\n   AND  ${key1} like '${req.query[key1]}%' `
                 }
             }
         }
@@ -120,20 +79,20 @@ router.use('/:employeeNumber', (req, res) => {
     pool.getConnection((err, connection) => {
         
         if (req.method === 'GET') {
-            connection.query(selectSqlOne, [req.params.employeeNumber], (err, result, fields) => {
+            connection.query(table_info.selectSqlOne, [req.params.employeeNumber], (err, result, fields) => {
                 if(err) {
                     console.log(`sql에 에러 발생 : ${err}`)
 
                     res.status(500).send({
                         seccess : false, 
                         message : 'sql에 에러 발생',
-                        sql     : selectSql,
+                        sql     : table_info.selectSql,
                         err
                     })                
                 }
                 else
                 {
-                    console.info(`실행 : ${selectSql}`)
+                    console.info(`실행 : ${table_info.selectSql}`)
                     console.info(`Row수 : ${result.length}`)
                     //console.info(`result : ${ JSON.stringify(result,null,2)}`)
 
@@ -157,7 +116,7 @@ router.use('/:employeeNumber', (req, res) => {
                     res.status(500).send({
                         seccess : false, 
                         message : `sql에러 : ${err}`,
-                        sql     : selectSql,
+                        sql     : table_info.deleteSqlOne,
                     })                
                 } 
                 else {
