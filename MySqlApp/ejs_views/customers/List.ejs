@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title><%=title%></title>
+    
     <style type="text/css">
         table.type02 {
             border-collapse: separate;
@@ -45,47 +47,110 @@
             border-bottom: 1px solid #ccc;
         }
         table.type02 td.center {
-            text-align: center;
-   
+            text-align: center;   
         }
     </style>
 
-    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js">/*jquery 최신버전 사용*/</script>
+
+    <script>
+        $(document).ready(function(){
+            $('input#btnSearch').click(function(){
+                $.ajax({ url        : '/json/customers', // 요청 할 주소 
+                         async      : true, // false 일 경우 동기 요청으로 변경
+                         type       : 'GET', // GET, PUT
+                         data       : {   
+                                        <% 
+                                        var cnt = 0;
+                                        searchs.forEach((search, index) => { 
+                                            if (search.isListView) {
+                                                %>
+                                                    <%if(cnt>0) {%>,<%}%> <%=search.name%> : $('input[name=<%=search.name%>]').val()
+                                                <% 
+                                                cnt++;
+                                            }
+                                        }) 
+                                        %>
+                                      }, // 전송할 데이터                
+                         dataType   : 'json', // xml, json, script, html                
+                         beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
+                         success    : function(jqXHR) { // 요청 완료 시        
+                            if(jqXHR.result.length === 0)
+                            {
+                                $('tbody#tbodyNodata').show();
+                                $('tbody#tbodyData').hide()
+                            } 
+                            else {
+                                $('tbody#tbodyNodata').hide()
+                                $('tbody#tbodyData').show();
+                            }
+                                
+                            $("#resultTable").find('tbody#tbodyData').children().remove ();
+                            $.each(jqXHR.result, function(idx, item){
+                                
+                                $("#resultTable").find('tbody#tbodyData').append("<tr>");
+                                <% 
+                                fields.forEach((field, index) => { 
+                                    if (field.isListView) {
+                                        %>
+                                        $("#resultTable").find('tbody#tbodyData').append("<td>"+item.<%=field.name%>+"&nbsp;</td>");
+                                        <% 
+                                    }
+                                }) 
+                                %>
+                                $("#resultTable").find('tbody#tbodyData').append("</tr>");
+                            });
+                         }, 
+                         error      : function(jqXHR) {}, // 요청 실패.                
+                         complete   : function(jqXHR) {}  // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                       })
+            })
+        })
+    </script>
 </head>
 <body>
+
+    
+
+
     <h1>Welcome to my home page</h1>
-    <h2>환영합니다.!</h2>
 
     <table class="type02">
-        <caption><%=title%></caption>
         <tr>
-          <th>Employee<br>Number</th>
-          <th>Lastname</th>
-          <th>Firstname</th>
-          <th>Extension</th>
-          <th>Email</th>
-          <th>Officecode</th>
-          <th>Reportsto</th>
-          <th>Jobtitle</th>
-          <th>&nbsp;</th>
+            <th><%=searchs[0].nameKor%></th>
+            <td><input name="<%=searchs[0].name%>" type="text" maxlength="<%=searchs[0].maxLength%>"></td>
+            <th><%=searchs[1].nameKor%></th>
+            <td><input name="<%=searchs[1].name%>" type="text" maxlength="<%=searchs[1].maxLength%>"></td>
+
+            <td><input id="btnSearch" type="button" value="검색" /></td>
         </tr>
-        <% result.forEach((result, index)=>{ %>
-          <tr>
-            <td class="center"><%=result.employeeNumber%></td>
-            <td><%=result.lastName%></td>
-            <td><%=result.firstName%></td>
-            <td><%=result.extension%></td>
-            <td><%=result.email%></td>
-            <td class="center"><%=result.officeCode%></td>
-            <td class="center"><%=result.reportsTo%></td>
-            <td><%=result.jobTitle%></td>
-            <td>
-              <input type="button" onclick="javascript:location.href='/updateMemo?id=<%=result.employeeNumber%>'" value="Edit">
-              <input type="button" onclick="javascript:location.href='/deleteMemo?id=<%=result.employeeNumber%>'" value="Del">
-            </td>
-          </tr>
-        <% }) %>
-      </table>
+    </table>
+
+    <table id="resultTable" class="type02">
+        <caption><%=title%></caption>
+        <thead>
+            <tr>
+            <% 
+            let colLength = 0
+            fields.forEach((fields, index) => { 
+                if (fields.isListView) {
+                    %>
+                    <th><%=fields.nameKor%></th>
+                    <% 
+                colLength++
+                }
+            }) 
+            %>
+            </tr>
+        </thead>
+        <tbody id="tbodyNodata">
+            <tr>
+                <td colspan="<%=colLength%>" class="center">자료없음</tㅇ>
+            </tr>
+        </tbody>
+        <tbody id="tbodyData" style="display: none;">
+        </tbody>
+    </table>
 </body>
 </html>
 

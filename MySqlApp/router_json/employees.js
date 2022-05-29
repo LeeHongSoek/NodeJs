@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const pool = require('../database/connection')                                 
 
-const selectSql = ` SELECT employeeNumber
+const selectSql = ` 
+                    SELECT employeeNumber
                          , lastName
                          , firstName
                          , extension
@@ -11,9 +12,9 @@ const selectSql = ` SELECT employeeNumber
                          , reportsTo
                          , jobTitle
                       FROM employees 
-                     WHERE del = 'N'
-                  `
-const selectSqlOne = ` SELECT employeeNumber
+                     WHERE del = 'N'   `
+const selectSqlOne = `
+                       SELECT employeeNumber
                             , lastName
                             , firstName
                             , extension
@@ -23,12 +24,11 @@ const selectSqlOne = ` SELECT employeeNumber
                             , jobTitle
                          FROM employees 
                         WHERE del = 'N'
-                          AND employeeNumber = ?  
-                     `
-const deleteSqlOne = ` UPDATE employees 
+                          AND employeeNumber = ?  `
+const deleteSqlOne = `
+                       UPDATE employees 
                           SET del = 'Y'   
-                        WHERE employeeNumber = ?  
-                     `
+                        WHERE employeeNumber = ?  `
 
 // 사용예 : >curl -X GET localhost:3000/json/employees
 router.get('/', (req, res) => {

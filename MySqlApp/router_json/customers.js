@@ -2,23 +2,28 @@ const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const pool = require('../database/connection')                                 
 
-const selectSql = ` SELECT customerNumber
-                         , customerName
-                         , contactLastName
-                         , contactFirstName
-                         , phone
-                         , addressLine1
-                         , addressLine2
-                         , city
-                         , state
-                         , postalCode
-                         , country
-                         , salesRepEmployeeNumber
-                         , creditLimit
-                      FROM customers
-                     WHERE del = 'N'
-                  `
-const selectSqlOne = ` SELECT customerNumber
+const searchs =  [ {name: 'customerName',    nameKor: '상호명',    isListView: true,   maxLength: 50 },
+                   {name: 'contactLastName', nameKor: '담당자_성', isListView: true,   maxLength: 50 }
+                 ]  
+
+const selectSql = `
+                       SELECT customerNumber
+                            , customerName
+                            , contactLastName
+                            , contactFirstName
+                            , phone
+                            , addressLine1
+                            , addressLine2
+                            , city
+                            , state
+                            , postalCode
+                            , country
+                            , salesRepEmployeeNumber
+                            , creditLimit
+                         FROM customers
+                        WHERE del = 'N' `
+const selectSqlOne = `
+                       SELECT customerNumber
                             , customerName
                             , contactLastName
                             , contactFirstName
@@ -33,38 +38,55 @@ const selectSqlOne = ` SELECT customerNumber
                             , creditLimit
                          FROM customers
                         WHERE del = 'N'
-                          AND customerNumber = ?  
-                     `
-const deleteSqlOne = ` UPDATE customers 
+                          AND customerNumber = ?  `
+const deleteSqlOne = `
+                       UPDATE customers 
                           SET del = 'Y'   
-                        WHERE customerNumber = ?  
-                     `
+                        WHERE customerNumber = ?  `
 
 // 사용예 : >curl -X GET localhost:3000/json/customers
-router.get('/', (req, res) => {
-    
+router.use('/', (req, res) => {
+
+    //var a = req.query.customerName;
+    //var b = req.query.contactLastName; 
+    //console.log("a : " + a + " / b : " + b)    
+
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
+    console.log( JSON.stringify(req.query))
 
     if (pool.isConnected === false) {
         console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
         return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
     }
 
-    pool.getConnection((err, connection) => {            
-        connection.query(selectSql, (err, result, fields) => {
+    pool.getConnection((err, connection) => {                   
+
+        var sql = selectSql
+        var keys = Object.keys(req.query); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+        for (var i=0; i<keys.length; i++) {
+            var key = keys[i];
+            console.log("key : " + key + ", value : " + req.query[key])
+            for(var j=i;j<searchs.length;j++) {
+                if ((key === searchs[j].name) && (req.query[key] !='')) {
+                    sql = sql + `\n       AND  ${key} like '${req.query[key]}%' `
+                }
+            }
+        }
+
+        connection.query(sql, (err, result, fields) => {
             if(err) {
                 console.log(`sql에 에러 발생 : ${err}`)
 
                 res.status(500).send({
                     seccess : false, 
                     message : 'sql에 에러 발생',
-                    sql     : selectSql,
+                    sql     : sql,
                     err
                 })
             }
             else
             {
-                console.info(`실행 : ${selectSql}`)
+                console.info(`실행 : ${sql}`)
                 console.info(`Row수 : ${result.length}`)
                 //console.info(`result : ${ JSON.stringify(result,null,2)}`)
 
@@ -74,6 +96,7 @@ router.get('/', (req, res) => {
                     length  : result.length,
                     result
                 });
+
                 console.info(`sql 정싱실행!`)
             }
         })

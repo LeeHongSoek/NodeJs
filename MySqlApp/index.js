@@ -14,9 +14,9 @@ app.get('/',(req, res) => {
     return  res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
 })
 
-
+//
 // v : view, j : json, p : popup
-
+//
 
 // customers
 
@@ -39,7 +39,6 @@ app.use('/view/employeesEdit', require('./router_view/employees/Edit.js'))
 //
 const port = process.env.WEB_PORT || 3000
 server = app.listen(port, () => console.log(`Server Start Listening on port ${port}`))
-
 
 var readline = require('readline')
 const { route } = require('../RestfulAPITDD/lec_07_app')
