@@ -1,8 +1,9 @@
 const table_info = {
-        tableName: 'customers',
-        tableNameKor: '고객',
 
-        searchs:  {customerName:    { nameKor: '상호명',    maxLength: 50 },
+        tableName : 'customers',
+        tableNameKor : '고객',
+
+        searchs : {customerName:    { nameKor: '상호명',    maxLength: 50 },
                    contactLastName: { nameKor: '담당자_성', maxLength: 50 }
                   },
         fields :  {customerNumber:         { nameKor: '고객번호',         isListView: false,   maxLength: 50 },
@@ -20,46 +21,50 @@ const table_info = {
                    creditLimit:            { nameKor: '신용한도',         isListView: false,   maxLength: 10 }
                   },
                   
+        totalrow : `
+                    SELECT count() totalrow 
+                      FROM (${this.selectSql}) 
+                   `,
+
         selectSql : `
-                  SELECT customerNumber
-                       , customerName
-                       , contactLastName
-                       , contactFirstName
-                       , phone
-                       , addressLine1
-                       , addressLine2
-                       , city
-                       , state
-                       , postalCode
-                       , country
-                       , salesRepEmployeeNumber
-                       , creditLimit
-                    FROM customers
-                   WHERE del = 'N' `,
+                     SELECT customerNumber
+                          , customerName
+                          , contactLastName
+                          , contactFirstName
+                          , phone
+                          , addressLine1
+                          , addressLine2
+                          , city
+                          , state
+                          , postalCode
+                          , country
+                          , salesRepEmployeeNumber
+                          , creditLimit
+                       FROM customers
+                      WHERE del = 'N' `,
 
         selectSqlOne : `
-                  SELECT customerNumber
-                       , customerName
-                       , contactLastName
-                       , contactFirstName
-                       , phone
-                       , addressLine1
-                       , addressLine2
-                       , city
-                       , state
-                       , postalCode
-                       , country
-                       , salesRepEmployeeNumber
-                       , creditLimit
-                    FROM customers
-                   WHERE del = 'N'
-                     AND customerNumber = ?  `,
+                        SELECT customerNumber
+                             , customerName
+                             , contactLastName
+                             , contactFirstName
+                             , phone
+                             , addressLine1
+                             , addressLine2
+                             , city
+                             , state
+                             , postalCode
+                             , country
+                             , salesRepEmployeeNumber
+                             , creditLimit
+                          FROM customers
+                         WHERE del = 'N'
+                           AND customerNumber = ?  `,
 
         deleteSqlOne : `
-                  UPDATE customers 
-                     SET del = 'Y'   
-                   WHERE customerNumber = ?  `
-
+                        UPDATE customers 
+                           SET del = 'Y'   
+                         WHERE customerNumber = ?  `
 }
 
 module.exports = table_info
