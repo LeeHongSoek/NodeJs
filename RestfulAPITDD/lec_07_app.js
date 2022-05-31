@@ -1,5 +1,5 @@
 const express = require('express')
-const logger = require('morgan')
+const logger = require('morgan') // npm install morgan --save
 const bodyParser = require('body-parser')
 const app = express();
 const user = require('./api/user/index.js') // '/index.js'는 생략 가능
