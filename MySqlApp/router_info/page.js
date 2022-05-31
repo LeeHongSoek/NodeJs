@@ -25,6 +25,7 @@ const pageInfo = {
     },
     set pagePerBlock(value) {
         this._pagePerBlock = (value < 1) ? 1 : value // 반드시 1 보다 커야함.        
+        return this._pagePerBlock
     },
 
     // 총레코드수를 기반으로 총페이지 수를 구한다.
@@ -101,10 +102,12 @@ const pageInfo = {
     getcurrPagelist: function() {
         var arrypage = []
 
-        for (var i=1; i<=this._pagePerBlock; i++) {
-            var cntpage = ((this._currBlock-1) * this._pagePerBlock) + i
-            if (cntpage <= this.totalPages)
-                arrypage.push(cntpage)
+        for (var i=1; i<=this.pagePerBlock; i++) {
+            
+            var page = ((this.currBlock-1) * this.pagePerBlock) + i
+
+            if (page <= this.totalPages)
+                arrypage.push(page)
         }
         return arrypage;
     }

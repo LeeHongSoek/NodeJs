@@ -1,9 +1,9 @@
-const pageInfo = require('./common')
+const pageInfo = require('./page')
 
-pageInfo.totalRow = 120
+pageInfo.totalRow = 122
 pageInfo.rowPerPage = 10
 pageInfo.pagePerBlock = 7
-pageInfo.currPage = 5
+pageInfo.currPage = 1
 pageInfo.currBlock = 1
 
 console.log('pageInfo.totalRow : ',pageInfo.totalRow)

@@ -32,6 +32,18 @@
             border-left: 1px solid #ccc;
             background: #ddd;
         }
+        table.type02 tfoot {
+            padding: 10px;
+            font-size: 10;
+            font-weight: bold;
+            vertical-align: top;
+            text-align: center;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            background: #ddd;
+        }
         table.type02 th {
             padding: 10px;
             font-weight: bold;
@@ -77,6 +89,19 @@
                          dataType   : 'json', // xml, json, script, html                
                          beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
                          success    : function(jqXHR) { // 요청 완료 시        
+
+                            var first = 0;
+                            $('td#tdPages').empty();                            
+                            for(page in jqXHR.pageList)
+                            {
+                                var a = (jqXHR.pageList[page] == jqXHR.currPage) ?'[' :'' ;
+                                var b = (jqXHR.pageList[page] == jqXHR.currPage) ?']' :'' ;
+
+                                var c = (first > 0) ?', ' :'' ;
+
+                                $('td#tdPages').append(c+a+"<a href='#'>"+jqXHR.pageList[page]+"</a>"+b+"&nbsp;");
+                                first++;
+                            }
                             if(jqXHR.result.length === 0)
                             {
                                 $('tbody#tbodyNodata').show();
@@ -164,6 +189,12 @@
         </tbody>
         <tbody id="tbodyData" style="display: none;">
         </tbody>
+        <tfoot>
+            <tr>
+                <td id="tdPages" colspan="<%=colLength%>" class="center"><< < > >></tㅇ>
+            </tr>
+        </tfoot>
     </table>
+
 </body>
 </html>
