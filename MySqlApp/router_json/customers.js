@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const pool = require('../database/connection')                                 
-const table_info = require('../../router_data/customers')
+const table_info = require('../router_data/customers')
 
 // 사용예 : >curl -X GET localhost:3000/json/customers
 router.use('/', (req, res) => {
@@ -21,13 +21,16 @@ router.use('/', (req, res) => {
     pool.getConnection((err, connection) => {                   
 
         var sql = table_info.selectSql
-        var keys1 = Object.keys(req.query); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-        for (var key1 in keys1) {
-            console.log("key : " + key1 + ", value : " + req.query[key1])
-            var keys2 = Object.keys(table_info.searchs); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-            for (var key2 in keys2) {
-                if ((key1 === key2) && (req.query[key1] !='')) {
-                    sql = sql + `\n   AND  ${key1} like '${req.query[key1]}%' `
+        var keysQuery = Object.keys(req.query); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+        for (var keyQuery in keysQuery) {
+            
+            var fieldName = keysQuery[keyQuery]
+            console.log("key : " + keyQuery + ", value : " + req.query[fieldName])
+
+            var keysSearchs = Object.keys(table_info.searchs); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+            for (var keysSearchs in keysSearchs) {
+                if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
+                    sql = sql + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
                 }
             }
         }

@@ -1,4 +1,4 @@
-const table_info = {
+const tableInfo = {
 
         tableName : 'customers',
         tableNameKor : '고객',
@@ -67,4 +67,4 @@ const table_info = {
                          WHERE customerNumber = ?  `
 }
 
-module.exports = table_info
+module.exports = tableInfo

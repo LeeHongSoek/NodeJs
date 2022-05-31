@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><%= table_info.tableNameKor %> 리스트</title>
+    <title><%= tableInfo.tableNameKor %> 리스트</title>
     
     <style type="text/css">
         table.type02 {
@@ -41,7 +41,7 @@
             background: #eee;
         }
         table.type02 td {
-            padding: 10px;
+            padding: 5px;
             vertical-align: top;
             border-right: 1px solid #ccc;
             border-bottom: 1px solid #ccc;
@@ -62,10 +62,12 @@
                          data       : {   
                                         <% 
                                         var cnt = 0
-                                        var keys = Object.keys(table_info.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-                                        for (var key in keys) {
-                                            console.log("key : " + key + ", value : " + req.query[key])
-                                            <% if(cnt>0) {%>,<%} %> <%=key%> : $('input[name=<%=key%>]').val()
+                                        var searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+                                        for (var key in searchs) {
+                                            console.log("key : " + key + ", value : " + searchs[key])
+                                            if(cnt>0) {%>,<%} %> <%=searchs[key]%> : $('input[name=<%=searchs[key]%>]').val()
+                                            <%
+                                            cnt++;                                        
                                         }
                                         %>
                                       }, // 전송할 데이터                
@@ -87,12 +89,13 @@
                                 
                                 $("#resultTable").find('tbody#tbodyData').append("<tr>");
                                 <% 
-                                var keys = Object.keys(table_info.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-                                for (var key in keys) {
-                                    var val = table_info.fields[key]
-                                    if (val.isListView) {
+                                const fields1 = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+                                for (var key in fields1) {                                    
+                                    var field = fields1[key]
+                                    
+                                    if (tableInfo.fields[field].isListView==true) {
                                         %>
-                                        $("#resultTable").find('tbody#tbodyData').append("<td maxlength='<%=val.maxlength%>'>"+item.<%=key%>+"&nbsp;</td>");
+                                        $("#resultTable").find('tbody#tbodyData').append("<td maxLength='<%=tableInfo.fields[field].maxLength%>'>"+item.<%=field%>+"&nbsp;</td>");
                                         <% 
                                     }
                                 }
@@ -116,28 +119,34 @@
 
     <table class="type02">
         <tr>
-            <th><%=table_info.searchs.customerName.nameKor%></th>
-            <td><input name="customerName" type="text" maxlength="<%=table_info.searchs.customerName.maxLength%>"></td>
+            <th><%=tableInfo.searchs.customerName.nameKor%></th>
+            <td><input name="customerName" type="text" maxLength="<%=tableInfo.searchs.customerName.maxLength%>"></td>
 
-            <th><%=table_info.searchs.contactLastName.nameKor%></th>
-            <td><input name="contactLastName" type="text" maxlength="<%=table_info.searchs.contactLastName.maxLength%>"></td>
+            <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
+            <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
 
             <td><input id="btnSearch" type="button" value="검색" /></td>
         </tr>
     </table>
 
     <table id="resultTable" class="type02">
-        <caption><%= table_info.tableNameKor %> 리스트</caption>
+        <caption><%= tableInfo.tableNameKor %> 리스트</caption>
         <thead>
             <tr>
                 <% 
                 let colLength = 0
 
-                var keys = Object.keys(table_info.fields)
-                for(var key in keys) {
-                    if(table_info.fields[key].isListView) {
+                const fields2 = Object.keys(tableInfo.fields)
+                for(var key in fields2) {
+                    
+                    var field = fields2[key]
+                    console.log("key : " + key + ", value : " + fields2[key])
+                    console.log(`tableInfo.fields[${field}].isListView : ` +tableInfo.fields[field].isListView)
+                    console.log(`tableInfo.fields[${field}].maxLength : ` +tableInfo.fields[field].maxLength)
+
+                    if(tableInfo.fields[field].isListView) {
                         %>
-                        <th><%=table_info.fields[key].nameKor%></th>
+                        <th><%=tableInfo.fields[field].nameKor%></th>
                         <% 
                         colLength++
                     }
@@ -155,9 +164,3 @@
     </table>
 </body>
 </html>
-
-
-
-
-
-
