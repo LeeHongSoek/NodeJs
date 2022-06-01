@@ -3,7 +3,7 @@ const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/N
 
 router.get('/', (req, res) => {
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
-    return res.render('employees/List',{title:"사원 리스트"});
+    return res.render('eEmployeesList',{title:"사원 리스트"});
 })
 
 module.exports = router

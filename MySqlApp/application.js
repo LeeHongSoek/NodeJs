@@ -20,19 +20,19 @@ app.get('/',(req, res) => {
 
 // customers
 
-app.use('/json/customers', require('./router_json/customers.js')) 
+app.use('/json/customers', require('./router_json/jCustomers.js')) 
 
-app.use('/view/customersList', require('./router_view/customers/List.js')) 
-app.use('/view/customersView', require('./router_view/customers/View.js')) 
-app.use('/view/customersEdit', require('./router_view/customers/Edit.js')) 
+app.use('/view/customersList', require('./router_view/rCustomersList.js')) 
+app.use('/view/customersView', require('./router_view/rCustomersView.js')) 
+app.use('/view/customersEdit', require('./router_view/rCustomersEdit.js')) 
 
 // employees
 
-app.use('/json/employees', require('./router_json/employees.js')) 
+app.use('/json/employees', require('./router_json/jEmployees.js')) 
 
-app.use('/view/employeesList', require('./router_view/employees/List.js')) 
-app.use('/view/employeesView', require('./router_view/employees/View.js')) 
-app.use('/view/employeesEdit', require('./router_view/employees/Edit.js')) 
+app.use('/view/employeesList', require('./router_view/rEmployeesList.js')) 
+app.use('/view/employeesView', require('./router_view/rEmployeesView.js')) 
+app.use('/view/employeesEdit', require('./router_view/rEmployeesEdit.js')) 
 
 //
 // server = app.listen(3000)
