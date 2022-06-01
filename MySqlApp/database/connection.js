@@ -1,5 +1,6 @@
 const path = require('path')
-require('dotenv').config({path : path.join(__dirname, 'config.env')})
+//require('dotenv').config({path : path.join(__dirname, 'config_local.env')})
+require('dotenv').config({path : path.join(__dirname, 'config_remote.env')})
 
 const connection = {
     host            : process.env.DB_HOST,
