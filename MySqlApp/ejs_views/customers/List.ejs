@@ -68,6 +68,10 @@
 
     <script src="http://code.jquery.com/jquery-latest.min.js">/*jquery 최신버전 사용*/</script>
 
+    <%
+    const searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    %>
     <script>
         
 
@@ -76,21 +80,46 @@
                 $.ajax({ url        : '/json/customers', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
-                         data       : {   
-                                        <% 
-                                        var cnt = 0
-                                        var searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-                                        for (var key in searchs) {
-                                            console.log("key : " + key + ", value : " + searchs[key])
-                                            if(cnt>0) {%>,<%} %> <%=searchs[key]%> : $('input[name=<%=searchs[key]%>]').val()
+                         data       : { <%
+                                        for (key in searchs) {
+                                            console.log("searchs_key : " + key + ", value : " + searchs[key])
+                                            var search = searchs[key]
+                                            %> <%=search%> : $('input[name=<%=search%>]').val(),
                                             <%
-                                            cnt++;                                        
                                         }
                                         %>
+                                        currPage: 1
                                       }, // 전송할 데이터                
                          dataType   : 'json', // xml, json, script, html                
                          beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
                          success    : function(jqXHR) { // 요청 완료 시        
+                            
+                            if(jqXHR.result.length === 0) {
+                                $('tbody#tbodyNodata').show();
+                                $('tbody#tbodyData').hide()
+                            } 
+                            else {
+                                $('tbody#tbodyNodata').hide()
+                                $('tbody#tbodyData').show();
+                            }
+                                
+                            $("#resultTable").find('tbody#tbodyData').children().remove ();
+                            $.each(jqXHR.result, function(idx, item){
+                                
+                                $("#resultTable").find('tbody#tbodyData').append("<tr>");
+                                <%                                 
+                                for (key in fields) {                                    
+                                    var field = fields[key]
+                                    
+                                    if (tableInfo.fields[field].isListView==true) {
+                                        %>
+                                        $("#resultTable").find('tbody#tbodyData').append("<td maxLength='<%=tableInfo.fields[field].maxLength%>'>"+item.<%=field%>+"&nbsp;</td>");
+                                        <% 
+                                    }
+                                }
+                                %>
+                                $("#resultTable").find('tbody#tbodyData').append("</tr>");
+                            });
 
                             var first = 0;
                             $('td#tdPages').empty();                            
@@ -107,34 +136,6 @@
                                 $('td#tdPages').append(c+a+d+jqXHR.pageList[page]+e+b+"&nbsp;");
                                 first++;
                             }
-                            if(jqXHR.result.length === 0)
-                            {
-                                $('tbody#tbodyNodata').show();
-                                $('tbody#tbodyData').hide()
-                            } 
-                            else {
-                                $('tbody#tbodyNodata').hide()
-                                $('tbody#tbodyData').show();
-                            }
-                                
-                            $("#resultTable").find('tbody#tbodyData').children().remove ();
-                            $.each(jqXHR.result, function(idx, item){
-                                
-                                $("#resultTable").find('tbody#tbodyData').append("<tr>");
-                                <% 
-                                const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-                                for (var key in fields) {                                    
-                                    var field = fields[key]
-                                    
-                                    if (tableInfo.fields[field].isListView==true) {
-                                        %>
-                                        $("#resultTable").find('tbody#tbodyData').append("<td maxLength='<%=tableInfo.fields[field].maxLength%>'>"+item.<%=field%>+"&nbsp;</td>");
-                                        <% 
-                                    }
-                                }
-                                %>
-                                $("#resultTable").find('tbody#tbodyData').append("</tr>");
-                            });
                          }, 
                          error      : function(jqXHR) {}, // 요청 실패.                
                          complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
@@ -171,9 +172,9 @@
                 <% 
                 let colLength = 0
 
-                for(var key in fields) {                    
+                for(key in fields) {                    
                     var field = fields[key]
-                    console.log("key : " + key + ", value : " + fields[key])
+                    console.log("fields_key : " + key + ", value : " + fields[key])
                     console.log(`tableInfo.fields[${field}].isListView : ` +tableInfo.fields[field].isListView)
                     console.log(`tableInfo.fields[${field}].maxLength : ` +tableInfo.fields[field].maxLength)
 
