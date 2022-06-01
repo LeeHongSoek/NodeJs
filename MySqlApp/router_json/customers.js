@@ -22,12 +22,17 @@ router.use('/', (req, res) => {
     pool.getConnection((err, connection) => { 
         
         var sqlLastSelect = customersInfo.selectSql // select 문!!
+        var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
         
         var keysQuery = Object.keys(req.query); // 검색 키 값들을 화면에서 가져옵니다.
         for (var keyQuery in keysQuery) {
             
             var fieldName = keysQuery[keyQuery]
-            console.log("query_key : " + fieldName + ", query_value : " + req.query[fieldName])
+            console.log("query key:value : " + fieldName + "=" + req.query[fieldName])
+
+            if (fieldName==='currPage') {
+                currPage = eval(req.query[fieldName])                
+            }
 
             var keysSearchs = Object.keys(customersInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
             for (var keysSearchs in keysSearchs) {
@@ -58,7 +63,7 @@ router.use('/', (req, res) => {
                 console.info(`Row수 : ${result.length}`)
 
                 pageInfo.totalRow = result[0].total_row // 총 레코드 수
-                pageInfo.currPage = 1 // 초기 페이지 (첫페이지) [변동가능]
+                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)
 
                 sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.rowPerPage} ` // 페이지에 해당하는 limit가 구성되었다...
 

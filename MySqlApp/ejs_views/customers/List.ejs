@@ -73,11 +73,8 @@
     const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
     %>
     <script>
-        
-
-        $(document).ready(function(){
-            $('input#btnSearch').click(function(){
-                $.ajax({ url        : '/json/customers', // 요청 할 주소 
+        function foo() {
+            $.ajax({ url        : '/json/customers', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { <%
@@ -88,7 +85,7 @@
                                             <%
                                         }
                                         %>
-                                        currPage: 1
+                                        currPage: $('input[name=hideCurrPage]').val()
                                       }, // 전송할 데이터                
                          dataType   : 'json', // xml, json, script, html                
                          beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
@@ -139,10 +136,17 @@
                          }, 
                          error      : function(jqXHR) {}, // 요청 실패.                
                          complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
-                                $('a.aPage').on('click', function(){alert(this.text)})
-                            }
+                                                          $('a.aPage').on('click', function(){               // 각자의 페이지를 클릭할때....
+                                                              $('input[name=hideCurrPage]').val(this.text);  // 새로운 페이지를 갱신하고..
+                                                              foo();                                         // 자기자신을 호출 
+                                                          })
+                                                      }
                        })
-            })
+        }
+        
+
+        $(document).ready(function(){
+            $('input#btnSearch').click(foo);
         })
     </script>
 </head>
@@ -160,7 +164,7 @@
 
             <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
             <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
-
+            
             <td><input id="btnSearch" type="button" value="검색" /></td>
         </tr>
     </table>
@@ -197,10 +201,12 @@
         </tbody>
         <tfoot>
             <tr>
-                <td id="tdPages" colspan="<%=colLength%>" class="center"><< < > >></tㅇ>
+                <td id="tdPages" colspan="<%=colLength%>" class="center"><< < > >></td>
             </tr>
         </tfoot>
     </table>
+    
+    <input name="hideCurrPage" type="hidden" value="1"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
 
 </body>
 </html>
