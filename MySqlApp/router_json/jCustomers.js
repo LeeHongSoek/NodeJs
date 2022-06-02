@@ -28,7 +28,7 @@ router.use('/', (req, res) => {
         for (var keyQuery in keysQuery) {
             
             var fieldName = keysQuery[keyQuery]
-            console.log("query key:value : " + fieldName + "=" + req.query[fieldName])
+            //console.log("query key:value : " + fieldName + "=" + req.query[fieldName])
 
             if (fieldName==='currPage') {
                 currPage = eval(req.query[fieldName])                

@@ -79,7 +79,7 @@
                          type       : 'GET', // GET, PUT
                          data       : { <%
                                         for (key in searchs) {
-                                            console.log("searchs_key : " + key + ", value : " + searchs[key])
+                                            // console.log("searchs_key : " + key + ", value : " + searchs[key])
                                             var search = searchs[key]
                                             %> <%=search%> : $('input[name=<%=search%>]').val(),
                                             <%
@@ -173,9 +173,9 @@
 
                 for(key in fields) {                    
                     var field = fields[key]
-                    console.log("fields_key : " + key + ", value : " + fields[key])
-                    console.log(`tableInfo.fields[${field}].isListView : ` +tableInfo.fields[field].isListView)
-                    console.log(`tableInfo.fields[${field}].maxLength : ` +tableInfo.fields[field].maxLength)
+                    // console.log("fields_key : " + key + ", value : " + fields[key])
+                    // console.log(`tableInfo.fields[${field}].isListView : ` +tableInfo.fields[field].isListView)
+                    // console.log(`tableInfo.fields[${field}].maxLength : ` +tableInfo.fields[field].maxLength)
 
                     if(tableInfo.fields[field].isListView) {
                         %>
