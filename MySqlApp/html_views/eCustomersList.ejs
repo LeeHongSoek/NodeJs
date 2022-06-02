@@ -4,69 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Failed to load resource: the server responded with a status of 404 (Not Found) 에러시 아래 2줄 -->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <title><%= tableInfo.tableNameKor %> 리스트</title>
     
-    <style type="text/css">
-        table.type02 {
-            border-collapse: separate;
-            border-spacing: 0;
-            text-align: left;
-            line-height: 1.5;
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
-            margin : 10px 5px;
-        }
-        table.type02 caption {
-            padding: 10px;
-            font-size: 10;
-            font-weight: bold;
-            vertical-align: top;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
-            background: #ddd;
-        }
-        table.type02 tfoot {
-            padding: 10px;
-            font-size: 10;
-            font-weight: bold;
-            vertical-align: top;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
-            background: #ddd;
-        }
-        table.type02 th {
-            padding: 10px;
-            font-weight: bold;
-            vertical-align: middle;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #fff;
-            border-left: 1px solid #fff;
-            background: #eee;
-        }
-        table.type02 td {
-            padding: 5px;
-            vertical-align: top;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-        }
-        table.type02 td.center {
-            text-align: center;   
-        }
-    </style>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
 
-    <script src="http://code.jquery.com/jquery-latest.min.js">/*jquery 최신버전 사용*/</script>
+    <script src="/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
     <%
     const searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.

@@ -1,6 +1,7 @@
 const express = require('express') // npm install express ---save
 app = express()
-app.set('views', __dirname+'/ejs_views');
+app.use(express.static(__dirname + '/html_views'))
+app.set('views', __dirname+'/html_views');
 app.set('view engine','ejs');
 app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
@@ -17,6 +18,8 @@ app.get('/',(req, res) => {
 //
 // v : view, j : json, p : popup
 //
+
+
 
 // customers
 
