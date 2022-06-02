@@ -20,11 +20,14 @@ const tableInfo = {
                    salesRepEmployeeNumber: { nameKor: '담당영업사원번호', isListView: true,    maxLength: 4 },
                    creditLimit:            { nameKor: '신용한도',         isListView: false,   maxLength: 10 }
                   },
-                  
-        totalrow : `
-                    SELECT count() totalrow 
-                      FROM (${this.selectSql}) 
-                   `,
+        
+        _totalRowSql : '',
+        get totalRowSql() {
+               return this._totalRowSql        
+        },
+        set totalRowSql(selectSql) {
+               this._totalRowSql = ` SELECT count(*) AS total_row FROM (  ${selectSql}  ) A `
+        },
 
         selectSql : `
                      SELECT customerNumber

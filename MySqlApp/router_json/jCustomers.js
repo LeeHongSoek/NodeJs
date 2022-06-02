@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const pool = require('../database/connection')                                 
-const table_info = require('../router_data/customers')
+const customersInfo = require('../router_info/customers')
+const pageInfo = require('../router_info/page')
 
-// 사용예 : >curl -X GET localhost:3000/json/customers
+// 사용예 : >curl -X GET localhost:3000/json/customersList
 router.use('/', (req, res) => {
 
     //var a = req.query.customerName;
@@ -18,50 +19,89 @@ router.use('/', (req, res) => {
         return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
     }
 
-    pool.getConnection((err, connection) => {                   
-
-        var sql = table_info.selectSql
-        var keysQuery = Object.keys(req.query); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    pool.getConnection((err, connection) => { 
+        
+        var sqlLastSelect = customersInfo.selectSql // select 문!!
+        var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
+        
+        var keysQuery = Object.keys(req.query); // 검색 키 값들을 화면에서 가져옵니다.
         for (var keyQuery in keysQuery) {
             
             var fieldName = keysQuery[keyQuery]
-            console.log("key : " + keyQuery + ", value : " + req.query[fieldName])
+            console.log("query key:value : " + fieldName + "=" + req.query[fieldName])
 
-            var keysSearchs = Object.keys(table_info.searchs); //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+            if (fieldName==='currPage') {
+                currPage = eval(req.query[fieldName])                
+            }
+
+            var keysSearchs = Object.keys(customersInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
             for (var keysSearchs in keysSearchs) {
                 if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
-                    sql = sql + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                    sqlLastSelect = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
                 }
             }
-        }
+        }  
 
-        connection.query(sql, (err, result, fields) => {
+        customersInfo.totalRowSql = sqlLastSelect  // 총 건수를 구하기 위한 쿼리를 구성한다
+        var totalRowSql = customersInfo.totalRowSql
+        
+
+        connection.query(totalRowSql, (err, result, fields) => {
             if(err) {
-                console.log(`sql에 에러 발생 : ${err}`)
+                console.log(`totalRowSql 에 에러 발생 : ${err}`)
 
                 res.status(500).send({
                     seccess : false, 
-                    message : 'sql에 에러 발생',
-                    sql     : sql,
+                    message : 'totalRowSql 에 에러 발생',
+                    sql     : totalRowSql,
                     err
                 })
             }
             else
             {
-                console.info(`실행 : ${sql}`)
+                console.info(`실행 : ${totalRowSql}`)
                 console.info(`Row수 : ${result.length}`)
-                //console.info(`result : ${ JSON.stringify(result,null,2)}`)
 
-                res.status(200).send({
-                    success : true,
-                    message : `${result.length}개의 레코드를 리턴합니다.`,
-                    length  : result.length,
-                    result
-                });
+                pageInfo.totalRow = result[0].total_row // 총 레코드 수
+                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)
 
-                console.info(`sql 정싱실행!`)
+                sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.rowPerPage} ` // 페이지에 해당하는 limit가 구성되었다...
+
+                connection.query(sqlLastSelect, (err, result, fields) => {
+                    if(err) {
+                        console.log(`sqlLastSelect 에 에러 발생 : ${err}`)
+        
+                        res.status(500).send({
+                            seccess : false, 
+                            message : 'sqlLastSelect 에 에러 발생',
+                            sql     : sqlLastSelect,
+                            err
+                        })
+                    }
+                    else
+                    {
+                        console.info(`실행 : ${sqlLastSelect}`)
+                        console.info(`Row수 : ${result.length}`)
+                        //console.info(`result : ${ JSON.stringify(result,null,2)}`)
+        
+                        res.status(200).send({
+                            success : true,
+                            message : `${result.length}개의 레코드를 리턴합니다.`,
+                            length  : result.length,
+                            pageList: pageInfo.getcurrPagelist(),
+                            currPage: pageInfo.currPage,
+                            result
+                        });    
+                        
+                        console.info(`sqlLastSelect 정싱실행!`)
+                    }
+                })
+
+                console.info(`totalRowSql 정싱실행!`)
             }
         })
+
+       
 
         connection.release()
     })    
@@ -82,20 +122,20 @@ router.use('/:employeeNumber', (req, res) => {
     pool.getConnection((err, connection) => {
         
         if (req.method === 'GET') {
-            connection.query(table_info.selectSqlOne, [req.params.employeeNumber], (err, result, fields) => {
+            connection.query(customersInfo.selectSqlOne, [req.params.employeeNumber], (err, result, fields) => {
                 if(err) {
                     console.log(`sql에 에러 발생 : ${err}`)
 
                     res.status(500).send({
                         seccess : false, 
                         message : 'sql에 에러 발생',
-                        sql     : table_info.selectSql,
+                        sql     : customersInfo.selectSql,
                         err
                     })                
                 }
                 else
                 {
-                    console.info(`실행 : ${table_info.selectSql}`)
+                    console.info(`실행 : ${customersInfo.selectSql}`)
                     console.info(`Row수 : ${result.length}`)
                     //console.info(`result : ${ JSON.stringify(result,null,2)}`)
 
@@ -119,7 +159,7 @@ router.use('/:employeeNumber', (req, res) => {
                     res.status(500).send({
                         seccess : false, 
                         message : `sql에러 : ${err}`,
-                        sql     : table_info.deleteSqlOne,
+                        sql     : customersInfo.deleteSqlOne,
                     })                
                 } 
                 else {

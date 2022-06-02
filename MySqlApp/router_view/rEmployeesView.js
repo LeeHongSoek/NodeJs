@@ -1,10 +1,13 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
-const tableInfo = require('../../router_data/customers')
 
-router.get('/', (req, res) => {
+// 사용예 : >curl localhost:3000/
+router.get('/:employeeNumber', (req, res) => {
+    
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
-    return res.render('customers/List',{ tableInfo })
+    console.log(` req.params.employeeNumber = ${req.params.employeeNumber}`)
+
+    return res.render('eEmployeesView', {employeeNumber})
 })
 
 module.exports = router

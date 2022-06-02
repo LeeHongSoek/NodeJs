@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Failed to load resource: the server responded with a status of 404 (Not Found) 에러시 아래 2줄 -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <title><%= tableInfo.tableNameKor %> 리스트</title>
     
@@ -18,6 +21,18 @@
             margin : 10px 5px;
         }
         table.type02 caption {
+            padding: 10px;
+            font-size: 10;
+            font-weight: bold;
+            vertical-align: top;
+            text-align: center;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            background: #ddd;
+        }
+        table.type02 tfoot {
             padding: 10px;
             font-size: 10;
             font-weight: bold;
@@ -53,29 +68,30 @@
 
     <script src="http://code.jquery.com/jquery-latest.min.js">/*jquery 최신버전 사용*/</script>
 
+    <%
+    const searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    %>
     <script>
-        $(document).ready(function(){
-            $('input#btnSearch').click(function(){
-                $.ajax({ url        : '/json/customers', // 요청 할 주소 
+        function foo() {
+            $.ajax({ url        : '/json/customers', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
-                         data       : {   
-                                        <% 
-                                        var cnt = 0
-                                        var searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-                                        for (var key in searchs) {
-                                            console.log("key : " + key + ", value : " + searchs[key])
-                                            if(cnt>0) {%>,<%} %> <%=searchs[key]%> : $('input[name=<%=searchs[key]%>]').val()
+                         data       : { <%
+                                        for (key in searchs) {
+                                            console.log("searchs_key : " + key + ", value : " + searchs[key])
+                                            var search = searchs[key]
+                                            %> <%=search%> : $('input[name=<%=search%>]').val(),
                                             <%
-                                            cnt++;                                        
                                         }
                                         %>
+                                        currPage: $('input[name=hideCurrPage]').val()
                                       }, // 전송할 데이터                
                          dataType   : 'json', // xml, json, script, html                
                          beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
                          success    : function(jqXHR) { // 요청 완료 시        
-                            if(jqXHR.result.length === 0)
-                            {
+                            
+                            if(jqXHR.result.length === 0) {
                                 $('tbody#tbodyNodata').show();
                                 $('tbody#tbodyData').hide()
                             } 
@@ -88,10 +104,9 @@
                             $.each(jqXHR.result, function(idx, item){
                                 
                                 $("#resultTable").find('tbody#tbodyData').append("<tr>");
-                                <% 
-                                const fields1 = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
-                                for (var key in fields1) {                                    
-                                    var field = fields1[key]
+                                <%                                 
+                                for (key in fields) {                                    
+                                    var field = fields[key]
                                     
                                     if (tableInfo.fields[field].isListView==true) {
                                         %>
@@ -102,11 +117,36 @@
                                 %>
                                 $("#resultTable").find('tbody#tbodyData').append("</tr>");
                             });
+
+                            var first = 0;
+                            $('td#tdPages').empty();                            
+                            for(page in jqXHR.pageList)
+                            {
+                                var a = (jqXHR.pageList[page] == jqXHR.currPage) ?'[' :'' ;
+                                var b = (jqXHR.pageList[page] == jqXHR.currPage) ?']' :'' ;
+
+                                var c = (first > 0) ?', ' :'' ;
+
+                                var d = (jqXHR.pageList[page] != jqXHR.currPage) ?"<a  href='javascript:void(0)' class='aPage'>" :'' ;
+                                var e = (jqXHR.pageList[page] != jqXHR.currPage) ?"</a>" :'' ;
+
+                                $('td#tdPages').append(c+a+d+jqXHR.pageList[page]+e+b+"&nbsp;");
+                                first++;
+                            }
                          }, 
                          error      : function(jqXHR) {}, // 요청 실패.                
-                         complete   : function(jqXHR) {}  // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                         complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                          $('a.aPage').on('click', function(){               // 각자의 페이지를 클릭할때....
+                                                              $('input[name=hideCurrPage]').val(this.text);  // 새로운 페이지를 갱신하고..
+                                                              foo();                                         // 자기자신을 호출 
+                                                          })
+                                                      }
                        })
-            })
+        }
+        
+
+        $(document).ready(function(){
+            $('input#btnSearch').click(foo);
         })
     </script>
 </head>
@@ -124,7 +164,7 @@
 
             <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
             <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
-
+            
             <td><input id="btnSearch" type="button" value="검색" /></td>
         </tr>
     </table>
@@ -136,11 +176,9 @@
                 <% 
                 let colLength = 0
 
-                const fields2 = Object.keys(tableInfo.fields)
-                for(var key in fields2) {
-                    
-                    var field = fields2[key]
-                    console.log("key : " + key + ", value : " + fields2[key])
+                for(key in fields) {                    
+                    var field = fields[key]
+                    console.log("fields_key : " + key + ", value : " + fields[key])
                     console.log(`tableInfo.fields[${field}].isListView : ` +tableInfo.fields[field].isListView)
                     console.log(`tableInfo.fields[${field}].maxLength : ` +tableInfo.fields[field].maxLength)
 
@@ -161,6 +199,14 @@
         </tbody>
         <tbody id="tbodyData" style="display: none;">
         </tbody>
+        <tfoot>
+            <tr>
+                <td id="tdPages" colspan="<%=colLength%>" class="center"><< < > >></td>
+            </tr>
+        </tfoot>
     </table>
+    
+    <input name="hideCurrPage" type="hidden" value="1"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
+
 </body>
 </html>
