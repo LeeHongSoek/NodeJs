@@ -25,7 +25,7 @@ app.get('/',(req, res) => {
 
 app.use('/json/customers', require('./router_json/jCustomers.js')) 
 
-app.use('/view/customersList', require('./router_view/rCustomersList.js')) 
+app.use('/view/customersList', require('./router_view/vCustomersList.js')) 
 app.use('/view/customersView', require('./router_view/vCustomersView.js')) 
 app.use('/view/customersEdit', require('./router_view/vCustomersEdit.js')) 
 

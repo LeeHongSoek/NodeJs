@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
     
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
 
-    return res.render('eEmployeesInsert', {employeeNumber})
+    return res.render('hEmployeesInsert', {employeeNumber})
 })
 
 // 사용예 : >curl localhost:3000/
@@ -15,7 +15,7 @@ router.get('/:employeeNumber', (req, res) => {
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
     console.log(` req.params.employeeNumber = ${req.params.employeeNumber}`)
 
-    return res.render('eEmployeesUpdate', {employeeNumber})
+    return res.render('hEmployeesUpdate', {employeeNumber})
 })
 
 module.exports = router

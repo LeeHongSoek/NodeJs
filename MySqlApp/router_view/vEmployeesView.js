@@ -7,7 +7,7 @@ router.get('/:employeeNumber', (req, res) => {
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
     console.log(` req.params.employeeNumber = ${req.params.employeeNumber}`)
 
-    return res.render('eEmployeesView', {employeeNumber})
+    return res.render('hEmployeesView', {employeeNumber})
 })
 
 module.exports = router
