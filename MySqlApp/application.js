@@ -6,7 +6,7 @@ app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
 const path = require('path')
 require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // npm i dotenv
-const pool = require('./database/connection')
+const pool = require('./_MySqlDatabase/connection')
 pool.chkConnection() // 데이터베이스 성공접속여부를 딱 한번만 체크해본다.
 
 app.get('/',(req, res) => {    

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
-const pool = require('../database/connection')                                 
+const pool = require('../_MySqlDatabase/connection')                                 
 
 const selectSql = ` 
                     SELECT employeeNumber
