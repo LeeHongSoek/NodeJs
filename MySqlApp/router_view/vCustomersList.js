@@ -4,7 +4,7 @@ const tableInfo = require('../router_info/customers')
 
 router.get('/', (req, res) => {
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)    
-    return res.render('eCustomersList',{ tableInfo })
+    return res.render('hCustomersList',{ tableInfo })
 })
 
 module.exports = router

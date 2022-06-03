@@ -7,7 +7,7 @@ router.get('/:customerNumber', (req, res) => {
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
 
-    return res.render('eCustomersView', {customerNumber})
+    return res.render('hCustomersView', {customerNumber})
 })
 
 module.exports = router

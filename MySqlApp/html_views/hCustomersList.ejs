@@ -4,82 +4,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Failed to load resource: the server responded with a status of 404 (Not Found) 에러시 아래 2줄 -->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <title><%= tableInfo.tableNameKor %> 리스트</title>
     
-    <style type="text/css">
-        table.type02 {
-            border-collapse: separate;
-            border-spacing: 0;
-            text-align: left;
-            line-height: 1.5;
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
-            margin : 10px 5px;
-        }
-        table.type02 caption {
-            padding: 10px;
-            font-size: 10;
-            font-weight: bold;
-            vertical-align: top;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
-            background: #ddd;
-        }
-        table.type02 tfoot {
-            padding: 10px;
-            font-size: 10;
-            font-weight: bold;
-            vertical-align: top;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
-            background: #ddd;
-        }
-        table.type02 th {
-            padding: 10px;
-            font-weight: bold;
-            vertical-align: middle;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-            border-top: 1px solid #fff;
-            border-left: 1px solid #fff;
-            background: #eee;
-        }
-        table.type02 td {
-            padding: 5px;
-            vertical-align: top;
-            border-right: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-        }
-        table.type02 td.center {
-            text-align: center;   
-        }
-    </style>
-
-    <script src="http://code.jquery.com/jquery-latest.min.js">/*jquery 최신버전 사용*/</script>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
     <%
     const searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
     const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
     %>
+
     <script>
-        function foo() {
+
+        function callAjax() {
             $.ajax({ url        : '/json/customers', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { <%
                                         for (key in searchs) {
-                                            // console.log("searchs_key : " + key + ", value : " + searchs[key])
+                                            console.log("searchs_key : " + key + ", value : " + searchs[key])
                                             var search = searchs[key]
                                             %> <%=search%> : $('input[name=<%=search%>]').val(),
                                             <%
@@ -118,36 +66,70 @@
                                 $("#resultTable").find('tbody#tbodyData').append("</tr>");
                             });
 
+                            var pageList   = jqXHR.pageInfo.currPagelist;
+                            var currPage   = jqXHR.pageInfo.currPage;
+                            var currBlock  = jqXHR.pageInfo.currBlock;
+                            var totalBlock = jqXHR.pageInfo.totalBlock;
+                            var totalPage  = jqXHR.pageInfo.totalPage;
+                            
+                            $('td#tdPages').empty();
+                            if (jqXHR.pageInfo.prevBlockPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevBlockPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+"<<"+e+"&nbsp;");
+                            }
+                            if (jqXHR.pageInfo.prevPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+"<"+e+"&nbsp;");
+                            }
                             var first = 0;
-                            $('td#tdPages').empty();                            
-                            for(page in jqXHR.pageList)
-                            {
-                                var a = (jqXHR.pageList[page] == jqXHR.currPage) ?'[' :'' ;
-                                var b = (jqXHR.pageList[page] == jqXHR.currPage) ?']' :'' ;
+                            for(page in pageList) {
+                                var a = (pageList[page] == currPage) ?'[' :'' ;
+                                var b = (pageList[page] == currPage) ?']' :'' ;
 
                                 var c = (first > 0) ?', ' :'' ;
 
-                                var d = (jqXHR.pageList[page] != jqXHR.currPage) ?"<a  href='javascript:void(0)' class='aPage'>" :'' ;
-                                var e = (jqXHR.pageList[page] != jqXHR.currPage) ?"</a>" :'' ;
+                                var d = (pageList[page] != currPage) ?`<a  href='javascript:void(0)' class='aPage' targetPage='${pageList[page]}'>` :'' ;
+                                var e = (pageList[page] != currPage) ?`</a>` :'' ;
 
-                                $('td#tdPages').append(c+a+d+jqXHR.pageList[page]+e+b+"&nbsp;");
+                                $('td#tdPages').append(c+a+d+pageList[page]+e+b+"&nbsp;");
                                 first++;
+                            }
+                            if (jqXHR.pageInfo.nextPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+">"+e+"&nbsp;");
+                            }
+                            if (jqXHR.pageInfo.nextBlockPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextBlockPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+">>"+e+"&nbsp;");
                             }
                          }, 
                          error      : function(jqXHR) {}, // 요청 실패.                
                          complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
                                                           $('a.aPage').on('click', function(){               // 각자의 페이지를 클릭할때....
-                                                              $('input[name=hideCurrPage]').val(this.text);  // 새로운 페이지를 갱신하고..
-                                                              foo();                                         // 자기자신을 호출 
+                                                              $('input[name=hideCurrPage]').val($(this).attr('targetPage'));  // 새로운 페이지를 갱신하고..
+                                                              callAjax();                                         // 자기자신을 호출 
                                                           })
                                                       }
                        })
-        }
-        
+        }        
 
         $(document).ready(function(){
-            $('input#btnSearch').click(foo);
+            $('input#btnSearch').click(clickSearch);
         })
+
+        function clickSearch() {
+            $('input[name=hideCurrPage]').val(1);
+            callAjax();
+        };
+
     </script>
 </head>
 <body>   
@@ -173,10 +155,8 @@
 
                 for(key in fields) {                    
                     var field = fields[key]
-                    // console.log("fields_key : " + key + ", value : " + fields[key])
-                    // console.log(`tableInfo.fields[${field}].isListView : ` +tableInfo.fields[field].isListView)
-                    // console.log(`tableInfo.fields[${field}].maxLength : ` +tableInfo.fields[field].maxLength)
-
+                    console.log("fields key/value : " + key + " / " + fields[key])
+                    
                     if(tableInfo.fields[field].isListView) {
                         %>
                         <th><%=tableInfo.fields[field].nameKor%></th>

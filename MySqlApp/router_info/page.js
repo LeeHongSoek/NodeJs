@@ -29,15 +29,15 @@ const pageInfo = {
     },
 
     // 총레코드수를 기반으로 총페이지 수를 구한다.
-    _totalPages: 0,
-    get totalPages() {
+    _totalPage: 0,
+    get totalPage() {
         var totalPage = parseInt(this._totalRow / this._rowPerPage)
         totalPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
 
         return totalPage
     },
-    set totalPages(value) {
-        this._totalPages = value
+    set totalPage(value) {
+        this._totalPage = value
     },
     // 총레코드수를 기반으로 총블럭 수를 구한다.
     _totalBlock: 0,
@@ -97,19 +97,38 @@ const pageInfo = {
         return this._rowPerPage
     },
 
-    
+    _currPagelist: [],
     // 현재 블럭의 페이지 수를 10개 혹은 이하로 리스팅한다.
-    getcurrPagelist: function() {
+    get currPagelist() {
         var arrypage = []
 
         for (var i=1; i<=this.pagePerBlock; i++) {
             
             var page = ((this.currBlock-1) * this.pagePerBlock) + i
 
-            if (page <= this.totalPages)
+            if (page <= this.totalPage)
                 arrypage.push(page)
         }
         return arrypage;
+    },
+
+    _prevBlockPage: 0,
+    get prevBlockPage() {
+        return (this.currBlock-1) * this.pagePerBlock 
+    },
+    _prevPage: 0,
+    get prevPage() {
+        return this.currPage - 1
+    },
+    _nextPage: 0,
+    get nextPage() {
+        console.log(this.currPage)
+        console.log(this.totalPage)
+        return (this.currPage === this.totalPage) ?0 :this.currPage + 1
+    },
+    _nextBlockPage: 0,
+    get nextBlockPage() {
+        return (this.currBlock === this.totalBlock) ?0 :this.currBlock * this.pagePerBlock + 1 
     }
 }
 

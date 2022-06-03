@@ -1,6 +1,7 @@
 const express = require('express') // npm install express ---save
 app = express()
-app.set('views', __dirname+'/ejs_views');
+app.use(express.static(__dirname + '/html_views'))
+app.set('views', __dirname+'/html_views');
 app.set('view engine','ejs');
 app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
@@ -18,21 +19,23 @@ app.get('/',(req, res) => {
 // v : view, j : json, p : popup
 //
 
+
+
 // customers
 
 app.use('/json/customers', require('./router_json/jCustomers.js')) 
 
-app.use('/view/customersList', require('./router_view/rCustomersList.js')) 
-app.use('/view/customersView', require('./router_view/rCustomersView.js')) 
-app.use('/view/customersEdit', require('./router_view/rCustomersEdit.js')) 
+app.use('/view/customersList', require('./router_view/vCustomersList.js')) 
+app.use('/view/customersView', require('./router_view/vCustomersView.js')) 
+app.use('/view/customersEdit', require('./router_view/vCustomersEdit.js')) 
 
 // employees
 
 app.use('/json/employees', require('./router_json/jEmployees.js')) 
 
-app.use('/view/employeesList', require('./router_view/rEmployeesList.js')) 
-app.use('/view/employeesView', require('./router_view/rEmployeesView.js')) 
-app.use('/view/employeesEdit', require('./router_view/rEmployeesEdit.js')) 
+app.use('/view/employeesList', require('./router_view/vEmployeesList.js')) 
+app.use('/view/employeesView', require('./router_view/vEmployeesView.js')) 
+app.use('/view/employeesEdit', require('./router_view/vEmployeesEdit.js')) 
 
 //
 // server = app.listen(3000)

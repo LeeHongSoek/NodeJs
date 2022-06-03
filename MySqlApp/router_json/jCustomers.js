@@ -28,7 +28,7 @@ router.use('/', (req, res) => {
         for (var keyQuery in keysQuery) {
             
             var fieldName = keysQuery[keyQuery]
-            //console.log("query key:value : " + fieldName + "=" + req.query[fieldName])
+            console.log("query key:value : " + fieldName + "=" + req.query[fieldName])
 
             if (fieldName==='currPage') {
                 currPage = eval(req.query[fieldName])                
@@ -65,7 +65,7 @@ router.use('/', (req, res) => {
                 pageInfo.totalRow = result[0].total_row // 총 레코드 수
                 pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)
 
-                sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.rowPerPage} ` // 페이지에 해당하는 limit가 구성되었다...
+                sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 
                 connection.query(sqlLastSelect, (err, result, fields) => {
                     if(err) {
@@ -88,8 +88,7 @@ router.use('/', (req, res) => {
                             success : true,
                             message : `${result.length}개의 레코드를 리턴합니다.`,
                             length  : result.length,
-                            pageList: pageInfo.getcurrPagelist(),
-                            currPage: pageInfo.currPage,
+                            pageInfo,
                             result
                         });    
                         
