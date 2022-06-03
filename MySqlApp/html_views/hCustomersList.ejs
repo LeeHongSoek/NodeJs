@@ -69,8 +69,8 @@
                             var pageList   = jqXHR.pageInfo.currPagelist;
                             var currPage   = jqXHR.pageInfo.currPage;
                             var currBlock  = jqXHR.pageInfo.currBlock;
-                            var totalBlock = jqXHR.pageInfo.totalBlock;
-                            var totalPage  = jqXHR.pageInfo.totalPage;
+                            var lastBlock = jqXHR.pageInfo.lastBlock;
+                            var lastPage  = jqXHR.pageInfo.lastPage;
                             
                             $('td#tdPages').empty();
                             if (jqXHR.pageInfo.prevBlockPage != 0) {

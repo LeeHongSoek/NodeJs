@@ -29,26 +29,26 @@ const pageInfo = {
     },
 
     // 총레코드수를 기반으로 총페이지 수를 구한다.
-    _totalPage: 0,
-    get totalPage() {
-        var totalPage = parseInt(this._totalRow / this._rowPerPage)
-        totalPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
+    _lastPage: 0,
+    get lastPage() {
+        var lastPage = parseInt(this._totalRow / this._rowPerPage)
+        lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
 
-        return totalPage
+        return lastPage
     },
-    set totalPage(value) {
-        this._totalPage = value
+    set lastPage(value) {
+        this._lastPage = value
     },
     // 총레코드수를 기반으로 총블럭 수를 구한다.
-    _totalBlock: 0,
-    get totalBlock() {
-        var totalBlock = parseInt(this._totalRow / (this._rowPerPage * this._pagePerBlock))
-        totalBlock += (this._totalRow % (this._rowPerPage * this._pagePerBlock) > 0) ? 1 : 0 
+    _lastBlock: 0,
+    get lastBlock() {
+        var lastBlock = parseInt(this._totalRow / (this._rowPerPage * this._pagePerBlock))
+        lastBlock += (this._totalRow % (this._rowPerPage * this._pagePerBlock) > 0) ? 1 : 0 
 
-        return totalBlock
+        return lastBlock
     },
-    set totalBlock(value) {
-        this._totalBlock = value
+    set lastBlock(value) {
+        this._lastBlock = value
     },
      
     // 현재 페이지
@@ -56,10 +56,10 @@ const pageInfo = {
     get currPage() { // 현재 페이지를  범위 보정후 리턴한다.
         if (this._currPage < 1) this._currPage = 1
 
-        var totalPage = parseInt(this._totalRow / this._rowPerPage)
-        totalPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
-        if (totalPage < this._currPage){
-            this._currPage = totalPage
+        var lastPage = parseInt(this._totalRow / this._rowPerPage)
+        lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
+        if (lastPage < this._currPage){
+            this._currPage = lastPage
         }
         return this._currPage
     },
@@ -106,7 +106,7 @@ const pageInfo = {
             
             var page = ((this.currBlock-1) * this.pagePerBlock) + i
 
-            if (page <= this.totalPage)
+            if (page <= this.lastPage)
                 arrypage.push(page)
         }
         return arrypage;
@@ -120,15 +120,14 @@ const pageInfo = {
     get prevPage() {
         return this.currPage - 1
     },
+    
     _nextPage: 0,
     get nextPage() {
-        console.log(this.currPage)
-        console.log(this.totalPage)
-        return (this.currPage === this.totalPage) ?0 :this.currPage + 1
+        return (this.currPage === this.lastPage) ?0 :this.currPage + 1
     },
     _nextBlockPage: 0,
     get nextBlockPage() {
-        return (this.currBlock === this.totalBlock) ?0 :this.currBlock * this.pagePerBlock + 1 
+        return (this.currBlock === this.lastBlock) ?0 :this.currBlock * this.pagePerBlock + 1 
     }
 }
 

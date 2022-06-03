@@ -7,8 +7,8 @@ pageInfo.currPage = 13
 pageInfo.currBlock = 1
 
 console.log('pageInfo.totalRow : ',pageInfo.totalRow)
-console.log('pageInfo.totalPage : ',pageInfo.totalPage)
-console.log('pageInfo.totalBlock : ',pageInfo.totalBlock)
+console.log('pageInfo.lastPage : ',pageInfo.lastPage)
+console.log('pageInfo.lastBlock : ',pageInfo.lastBlock)
 console.log('pageInfo.currPage : ',pageInfo.currPage)
 console.log('pageInfo.currBlock : ',pageInfo.currBlock)
 console.log('pageInfo.limtFrom : ',pageInfo.limitFrom)
