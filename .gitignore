@@ -1,5 +1,7 @@
 /.vscode
-node_modules
-MySqlDbConnectionPool/node_modules
-package-lock.json
-package.json
+MySqlApp/node_modules
+MySqlApp/package-lock.json
+MySqlApp/package.json
+RestfulApiTDD/node_modules
+RestfulApiTDD/package-lock.json
+RestfulApiTDD/package.json
