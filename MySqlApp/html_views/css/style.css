@@ -1,4 +1,6 @@
 table.type02 {
+    table-layout:fixed;
+    word-break:break-all;
     border-collapse: separate;
     border-spacing: 0;
     text-align: left;
