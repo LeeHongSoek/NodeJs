@@ -56,9 +56,9 @@ const tableInfo = {
                             , country
                             , salesRepEmployeeNumber
                             , creditLimit
-                        FROM customers
-                       WHERE del = 'N'
-                         AND customerNumber = ?  `,
+                         FROM customers
+                        WHERE del = 'N'
+                          AND customerNumber = ?  `,
 
     deleteSqlOne : `
                     UPDATE customers 
