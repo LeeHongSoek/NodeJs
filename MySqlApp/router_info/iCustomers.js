@@ -39,8 +39,8 @@ const tableInfo = {
                         , country
                         , salesRepEmployeeNumber
                         , creditLimit
-                    FROM customers
-                   WHERE del = 'N' `,
+                     FROM customers
+                    WHERE del = 'N' `,
 
     selectSqlOne : `
                     SELECT customerNumber
