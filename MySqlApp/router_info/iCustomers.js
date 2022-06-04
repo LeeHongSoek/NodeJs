@@ -23,7 +23,7 @@ const tableInfo = {
                creditLimit:            { nameKor: '신용한도',         isListView: false,   maxLength: 10 }
               },
     
-    getTotalRowSql: getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
+    getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
 
     selectSql : `
                     SELECT customerNumber
@@ -40,7 +40,7 @@ const tableInfo = {
                         , salesRepEmployeeNumber
                         , creditLimit
                     FROM customers
-                    WHERE del = 'N' `,
+                   WHERE del = 'N' `,
 
     selectSqlOne : `
                     SELECT customerNumber
@@ -57,13 +57,13 @@ const tableInfo = {
                             , salesRepEmployeeNumber
                             , creditLimit
                         FROM customers
-                        WHERE del = 'N'
-                        AND customerNumber = ?  `,
+                       WHERE del = 'N'
+                         AND customerNumber = ?  `,
 
     deleteSqlOne : `
                     UPDATE customers 
-                        SET del = 'Y'   
-                        WHERE customerNumber = ?  `
+                       SET del = 'Y'   
+                     WHERE customerNumber = ?  `
 }
 
 module.exports = tableInfo
