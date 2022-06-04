@@ -26,7 +26,7 @@ const tableInfo = {
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
 
     selectSql : `
-                    SELECT customerNumber
+                   SELECT customerNumber
                         , customerName
                         , contactLastName
                         , contactFirstName
@@ -43,22 +43,22 @@ const tableInfo = {
                     WHERE del = 'N' `,
 
     selectSqlOne : `
-                    SELECT customerNumber
-                            , customerName
-                            , contactLastName
-                            , contactFirstName
-                            , phone
-                            , addressLine1
-                            , addressLine2
-                            , city
-                            , state
-                            , postalCode
-                            , country
-                            , salesRepEmployeeNumber
-                            , creditLimit
-                         FROM customers
-                        WHERE del = 'N'
-                          AND customerNumber = ?  `,
+                     SELECT customerNumber
+                          , customerName
+                          , contactLastName
+                          , contactFirstName
+                          , phone
+                          , addressLine1
+                          , addressLine2
+                          , city
+                          , state
+                          , postalCode
+                          , country
+                          , salesRepEmployeeNumber
+                          , creditLimit
+                       FROM customers
+                      WHERE del = 'N'
+                        AND customerNumber = ?  `,
 
     deleteSqlOne : `
                     UPDATE customers 
