@@ -6,7 +6,7 @@ const tableInfo = {
         searchs : {customerName:    { nameKor: '상호명',    maxLength: 50 },
                    contactLastName: { nameKor: '담당자_성', maxLength: 50 }
                   },
-        fields :  {customerNumber:         { nameKor: '고객번호',         isListView: false,   maxLength: 50 },
+        fields :  {customerNumber:         { nameKor: '고객번호',         isListView: false,   maxLength: 4 },
                    customerName:           { nameKor: '상호명',           isListView: true,    maxLength: 50 },
                    contactLastName:        { nameKor: '담당자_성',        isListView: true,    maxLength: 50 },
                    contactFirstName:       { nameKor: '담당자_이름',      isListView: true,    maxLength: 50 },

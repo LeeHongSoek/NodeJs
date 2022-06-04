@@ -22,7 +22,7 @@
     <script>
 
         function callAjax() {
-            $.ajax({ url        : '/json/customers', // 요청 할 주소 
+            $.ajax({ url        : '/json/employees', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { <%
@@ -51,26 +51,26 @@
                             $("#resultTable").find('tbody#tbodyData').children().remove ();
                             
                             $.each(jqXHR.result, function(idx, item){                                
-                                $("#resultTable").find('tbody#tbodyData').append("<tr>", function(){
-                                    <%                                 
-                                    for (key in fields) {                                    
-                                        var field = fields[key]
-                                        
-                                        if (tableInfo.fields[field].isListView==true) {
-                                            %>
-                                            $(this).append("<td><%%></td>");                                            
-                                            <% 
-                                        }
+
+                                var $tr = $("<tr>",{});
+                                <%                                 
+                                for (key in fields) {                                    
+                                    var field = fields[key]
+                                    
+                                    if (tableInfo.fields[field].isListView==true) {
+                                        %> $tr.append( $("<td>", {text: item.<%=field%> }) );
+                                        <% 
                                     }
-                                    %>
-                                });                                
+                                }
+                                %>
+                                $("#resultTable").find('tbody#tbodyData').append($tr);
                             });
 
                             //append("<td>"+item.<%=field%>+"&nbsp;</td>");
 
-                            var pageList   = jqXHR.pageInfo.currPagelist;
-                            var currPage   = jqXHR.pageInfo.currPage;
-                            var currBlock  = jqXHR.pageInfo.currBlock;
+                            var pageList  = jqXHR.pageInfo.currPagelist;
+                            var currPage  = jqXHR.pageInfo.currPage;
+                            var currBlock = jqXHR.pageInfo.currBlock;
                             var lastBlock = jqXHR.pageInfo.lastBlock;
                             var lastPage  = jqXHR.pageInfo.lastPage;
                             
@@ -138,11 +138,11 @@
 
     <table class="type02">
         <tr>
-            <th><%=tableInfo.searchs.customerName.nameKor%></th>
-            <td><input name="customerName" type="text" maxLength="<%=tableInfo.searchs.customerName.maxLength%>"></td>
+            <th><%=tableInfo.searchs.lastName.nameKor%></th>
+            <td><input name="lastName" type="text" maxLength="<%=tableInfo.searchs.lastName.maxLength%>"></td>
 
-            <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
-            <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
+            <th><%=tableInfo.searchs.jobTitle.nameKor%></th>
+            <td><input name="jobTitle" type="text" maxLength="<%=tableInfo.searchs.jobTitle.maxLength%>"></td>
             
             <td><input id="btnSearch" type="button" value="검색" /></td>
         </tr>
@@ -178,7 +178,7 @@
         </tbody>
         <tfoot>
             <tr  style="height: 20px;">
-                <td id="tdPages" colspan="<%=colLength%>" class="center"><< < > >></td>
+                <td id="tdPages" colspan="<%=colLength%>" class="center">&nbsp;</td>
             </tr>
         </tfoot>
     </table>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Failed to load resource: the server responded with a status of 404 (Not Found) 에러시 아래 2줄 -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <title><%= tableInfo.tableNameKor %> 리스트</title>
+    
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
+
+    <%
+    const searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    %>
+
+    <script>
+
+        function callAjax() {
+            $.ajax({ url        : '/json/customers', // 요청 할 주소 
+                         async      : true, // false 일 경우 동기 요청으로 변경
+                         type       : 'GET', // GET, PUT
+                         data       : { <%
+                                        for (key in searchs) {
+                                            console.log("searchs_key : " + key + ", value : " + searchs[key])
+                                            var search = searchs[key]
+                                            %> <%=search%> : $('input[name=<%=search%>]').val(),
+                                            <%
+                                        }
+                                        %>
+                                        currPage: $('input[name=hideCurrPage]').val()
+                                      }, // 전송할 데이터                
+                         dataType   : 'json', // xml, json, script, html                
+                         beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
+                         success    : function(jqXHR) { // 요청 완료 시        
+                            
+                            if(jqXHR.result.length === 0) {
+                                $('tbody#tbodyNodata').show();
+                                $('tbody#tbodyData').hide()
+                            } 
+                            else {
+                                $('tbody#tbodyNodata').hide()
+                                $('tbody#tbodyData').show();
+                            }
+                                
+                            $("#resultTable").find('tbody#tbodyData').children().remove ();
+                            
+                            $.each(jqXHR.result, function(idx, item){                                
+
+                                var $tr = $("<tr>",{});
+                                <%                                 
+                                for (key in fields) {                                    
+                                    var field = fields[key]
+                                    
+                                    if (tableInfo.fields[field].isListView==true) {
+                                        %> $tr.append( $("<td>", {text: item.<%=field%> }) );
+                                        <% 
+                                    }
+                                }
+                                %>
+                                $("#resultTable").find('tbody#tbodyData').append($tr);
+                            });
+
+                            //append("<td>"+item.<%=field%>+"&nbsp;</td>");
+
+                            var pageList  = jqXHR.pageInfo.currPagelist;
+                            var currPage  = jqXHR.pageInfo.currPage;
+                            var currBlock = jqXHR.pageInfo.currBlock;
+                            var lastBlock = jqXHR.pageInfo.lastBlock;
+                            var lastPage  = jqXHR.pageInfo.lastPage;
+                            
+                            $('td#tdPages').empty();
+                            if (jqXHR.pageInfo.prevBlockPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevBlockPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+"<<"+e+"&nbsp;");
+                            }
+                            if (jqXHR.pageInfo.prevPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+"<"+e+"&nbsp;");
+                            }
+                            var first = 0;
+                            for(page in pageList) {
+                                var a = (pageList[page] == currPage) ?'[' :'' ;
+                                var b = (pageList[page] == currPage) ?']' :'' ;
+
+                                var c = (first > 0) ?', ' :'' ;
+
+                                var d = (pageList[page] != currPage) ?`<a  href='javascript:void(0)' class='aPage' targetPage='${pageList[page]}'>` :'' ;
+                                var e = (pageList[page] != currPage) ?`</a>` :'' ;
+
+                                $('td#tdPages').append(c+a+d+pageList[page]+e+b+"&nbsp;");
+                                first++;
+                            }
+                            if (jqXHR.pageInfo.nextPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+">"+e+"&nbsp;");
+                            }
+                            if (jqXHR.pageInfo.nextBlockPage != 0) {
+                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextBlockPage}'>` ;
+                                var e = `</a>` ;
+
+                                $('td#tdPages').append(d+">>"+e+"&nbsp;");
+                            }
+                         }, 
+                         error      : function(jqXHR) {}, // 요청 실패.                
+                         complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                          $('a.aPage').on('click', function(){               // 각자의 페이지를 클릭할때....
+                                                              $('input[name=hideCurrPage]').val($(this).attr('targetPage'));  // 새로운 페이지를 갱신하고..
+                                                              callAjax();                                         // 자기자신을 호출 
+                                                          })
+                                                      }
+                       })
+        }        
+
+        $(document).ready(function(){
+            $('input#btnSearch').click(clickSearch);
+        })
+
+        function clickSearch() {
+            $('input[name=hideCurrPage]').val(1);
+            callAjax();
+        };
+
+    </script>
+</head>
+<body>   
+
+    <table class="type02">
+        <tr>
+            <th><%=tableInfo.searchs.customerName.nameKor%></th>
+            <td><input name="customerName" type="text" maxLength="<%=tableInfo.searchs.customerName.maxLength%>"></td>
+
+            <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
+            <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
+            
+            <td><input id="btnSearch" type="button" value="검색" /></td>
+        </tr>
+    </table>
+
+    <table id="resultTable" class="type02" style="width: 90%;">
+        <caption><%= tableInfo.tableNameKor %> 리스트</caption>
+        <thead>
+            <tr style="height: 20px;">
+                <% 
+                let colLength = 0
+
+                for(key in fields) {                    
+                    var field = fields[key]
+                    console.log("fields key/value : " + key + " / " + fields[key])
+                    
+                    if(tableInfo.fields[field].isListView) {
+                        %>
+                        <th><%=tableInfo.fields[field].nameKor%></th>
+                        <% 
+                        colLength++
+                    }
+                }
+                %>
+            </tr>
+        </thead>
+        <tbody id="tbodyNodata">
+            <tr  style="height: 20px;">
+                <td colspan="<%=colLength%>" class="center">자료없음</tㅇ>
+            </tr>
+        </tbody>
+        <tbody id="tbodyData" style="display: none;">
+        </tbody>
+        <tfoot>
+            <tr  style="height: 20px;">
+                <td id="tdPages" colspan="<%=colLength%>" class="center">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <input name="hideCurrPage" type="hidden" value="1"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
+
+</body>
+</html>
