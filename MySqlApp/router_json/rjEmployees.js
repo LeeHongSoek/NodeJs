@@ -42,10 +42,7 @@ router.use('/', (req, res) => {
             }
         }  
 
-        employeesInfo.totalRowSql = sqlLastSelect  // 총 건수를 구하기 위한 쿼리를 구성한다
-        var totalRowSql = employeesInfo.totalRowSql
-        
-
+        var totalRowSql = customersInfo.getTotalRowSql(sqlLastSelect)  // 총 건수를 구하기 위한 쿼리를 구성한다
         connection.query(totalRowSql, (err, result, fields) => {
             if(err) {
                 console.log(`totalRowSql 에 에러 발생 : ${err}`)

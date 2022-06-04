@@ -1,3 +1,5 @@
+const getTotalRowSql = require('./getTotalRowSql')
+
 const tableInfo = {
 
     tableName : 'employees',
@@ -16,13 +18,7 @@ const tableInfo = {
                jobTitle:       { nameKor: '직군',      isListView: true,    maxLength: 50 }
               },
     
-    _totalRowSql : '',
-    get totalRowSql() {
-           return this._totalRowSql        
-    },
-    set totalRowSql(selectSql) {
-           this._totalRowSql = ` SELECT count(*) AS total_row FROM (  ${selectSql}  ) A `
-    },
+    getTotalRowSql: getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
 
     selectSql : `
                   SELECT employeeNumber
