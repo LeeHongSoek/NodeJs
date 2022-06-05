@@ -1,7 +1,7 @@
 const express = require('express') // npm install express ---save
 app = express()
-app.use(express.static(__dirname + '/html'))
-app.set('views', __dirname+'/html');
+app.use(express.static(__dirname + '/html_ejs'))
+app.set('views', __dirname+'/html_ejs');
 app.set('view engine','ejs');
 app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
