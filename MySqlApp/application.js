@@ -15,7 +15,7 @@ app.get('/',(req, res) => {
     return  res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
 })
 
-app.use('/jqwidgets', express.static(__dirname + '/html_ejs'))
+app.use('/html', express.static(__dirname + '/html_ejs'))
 
 //
 // /view/ : view, /json/ : json, /pop/ : popup
