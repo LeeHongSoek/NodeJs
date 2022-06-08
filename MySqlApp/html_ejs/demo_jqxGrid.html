@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title id="Description">DataGrid for Javascript Showcase with Custom Dark Mode</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1 minimum-scale=1" />
+    
+    <link rel="stylesheet" href="./js/jqwidgets-framework/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="./js/jqwidgets-framework/jqwidgets/styles/jqx.dark.css" type="text/css" />
+
+    <script type="text/javascript" src="./js/jqwidgets-framework/scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxgrid.filter.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets-framework/jqwidgets/jqxdropdownlist.js"></script>
+    <style>
+		#jqxGrid .jqx-grid-column-header {
+			font-weight: bold;
+		}
+		#jqxGrid .jqx-grid-cell {
+			color: rgb(148, 198, 255);
+			font-size: 12px;
+		}
+		.specialtext {
+			color: orange !important;
+		}
+		.description {
+			color: whitesmoke !important;
+		}
+		.sellformat {
+			color: red !important;
+		}
+		.buyformat {
+			color: greenyellow !important;
+		}
+		.booleanvalue {
+			color: mistyrose !important;
+			background-color: aquamarine;
+			pointer-events: none;
+			visibility: hidden;
+		}
+		.quoteonthewire input {
+			background-color: whitesmoke;
+			color: gray !important;
+		}
+		.quoterequested input {
+			background-color: rgb(231, 86, 60);
+			color: white !important;
+		}
+		.jqx-grid-cell {
+			border-color: black !important;
+			border-right: none;
+			border-bottom-width: 2px;
+		}
+		.jqx-grid-cell .jqx-grid-cell-left-align {
+			margin-top: 10px !important;
+		}
+		.jqx-grid-statusbar {
+			background-color: rgb(22, 22, 22) !important;
+		}
+		.jqx-grid-statusbar span {
+			color: rgb(148, 198, 255);
+			font-size: 12px;
+		}
+	</style>
+	<script>
+		window.onload = function() {
+			// Data
+			var data = [{
+					axe: null,
+					exp: null,
+					status: true,
+					time: "11:57:17",
+					date: "2020-10-10",
+					source: 3,
+					clientname: "DSK BANK IN LIECHTENSTEIN",
+					leg: "M",
+					condition: "SELL",
+					ticker: "",
+					size: 1000000,
+					id: "5D9F0E7BBE",
+					description: "LLOYD3"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: false,
+					time: "15:29:11",
+					date: "2020-10-10",
+					source: 6,
+					clientname: "BANQUE JACOB PETERSON (MONACO) SA",
+					leg: "M",
+					condition: "BUY",
+					ticker: "",
+					size: 1000000,
+					id: "5D9F4027BE",
+					description: "HSBC"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: true,
+					time: "15:57:23",
+					date: "2020-10-10",
+					source: 4,
+					clientname: "CREDIT SUISSE PB ZURICH",
+					leg: "M",
+					condition: "SELL",
+					ticker: "SOCGEN",
+					size: 1000000,
+					id: "5D9F46C4C0",
+					description: "SOCGEN"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: false,
+					time: "20:05:21",
+					date: "2020-10-10",
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "M",
+					condition: "SELL",
+					ticker: "",
+					size: 1,
+					id: "46769596",
+					description: "HSBC"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: null,
+					time: null,
+					date: null,
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "L1",
+					condition: "SELL",
+					ticker: "",
+					size: 1000000,
+					id: null,
+					description: "T 2.875"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: false,
+					time: "20:05:21",
+					date: "2020-10-10",
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "M",
+					condition: "SELL",
+					ticker: "",
+					size: 1000000,
+					id: "46769599",
+					description: "BHP 5."
+				},
+				{
+					axe: null,
+					exp: null,
+					status: null,
+					time: null,
+					date: null,
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "L1",
+					condition: "SELL",
+					ticker: "",
+					size: 1000000,
+					id: null,
+					description: "T 2.875"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: false,
+					time: "20:05:21",
+					date: "2020-10-10",
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "M",
+					condition: "BUY",
+					ticker: "",
+					size: 1,
+					id: "46769605",
+					description: "RIOLN"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: null,
+					time: null,
+					date: null,
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "L1",
+					condition: "BUY",
+					ticker: "",
+					size: 1000000,
+					id: null,
+					description: "T 2.875"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: false,
+					time: "20:05:21",
+					date: "2020-10-10",
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "M",
+					condition: "SELL",
+					ticker: "",
+					size: 1,
+					id: "46769612",
+					description: "RBS 6."
+				},
+				{
+					axe: null,
+					exp: null,
+					status: null,
+					time: null,
+					date: null,
+					source: 4,
+					clientname: "MARKET BD HOLDINGS INC",
+					leg: "L1",
+					condition: "SELL",
+					ticker: "",
+					size: 1000000,
+					id: null,
+					description: "T 1.500"
+				},
+				{
+					axe: null,
+					exp: null,
+					status: false,
+					time: "20:06:15",
+					date: "2020-10-10",
+					source: 4,
+					clientname: "NEW SERVICE CAPITAL, LLC",
+					leg: "M",
+					condition: "BUY",
+					ticker: "",
+					size: 1,
+					id: "46769754",
+					description: "HSBC"
+				},
+			];
+			// prepare the data
+			let source = {
+				datatype: "json",
+				datafields: [
+					{ name: "axe" },
+					{ name: "exp", type: "string" },
+					{ name: "status", type: "bool" },
+					{ name: "status_metadata", type: "string" },
+					{ name: "time", type: "date", format: "HH:mm:ss" },
+					{ name: "date", type: "date", format: "yyyy-MM-dd" },
+					{ name: "source", type: "number" },
+					{ name: "clientname", type: "string" },
+					{ name: "leg", type: "string" },
+					{ name: "condition", type: "string" },
+					{ name: "ticker", type: "string" },
+					{ name: "size", type: "number" },
+					{ name: "id", type: "string" },
+					{ name: "description", type: "string" }
+				],
+				localdata: data
+			};
+			let dataAdapter = new $.jqx.dataAdapter(source, {
+				beforeLoadComplete: function(records) {
+					for (const key in records) {
+						let record = records[key];
+						if (record.status == null) {
+							record.status_metadata = "null";
+						} else {
+							record.status_metadata = record.status;
+						}
+					}
+					return records;
+				},
+				downloadComplete: function(data, status, xhr) {},
+				loadComplete: function(data) {},
+				loadError: function(xhr, status, error) {}
+			});
+			// initialize jqxGrid
+			var grid = new jqxGrid('#grid', {
+				theme: "dark",
+				width: '100%', 
+				source: dataAdapter,
+				autoheight: true,
+				sortable: true,
+				editable: true,
+				showtoolbar: true,
+				showstatusbar: true,
+				selectionmode: "multiplecellsadvanced",
+				renderstatusbar: function(statusbar) {
+					let container = $("<div style='margin: 5px;'></div>");
+					let leftResult = "24 Items";
+					let nextToLeftResult = "0 Selected";
+					let rightResult = "114.4 Size";
+					let leftSpan = $(`<span style='float: left; margin-top: 5px; margin-left: 18px;'>${leftResult}</span>`);
+					let nextToLeftSpan = $(`<span style='float: left; margin-top: 5px; margin-left: 18px;'>${nextToLeftResult}</span>`);
+					let rightSpan = $(`<span style='float: right; margin-top: 5px; margin-right: 45px;'>${rightResult}</span>`);
+					container.append(leftSpan);
+					container.append(nextToLeftSpan);
+					container.append(rightSpan);
+					statusbar.append(container);
+				},
+				columns: [
+					{
+						text: "Status",
+						datafield: "status",
+						width: 140,
+						columntype: "button",
+						cellclassname: function(row, column, value, data) {
+							let result = "booleanvalue";
+							switch (data.status_metadata) {
+								case true:
+									result = "quoteonthewire";
+									break;
+								case false:
+									result = "quoterequested";
+									break;
+								default:
+									break;
+							}
+							return result;
+						},
+						cellsrenderer: function(row, columnfield, value, defaulthtml, columnproperties, rowdata) {
+							let result = " ";
+							switch (rowdata.status_metadata) {
+								case true:
+									result = "QuoteOnTheWire";
+									break;
+								case false:
+									result = "QuoteRequested";
+									break;
+								default:
+									break;
+							}
+							return result;
+						},
+						buttonclick: function(row) {
+							console.log("Click:", row);
+						}
+					},
+					{ text: "Time", datafield: "time", width: 100, cellsformat: "HH:mm:ss" },
+					{ text: "Date", datafield: "date", width: 100, cellsformat: "yyyy-MM-dd" },
+					{ text: "Source", datafield: "source", width: 100 },
+					{ text: "Client Name", datafield: "clientname", width: 240, cellclassname: "specialtext" },
+					{
+						text: "leg #",
+						datafield: "leg",
+						columntype: "dropdownlist",
+						width: 100,
+						cellclassname: function(row, column, value, data) {
+							if (value === "M") {
+								return "description";
+							}
+							return "";
+						}
+					},
+					{
+						text: "C.",
+						datafield: "condition",
+						columntype: "dropdownlist",
+						width: 80,
+						cellclassname: function(row, column, value, data) {
+							if (value == "SELL") {
+								return "sellformat";
+							} else if (value === "BUY") {
+								return "buyformat";
+							}
+						}
+					},
+					{ text: "TICKER", datafield: "ticker", width: 100, cellclassname: "specialtext" },
+					{ text: "Size", datafield: "size", width: 100 },
+					{ text: "Id", datafield: "id", width: 100 },
+					{ text: "Description", datafield: "description",  cellclassname: "description", columntype: "textbox" }
+				],
+				columngroups: [
+					{ text: "Product Details", align: "center", name: "ProductDetails" }
+				]
+			});
+		}
+	</script>
+</head>
+<body>
+<h2>DataGrid with Custom Dark Mode Style</h2>
+	<p>This example demonstrates how to customize the Grid style by using our API.</p>
+    <div id="grid"></div>
+</body>
+</html>
