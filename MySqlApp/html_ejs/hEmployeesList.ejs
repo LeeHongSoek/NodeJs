@@ -15,6 +15,8 @@
     <script src="/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
     <%
+    // 코어 자바스크립트 > 자료구조와 자료형 Object.keys, values, entries
+    // https://ko.javascript.info/keys-values-entries 
     const searchs = Object.keys(tableInfo.searchs) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
     const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
     %>
@@ -26,8 +28,9 @@
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { <%
+                                        console.log("searchs : ")
                                         for (key in searchs) {
-                                            console.log("searchs_key : " + key + ", value : " + searchs[key])
+                                            console.log("key : " + key + ", value : " + searchs[key])
                                             var search = searchs[key]
                                             %> <%=search%> : $('input[name=<%=search%>]').val(),
                                             <%
@@ -155,9 +158,10 @@
                 <% 
                 let colLength = 0
 
-                for(key in fields) {                    
+                console.log("fields : ")
+                for(key in fields) {
                     var field = fields[key]
-                    console.log("fields key/value : " + key + " / " + fields[key])
+                    console.log("key : " + key + ", value : " + fields[key])
                     
                     if(tableInfo.fields[field].isListView) {
                         %>
