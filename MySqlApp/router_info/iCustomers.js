@@ -40,7 +40,8 @@ const tableInfo = {
                         , salesRepEmployeeNumber
                         , creditLimit
                      FROM customers
-                    WHERE del = 'N' `,
+                    WHERE del = 'N' 
+                `,
 
     selectSqlOne : `
                      SELECT customerNumber
@@ -58,12 +59,14 @@ const tableInfo = {
                           , creditLimit
                        FROM customers
                       WHERE del = 'N'
-                        AND customerNumber = ?  `,
+                        AND customerNumber = ?  
+                  `,
 
     deleteSqlOne : `
                     UPDATE customers 
                        SET del = 'Y'   
-                     WHERE customerNumber = ?  `
+                     WHERE customerNumber = ?  
+                  `
 }
 
 module.exports = tableInfo

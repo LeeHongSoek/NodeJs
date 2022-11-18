@@ -3,7 +3,8 @@ getTotalRowSql = function (selectSql) {
     return `
              SELECT count(*) AS total_row 
                FROM ( ${selectSql}  
-                    ) A `
+                    ) A 
+          `
 }
 
 module.exports =  getTotalRowSql

@@ -30,7 +30,8 @@ const tableInfo = {
                        , reportsTo
                        , jobTitle
                     FROM employees 
-                   WHERE del = 'N' `,
+                   WHERE del = 'N' 
+               `,
  
     selectSqlOne : `
                      SELECT employeeNumber
@@ -43,12 +44,14 @@ const tableInfo = {
                           , jobTitle
                        FROM employees 
                       WHERE del = 'N'
-                        AND employeeNumber = ?   `,
+                        AND employeeNumber = ?   
+                  `,
 
     deleteSqlOne : `
                      UPDATE employees 
                         SET del = 'Y'   
-                      WHERE employeeNumber = ?   `
+                      WHERE employeeNumber = ?   
+                  `
 }
 
 module.exports = tableInfo
