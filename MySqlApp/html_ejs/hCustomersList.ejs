@@ -28,9 +28,9 @@
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { <%
-                                        console.log("searchs : ")
+                                        console.log("검색항목 : ")
                                         for (key in searchs) {
-                                            console.log("key : " + key + ", value : " + searchs[key])
+                                            console.log("키 : " + key + ", 값 : " + searchs[key])
                                             var search = searchs[key]
                                             %> <%=search%> : $('input[name=<%=search%>]').val(),
                                             <%
@@ -159,10 +159,10 @@
                 <% 
                 let colLength = 0
 
-                console.log("fields : ")
+                console.log("출력항목 : ")
                 for(key in fields) {
                     var field = fields[key]
-                    console.log("key : " + key + ", value : " + fields[key])
+                    console.log("키 : " + key + ", 값 : " + fields[key])
                     
                     if(tableInfo.fields[field].isListView) {
                         %>
