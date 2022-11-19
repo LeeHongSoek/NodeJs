@@ -3,6 +3,8 @@
  * 
  * Node.js 에서 웹 크롤링하기    # npm install axios cheerio
  * 
+ * 참조 : https://www.youtube.com/watch?v=aoQSOZfz3vQ
+ * 
  */
 const axios = require('axios');
 const cheerio = require('cheerio');
