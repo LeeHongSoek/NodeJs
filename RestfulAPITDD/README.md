@@ -2,7 +2,7 @@
 
 # Node.Js
 
-node.js 공부를 위한 저장소...
+node.js 공부를 위한 저장소... 2024.11.19 맥북에 clone함
 
 # [토크ON 26차. Node.js 기반의 REST API 서버 개발 | T아카데미](https://www.youtube.com/watch?v=3dBnLSsnqic&list=PL9mhQYIlKEhfEAgBlIhl7iBKJcHGekml1)
 
@@ -63,7 +63,6 @@ HTTP 상태코드
 • 409: 충돌 (Conflict)
 
 • 500: 서버 에러 (Interel server error)
-
 
 ## 1xx (조건부 응답)
 
