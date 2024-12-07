@@ -1,4 +1,4 @@
-
+USE mysql;
 
 
 create USER 'classicmodels'@'%' IDENTIFIED BY 'classicmodels';
