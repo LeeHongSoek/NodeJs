@@ -128,6 +128,19 @@ const pageInfo = {
     _nextBlockPage: 0,
     get nextBlockPage() {
         return (this.currBlock === this.lastBlock) ?0 :this.currBlock * this.pagePerBlock + 1 
+    },
+
+    toJSON() {
+        return {
+            totalRow: this.totalRow,
+            rowPerPage: this.rowPerPage,
+            pagePerBlock: this.pagePerBlock,
+            currPage: this.currPage,
+            lastPage: this.lastPage,
+            currBlock: this.currBlock,
+            limitFrom: this.limitFrom,
+            currPagelist: this.currPagelist
+        };
     }
 }
 
