@@ -1,3 +1,5 @@
+//////////////////
+// 
 const express = require('express') // npm install express ---save
 app = express()
 app.use(express.static(__dirname + '/html_ejs'))
@@ -22,21 +24,16 @@ app.use('/html', express.static(__dirname + '/html_ejs'))
 //
 
 // customers
-
-app.use('/json/customers', require('./router_json/rjCustomers.js')) 
-
+app.use('/json/customers',     require('./router_json/rjCustomers.js')) 
 app.use('/view/customersList', require('./router_view/rvCustomersList.js')) 
 app.use('/view/customersView', require('./router_view/rvCustomersView.js')) 
 app.use('/view/customersEdit', require('./router_view/rvCustomersEdit.js')) 
 
 // employees
-
-app.use('/json/employees', require('./router_json/rjEmployees.js')) 
-
+app.use('/json/employees',     require('./router_json/rjEmployees.js')) 
 app.use('/view/employeesList', require('./router_view/rvEmployeesList.js')) 
 app.use('/view/employeesView', require('./router_view/rvEmployeesView.js')) 
 app.use('/view/employeesEdit', require('./router_view/rvEmployeesEdit.js')) 
-
 
 
 //
