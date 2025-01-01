@@ -23,25 +23,31 @@ const tableInfo = {
                creditLimit:            { nameKor: '신용한도',         isListView: false,   maxLength: 10 }
               },
     
-    getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
+    getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다.. // require('./getTotalRowSql')
+
+    selectSqlKeys : `
+                    SELECT customerNumber
+                      FROM customers
+                     WHERE del = 'N' 
+                   `,
 
     selectSql : `
-                   SELECT customerNumber
-                        , customerName
-                        , contactLastName
-                        , contactFirstName
-                        , phone
-                        , addressLine1
-                        , addressLine2
-                        , city
-                        , state
-                        , postalCode
-                        , country
-                        , salesRepEmployeeNumber
-                        , creditLimit
-                     FROM customers
-                    WHERE del = 'N' 
-                `,
+                SELECT customerNumber
+                     , customerName
+                     , contactLastName
+                     , contactFirstName
+                     , phone
+                     , addressLine1
+                     , addressLine2
+                     , city
+                     , state
+                     , postalCode
+                     , country
+                     , salesRepEmployeeNumber
+                     , creditLimit
+                  FROM customers
+                 WHERE del = 'N' 
+             `,
 
     selectSqlOne : `
                      SELECT customerNumber

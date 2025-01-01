@@ -21,6 +21,7 @@ router.use('/', (req, res) => {
 
     pool.getConnection((err, connection) => { 
         
+        var sqlLastSelectKeys = customersInfo.selectSqlKeys // select 문!!
         var sqlLastSelect = customersInfo.selectSql // select 문!!
         var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
         
@@ -37,12 +38,13 @@ router.use('/', (req, res) => {
             var keysSearchs = Object.keys(customersInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
             for (var keysSearchs in keysSearchs) {
                 if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
-                    sqlLastSelect = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                    sqlLastSelectKeys = sqlLastSelectKeys + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                    sqlLastSelect     = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
                 }
             }
         }  
 
-        var totalRowSql = customersInfo.getTotalRowSql(sqlLastSelect)  // 총 건수를 구하기 위한 쿼리를 구성한다
+        var totalRowSql = customersInfo.getTotalRowSql(sqlLastSelectKeys)  // 총 건수를 구하기 위한 쿼리를 구성한다
         connection.query(totalRowSql, (err, result, fields) => {
             if(err) {
                 console.log(`totalRowSql 에 에러 발생 : ${err}`)
