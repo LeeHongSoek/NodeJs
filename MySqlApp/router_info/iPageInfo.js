@@ -6,7 +6,7 @@ const pageInfo = {
         return this._totalRow
     },
     set totalRow(value) {
-        this._totalRow = (value < 1) ? 1 : value // 반드시 1 보다 커야함.        
+        this._totalRow = (value < 1) ? 1 : value // 반드시 0 보다 커야함.        
     },
 
     // 페이지당 레코드수
@@ -15,7 +15,7 @@ const pageInfo = {
         return this._rowPerPage
     },
     set rowPerPage(value) {        
-        this._rowPerPage = (value < 1) ? 1 : value // 반드시 1 보다 커야함.        
+        this._rowPerPage = (value < 1) ? 1 : value // 반드시 0 보다 커야함.        
     },    
 
     // 블럭당 페이지 수
@@ -24,7 +24,7 @@ const pageInfo = {
         return this._pagePerBlock        
     },
     set pagePerBlock(value) {
-        this._pagePerBlock = (value < 1) ? 1 : value // 반드시 1 보다 커야함.        
+        this._pagePerBlock = (value < 1) ? 1 : value // 반드시 0 보다 커야함.        
         return this._pagePerBlock
     },
 
@@ -97,6 +97,16 @@ const pageInfo = {
         return this._rowPerPage
     },
 
+
+    _prevBlockPage: 0,
+    get prevBlockPage() {
+        return (this.currBlock-1) * this.pagePerBlock 
+    },
+    _prevPage: 0,
+    get prevPage() {
+        return this.currPage - 1
+    },
+
     _currPagelist: [],
     // 현재 블럭의 페이지 수를 10개 혹은 이하로 리스팅한다.
     get currPagelist() {
@@ -111,15 +121,6 @@ const pageInfo = {
         }
         return arrypage;
     },
-
-    _prevBlockPage: 0,
-    get prevBlockPage() {
-        return (this.currBlock-1) * this.pagePerBlock 
-    },
-    _prevPage: 0,
-    get prevPage() {
-        return this.currPage - 1
-    },
     
     _nextPage: 0,
     get nextPage() {
@@ -130,6 +131,8 @@ const pageInfo = {
         return (this.currBlock === this.lastBlock) ?0 :this.currBlock * this.pagePerBlock + 1 
     },
 
+    //                            
+
     toJSON() {
         return {
             totalRow: this.totalRow,
@@ -139,9 +142,25 @@ const pageInfo = {
             lastPage: this.lastPage,
             currBlock: this.currBlock,
             limitFrom: this.limitFrom,
-            currPagelist: this.currPagelist
+
+            prevBlockPage: this.prevBlockPage,
+            prevPage: this.prevPage,
+            
+            currPagelist: this.currPagelist,
+
+            nextPage: this.nextPage,
+            nextBlockPage: this.nextBlockPage,
+
+
+
+            startBlock: null,
+            prevBlock: null,            
+            nextBlock: null,
+            endBlock: null
         };
     }
+
+    //
 }
 
 module.exports = pageInfo

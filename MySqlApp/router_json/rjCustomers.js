@@ -29,7 +29,7 @@ router.use('/', (req, res) => {
         for (var keyQuery in keysQuery) {
             
             var fieldName = keysQuery[keyQuery]
-            console.log("json 키=값 : " + fieldName + "=" + req.query[fieldName])
+            console.log("req.json 키=값 : " + fieldName + "=" + req.query[fieldName])
 
             if (fieldName==='currPage') {
                 currPage = eval(req.query[fieldName])                
@@ -81,7 +81,8 @@ router.use('/', (req, res) => {
                     {
                         console.info(`실행 : ${sqlLastSelect}`)
                         console.info(`Row수 : ${result.length}`)
-                        //console.info(`result : ${ JSON.stringify(result,null,2)}`)
+                        console.info(`res.pageInfo : ${JSON.stringify(pageInfo,null,2)}`)
+                        //console.info(`res.result : ${JSON.stringify(result,null,2)}`)
         
                         res.status(200).send({
                             success : true,
