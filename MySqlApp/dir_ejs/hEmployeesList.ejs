@@ -11,8 +11,8 @@
 
     <title><%= tableInfo.tableNameKor %> 리스트</title>
     
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
-    <script src="/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
+    <link href="/dir_statics/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/dir_statics/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
     <%
     // 코어 자바스크립트 > 자료구조와 자료형 Object.keys, values, entries
@@ -24,7 +24,7 @@
     <script>
 
         function callAjax() {
-            $.ajax({ url        : '/json/customers', // 요청 할 주소 
+            $.ajax({ url        : '/json/employees', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { <%
@@ -142,11 +142,11 @@
 
     <table class="type02">
         <tr>
-            <th><%=tableInfo.searchs.customerName.nameKor%></th>
-            <td><input name="customerName" type="text" maxLength="<%=tableInfo.searchs.customerName.maxLength%>"></td>
+            <th><%=tableInfo.searchs.lastName.nameKor%></th>
+            <td><input name="lastName" type="text" maxLength="<%=tableInfo.searchs.lastName.maxLength%>"></td>
 
-            <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
-            <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
+            <th><%=tableInfo.searchs.jobTitle.nameKor%></th>
+            <td><input name="jobTitle" type="text" maxLength="<%=tableInfo.searchs.jobTitle.maxLength%>"></td>
             
             <td><input id="btnSearch" type="button" value="검색" /></td>
         </tr>

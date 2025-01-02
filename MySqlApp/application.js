@@ -1,10 +1,12 @@
 //////////////////
 // 
 const express = require('express') // npm install express ---save
+
 app = express()
-app.use(express.static(__dirname + '/html_ejs'))
-app.set('views', __dirname+'/html_ejs');
+app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
+// app.use(express.static(__dirname + '/html_ejs'))
 app.set('view engine','ejs');
+app.set('views', __dirname+'/dir_ejs');
 app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
 const path = require('path')
@@ -16,8 +18,6 @@ app.get('/',(req, res) => {
     console.log(` / 요청 : 지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
     return  res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
 })
-
-app.use('/html', express.static(__dirname + '/html_ejs'))
 
 //
 // /view/ : view, /json/ : json, /pop/ : popup
