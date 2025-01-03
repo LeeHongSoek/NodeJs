@@ -3,7 +3,7 @@ const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/N
 const tableInfo = require('../rt_info/iEmployees')
 
 router.get('/', (req, res) => {
-    console.log(` ${req.originalUrl} [${req.method}] 요청 `)
+    console.log(` ${req.originalUrl} [${req.method}] 요청 (hEmployeesList)`)
     return res.render('hEmployeesList',{ tableInfo });
 })
 

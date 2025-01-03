@@ -51,15 +51,37 @@
                             const customer = jqXHR.result[0]; // 단일 레코드, 첫 번째 값에 접근
                     
                             // 데이터 바인딩
-                            $("#customer-number").text(customer.customerNumber);
-                            $("#customer-name").text(customer.customerName);
-                            $("#contact-name").text(`${customer.contactLastName} ${customer.contactFirstName}`);
-                            $("#phone").text(customer.phone);
-                            $("#address").text(customer.addressLine1);
-                            $("#city").text(customer.city);
-                            $("#state").text(customer.state || "N/A");
-                            $("#country").text(customer.country);
-                            $("#credit-limit").text(customer.creditLimit || "0");
+                            <%
+                            if (tableInfo.ackType == 'view')
+                            {
+                                %>
+                                $("#customer-number").text(customer.customerNumber);
+                                $("#customer-name").text(customer.customerName);
+                                $("#contact-name").text(`${customer.contactLastName} ${customer.contactFirstName}`);
+                                $("#phone").text(customer.phone);
+                                $("#address").text(customer.addressLine1);
+                                $("#city").text(customer.city);
+                                $("#state").text(customer.state || "N/A");
+                                $("#country").text(customer.country);
+                                $("#credit-limit").text(customer.creditLimit || "0");
+                                <%
+                            }
+                            if (tableInfo.ackType == 'edit')
+                            {
+                                %>
+                                // 데이터 바인딩
+                                $("#customer-number").val(customer.customerNumber).prop('readonly', true);
+                                $("#customer-name").val(customer.customerName);
+                                $("#contact-name").val(`${customer.contactLastName} ${customer.contactFirstName}`);
+                                $("#phone").val(customer.phone);
+                                $("#address").val(customer.addressLine1);
+                                $("#city").val(customer.city);
+                                $("#state").val(customer.state || "");
+                                $("#country").val(customer.country);
+                                $("#credit-limit").val(customer.creditLimit || "0");
+                                <%
+                            }
+                            %>    
 
                             // jqXHR의 result에 접근
                             const results = jqXHR.result;
@@ -93,10 +115,10 @@
 </head>
 <body>
     <%
-    if tableInfo.ackType == 'view'
+    if (tableInfo.ackType == 'view')
     {
         %>
-        <h1>고객 정보</h1>
+        <h1>고객 정보 보기</h1>
 
         <!-- 고객 정보를 표시할 영역 -->
         <div id="customer-info">
@@ -110,6 +132,84 @@
             <p><strong>국가:</strong>         <span id="country"></span>              </p>
             <p><strong>신용 한도:</strong>    <span id="credit-limit"></span>         </p>
         </div>
+        <%
+    }
+    if (tableInfo.ackType == 'edit')
+    {
+        %>
+        <h1>고객 정보 편집</h1>
+
+        <!-- 고객 정보 편집 폼 -->
+        <form id="customer-edit-form">
+            <div class="form-group">
+                <label for="customer-number"><strong>고객 번호:</strong></label>
+                <input type="text" id="customer-number" name="customer-number" readonly>
+            </div>
+            <div class="form-group">
+                <label for="customer-name"><strong>고객명:</strong></label>
+                <input type="text" id="customer-name" name="customer-name" required>
+            </div>
+            <div class="form-group">
+                <label for="contact-name"><strong>연락 이름:</strong></label>
+                <input type="text" id="contact-name" name="contact-name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone"><strong>전화번호:</strong></label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address"><strong>주소:</strong></label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="city"><strong>도시:</strong></label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state"><strong>주:</strong></label>
+                <input type="text" id="state" name="state">
+            </div>
+            <div class="form-group">
+                <label for="country"><strong>국가:</strong></label>
+                <input type="text" id="country" name="country" required>
+            </div>
+            <div class="form-group">
+                <label for="credit-limit"><strong>신용 한도:</strong></label>
+                <input type="number" id="credit-limit" name="credit-limit" required>
+            </div>
+            <button type="submit" class="save-button">저장</button>
+        </form>
+
+        <style>
+            #customer-edit-form {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            .save-button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .save-button:hover {
+                background-color: #45a049;
+            }
+        </style>
         <%
     }
     %>

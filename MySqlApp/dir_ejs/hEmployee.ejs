@@ -93,15 +93,34 @@
 </head>
 <body>
     <%
-    if tableInfo.ackType == 'view'
+    if (tableInfo.ackType == 'view')
     {
         %>
-        <h1>고객 정보</h1>
+        <h1>사원 정보 보기</h1>
 
-        <!-- 고객 정보를 표시할 영역 -->
+        <!-- 사원 정보를 표시할 영역 -->
         <div id="employee-info">
-            <p><strong>고객 번호:</strong> <b><span id="employee-number"></span></b>  </p>
-            <p><strong>고객명:</strong>       <span id="employee-name"></span>        </p>
+            <p><strong>사원 번호:</strong> <b><span id="employee-number"></span></b>  </p>
+            <p><strong>사원명:</strong>       <span id="employee-name"></span>        </p>
+            <p><strong>연락 이름:</strong>    <span id="contact-name"></span>         </p>
+            <p><strong>전화번호:</strong>     <span id="phone"></span>                </p>
+            <p><strong>주소:</strong>         <span id="address"></span>              </p>
+            <p><strong>도시:</strong>         <span id="city"></span>                 </p>
+            <p><strong>주:</strong>           <span id="state"></span>                </p>
+            <p><strong>국가:</strong>         <span id="country"></span>              </p>
+            <p><strong>신용 한도:</strong>    <span id="credit-limit"></span>         </p>
+        </div>
+        <%
+    }
+    if (tableInfo.ackType == 'edit')
+    {
+        %>
+        <h1>사원 정보 수정</h1>
+
+        <!-- 사원 정보를 표시할 영역 -->
+        <div id="employee-info">
+            <p><strong>사원 번호:</strong> <b><span id="employee-number"></span></b>  </p>
+            <p><strong>사원명:</strong>       <span id="employee-name"></span>        </p>
             <p><strong>연락 이름:</strong>    <span id="contact-name"></span>         </p>
             <p><strong>전화번호:</strong>     <span id="phone"></span>                </p>
             <p><strong>주소:</strong>         <span id="address"></span>              </p>

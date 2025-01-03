@@ -6,16 +6,15 @@ router.get('/', (req, res) => {
     res.status(404).send(`
         <script>
             alert('잘못된 경로입니다.');
-            window.location.href = '/view/employeesList';
+            window.location.href = '/employeesList';
         </script>
     `);
-    //res.redirect('/view/employeesList');  // '/home' 경로로 리디렉션
 })
 
 // 사용예 : >curl localhost:3000/
 router.get('/:ackType/:employeeNumber', (req, res) => {
     
-    console.log(` ${req.originalUrl} [${req.method}] 요청 `)
+    console.log(` ${req.originalUrl} [${req.method}] 요청 (hemployee)`)
     console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view
     console.log(` req.params.employeeNumber = ${req.params.employeeNumber}`)
 
@@ -28,7 +27,7 @@ router.get('/:ackType/:employeeNumber', (req, res) => {
 // 사용예 : >curl localhost:3000/
 router.get('/insert', (req, res) => {
     
-    console.log(` ${req.originalUrl} [${req.method}] 요청 `)
+    console.log(` ${req.originalUrl} [${req.method}] 요청 (hemployee) `)
     console.log(` req.params.ackType = insert`)
 
     tableInfo.ackType = 'insert'

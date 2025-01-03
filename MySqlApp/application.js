@@ -20,19 +20,21 @@ app.get('/',(req, res) => {
 })
 
 //
-// /view/ : view, /json/ : json, /pop/ : popup
+// /json/ : json, /pop/ : popup
 //
 
+app.use('/json/customers', require('./rt_json/rjCustomers.js')) 
 // customer(s)
-app.use('/json/customers',     require('./rt_json/rjCustomers.js')) 
-app.use('/view/customersList', require('./rt_view/rvCustomersList.js')) 
-app.use('/view/customer',      require('./rt_view/rvCustomer.js')) 
+app.use('/customersList', require('./rt_view/rvCustomersList.js')) 
+app.use('/customer',      require('./rt_view/rvCustomer.js')) 
 
+
+app.use('/json/employees', require('./rt_json/rjEmployees.js')) 
 // employee(s)
-app.use('/json/employees',     require('./rt_json/rjEmployees.js')) 
-app.use('/view/employeesList', require('./rt_view/rvEmployeesList.js')) 
-app.use('/view/employee',      require('./rt_view/rvEmployee.js')) 
+app.use('/employeesList', require('./rt_view/rvEmployeesList.js')) 
+app.use('/employee',      require('./rt_view/rvEmployee.js')) 
 
+//
 
 
 //
