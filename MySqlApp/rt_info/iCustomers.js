@@ -48,7 +48,8 @@ const tableInfo = {
                   FROM customers
                  WHERE del = 'N' 
              `,
-    ackType : '', // edit, view, insert
+             
+    ackType : '', // edit, view, insert, delete
     pk_value : '',
 
     selectSqlOne : ` /* selectSqlOne */

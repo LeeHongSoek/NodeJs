@@ -83,6 +83,11 @@
                                             class: 'buttonEdit',
                                             pk_key: item.customerNumber,
                                             text: '수정'
+                                        }),
+                                        $("<button>", {
+                                            class: 'buttonDelete',
+                                            pk_key: item.customerNumber,
+                                            text: '삭제'
                                         })
                                     )
                                 );
@@ -147,6 +152,18 @@
                                                           })
                                                           $('button.buttonEdit').on('click', function(e){ 
                                                               window.location.href = '/customer/edit/' + $(this).attr('pk_key');
+                                                          })
+                                                          $('button.buttonDelete').on('click', function(e){ 
+                                                              
+                                                              $.ajax({ url        : '/customer/delete/' + $(this).attr('pk_key'), // 요청 할 주소 
+                                                                       async      : false, // false 일 경우 동기 요청으로 변경
+                                                                       type       : 'GET', // GET, PUT
+                                                                       data       : { hideCurrPage: $('input[name=hideCurrPage]').val()},
+                                                                       error      : function() {}, // 요청 실패.                
+                                                                       complete   : function() { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                                                                     alert($(this).attr('pk_key')+'삭제가.....');
+                                                                                                }
+                                                                })
                                                           })
                                                       }
                        })

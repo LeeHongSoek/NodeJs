@@ -10,19 +10,20 @@ router.get('/', (req, res) => {
             window.location.href = '/customersList';
         </script>
     `);
+    //res.redirect('/view/customersList');  // '/home' 경로로 리디렉션
 })
 
 // 사용예 : >curl localhost:3000/
 router.get('/:ackType/:customerNumber', (req, res) => {
     
     console.log(` ${req.originalUrl} [${req.method}] 요청 (hCustomer)`)
-    console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view
+    console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view, delete
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
 
-    tableInfo.ackType = req.params.ackType // edit, view
+    tableInfo.ackType = req.params.ackType // edit, view, delete
     tableInfo.pk_value = req.params.customerNumber
 
-    return res.render('hCustomer', { tableInfo } /*{ customerNumber: req.params.customerNumber }*/)
+    return res.render('hCustomer', { tableInfo })
 })
 
 // 사용예 : >curl localhost:3000/
@@ -33,7 +34,7 @@ router.get('/insert', (req, res) => {
 
     tableInfo.ackType = 'insert'
 
-    return res.render('hCustomer', { tableInfo } /*{ customerNumber: req.params.customerNumber }*/)
+    return res.render('hCustomer', { tableInfo })
 })
 
 module.exports = router
