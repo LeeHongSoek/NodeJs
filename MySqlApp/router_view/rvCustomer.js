@@ -17,11 +17,22 @@ router.get('/', (req, res) => {
 router.get('/:ackType/:customerNumber', (req, res) => {
     
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
-    console.log(` req.params.ackType = ${req.params.ackType}`)
+    console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
 
-    tableInfo.ackType = req.params.ackType
+    tableInfo.ackType = req.params.ackType // edit, view
     tableInfo.pk_value = req.params.customerNumber
+
+    return res.render('hCustomer', { tableInfo } /*{ customerNumber: req.params.customerNumber }*/)
+})
+
+// 사용예 : >curl localhost:3000/
+router.get('/insert', (req, res) => {
+    
+    console.log(` ${req.originalUrl} [${req.method}] 요청 `)
+    console.log(` req.params.ackType = insert`)
+
+    tableInfo.ackType = 'insert'
 
     return res.render('hCustomer', { tableInfo } /*{ customerNumber: req.params.customerNumber }*/)
 })

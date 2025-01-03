@@ -8,35 +8,112 @@
     <link href="/dir_statics/css/style.css" rel="stylesheet" type="text/css">
     <script src="/dir_statics/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
+    <style>
+    #employee-info {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        max-width: 400px;
+        background-color: #f9f9f9;
+    }
+    #employee-info p {
+        margin: 5px 0;
+    }
+    #employee-info strong {
+        color: #333;
+    }
+    </style>
+
     <title>Document</title>
+
+    <%
+    // 코어 자바스크립트 > 자료구조와 자료형 Object.keys, values, entries
+    // https://ko.javascript.info/keys-values-entries 
+    const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    %>
+
+
+    <script>
+        function callAjax() {
+                $.ajax({ url        : '/json/employees/<%=tableInfo.pk_value%>', // 요청 할 주소 
+                         async      : true, // false 일 경우 동기 요청으로 변경
+                         type       : 'GET', // GET, PUT
+                         data       : { 
+                                      }, // 전송할 데이터                
+                         dataType   : 'json', // xml, json, script, html                
+                         beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
+                         success    : function(jqXHR) { // 요청 완료 시        
+                            
+                            console.log(jqXHR);
+
+                            const employee = jqXHR.result[0]; // 단일 레코드, 첫 번째 값에 접근
+                    
+                            // 데이터 바인딩
+                            $("#employee-number").text(employee.employeeNumber);
+                            $("#employee-name").text(employee.employeeName);
+                            $("#contact-name").text(`${employee.contactLastName} ${employee.contactFirstName}`);
+                            $("#phone").text(employee.phone);
+                            $("#address").text(employee.addressLine1);
+                            $("#city").text(employee.city);
+                            $("#state").text(employee.state || "N/A");
+                            $("#country").text(employee.country);
+                            $("#credit-limit").text(employee.creditLimit || "0");
+
+                            // jqXHR의 result에 접근
+                            const results = jqXHR.result;
+
+                            // result 배열의 각 요소를 반복하여 출력
+                            results.forEach(function(employee) {
+                                console.log("employee Number: " + employee.employeeNumber);
+                                console.log("employee Name: " + employee.employeeName);
+                                console.log("Contact Last Name: " + employee.contactLastName);
+                                console.log("Contact First Name: " + employee.contactFirstName);
+                                console.log("Phone: " + employee.phone);
+                                console.log("Address Line 1: " + employee.addressLine1);
+                                console.log("City: " + employee.city);
+                                console.log("State: " + employee.state);
+                                console.log("Country: " + employee.country);
+                                console.log("Credit Limit: " + employee.creditLimit);
+                                console.log("------------------------------");
+                            });
+                            
+                            
+                         }, 
+                         error      : function(jqXHR) {}, // 요청 실패.                
+                         complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                       }
+                       })
+        }
+
+        callAjax()
+
+    </script>
 </head>
 <body>
-    <h1>Welcome to my home page</h1>
-    <h2>환영합니다.!</h2>
+    <%
+    if tableInfo.ackType == 'view'
+    {
+        %>
+        <h1>고객 정보</h1>
 
-    <table class="type02">
-        <caption><%=title%></caption>
-        <tr>
-          <th>Employee<br>Number</th>
-          <th>Lastname</th>
-          <th>Firstname</th>
-          <th>Extension</th>
-          <th>Email</th>
-          <th>Officecode</th>
-          <th>Reportsto</th>
-          <th>Jobtitle</th>
-          <th>&nbsp;</th>
-        </tr>
-          <tr>
-            <td rowspan="9">
-            </td>
-          </tr>
-      </table>
+        <!-- 고객 정보를 표시할 영역 -->
+        <div id="employee-info">
+            <p><strong>고객 번호:</strong> <b><span id="employee-number"></span></b>  </p>
+            <p><strong>고객명:</strong>       <span id="employee-name"></span>        </p>
+            <p><strong>연락 이름:</strong>    <span id="contact-name"></span>         </p>
+            <p><strong>전화번호:</strong>     <span id="phone"></span>                </p>
+            <p><strong>주소:</strong>         <span id="address"></span>              </p>
+            <p><strong>도시:</strong>         <span id="city"></span>                 </p>
+            <p><strong>주:</strong>           <span id="state"></span>                </p>
+            <p><strong>국가:</strong>         <span id="country"></span>              </p>
+            <p><strong>신용 한도:</strong>    <span id="credit-limit"></span>         </p>
+        </div>
+        <%
+    }
+    %>
+
 </body>
+
 </html>
-
-
-
-
-
-

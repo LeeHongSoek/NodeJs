@@ -20,7 +20,7 @@ const tableInfo = {
     
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
 
-    selectSql : `
+    selectSql : ` /* selectSql */
                   SELECT employeeNumber
                        , lastName
                        , firstName
@@ -33,7 +33,10 @@ const tableInfo = {
                    WHERE del = 'N' 
                `,
  
-    selectSqlOne : `
+    ackType : '', // edit, view, insert
+    pk_value : '',
+
+    selectSqlOne : ` /* selectSqlOne */
                      SELECT employeeNumber
                           , lastName
                           , firstName
@@ -47,7 +50,7 @@ const tableInfo = {
                         AND employeeNumber = ?   
                   `,
 
-    deleteSqlOne : `
+    deleteSqlOne : ` /* deleteSqlOne */
                      UPDATE employees 
                         SET del = 'Y'   
                       WHERE employeeNumber = ?   
