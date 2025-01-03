@@ -7,6 +7,15 @@ const pageInfo = {
     },
     set totalRow(value) {
         this._totalRow = (value < 1) ? 1 : value // 반드시 0 보다 커야함.        
+        
+        // 마지막 페이지를 갱신한다.
+        _lastPage = parseInt(this._totalRow / this._rowPerPage)
+        _lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0
+
+        // 현제페이지가 마지막페이지 보다 크면 마지막페이지가 현제페이지가 된다.
+        if (_lastPage < this._currPage) {
+            this._currPage = _lastPage
+        }
     },
 
     // 페이지당 레코드수
@@ -54,12 +63,12 @@ const pageInfo = {
     // 현재 페이지
     _currPage: 1,     
     get currPage() { // 현재 페이지를  범위 보정후 리턴한다.
-        if (this._currPage < 1) this._currPage = 1
+        if (this._currPage < 1) this._currPage = 1 // 반드시 0 보다 커야함.
 
-        var lastPage = parseInt(this._totalRow / this._rowPerPage)
-        lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
+        this._lastPage = parseInt(this._totalRow / this._rowPerPage)
+        this._lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
         if (lastPage < this._currPage){
-            this._currPage = lastPage
+            this._currPage = this._lastPage
         }
         return this._currPage
     },

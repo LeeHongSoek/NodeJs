@@ -49,7 +49,7 @@ router.use('/:customerNumber', (req, res) => {
         }
         
         if (req.method === 'DELETE') {
-            connection.query(deleteSqlOne, [req.params.customerNumber], (err,rows, fields) => {
+            connection.query(customersInfo.deleteSqlOne, [req.params.customerNumber], (err,rows, fields) => {
                 if(err) {
                     console.log(`sql에 에러 발생 : ${err}`)
 
@@ -102,7 +102,8 @@ router.use('/', (req, res) => {
             console.log("req.json 키=값 : " + fieldName + "=" + req.query[fieldName])
 
             if (fieldName==='currPage') {
-                currPage = eval(req.query[fieldName])                
+                currPage = eval(req.query[fieldName])              
+                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)  
             }
 
             var keysSearchs = Object.keys(customersInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
@@ -132,7 +133,6 @@ router.use('/', (req, res) => {
                 console.info(`Row수 : ${result.length}`)
 
                 pageInfo.totalRow = result[0].total_row // 총 레코드 수
-                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)
 
                 sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 

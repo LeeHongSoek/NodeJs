@@ -49,7 +49,7 @@ const tableInfo = {
                  WHERE del = 'N' 
              `,
              
-    ackType : '', // edit, view, insert, delete
+    ackType : '', // edit, view, insert
     pk_value : '',
 
     selectSqlOne : ` /* selectSqlOne */
