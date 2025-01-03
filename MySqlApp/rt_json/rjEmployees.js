@@ -98,7 +98,8 @@ router.use('/', (req, res) => {
             console.log("req.json 키=값 : " + fieldName + "=" + req.query[fieldName])
 
             if (fieldName==='currPage') {
-                currPage = eval(req.query[fieldName])                
+                currPage = eval(req.query[fieldName])
+                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)
             }
 
             var keysSearchs = Object.keys(employeesInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
@@ -127,7 +128,6 @@ router.use('/', (req, res) => {
                 console.info(`Row수 : ${result.length}`)
 
                 pageInfo.totalRow = result[0].total_row // 총 레코드 수
-                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)
 
                 sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 
