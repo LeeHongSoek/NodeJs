@@ -23,15 +23,16 @@ app.get('/',(req, res) => {
 // /view/ : view, /json/ : json, /pop/ : popup
 //
 
-// customers
-app.use('/json/customers',     require('./router_json/rjCustomers.js')) 
-app.use('/view/customersList', require('./router_view/rvCustomersList.js')) 
-app.use('/view/customersOne', require('./router_view/rvCustomer.js')) 
+// customer(s)
+app.use('/json/customers',     require('./rt_json/rjCustomers.js')) 
+app.use('/view/customersList', require('./rt_view/rvCustomersList.js')) 
+app.use('/view/customer',      require('./rt_view/rvCustomer.js')) 
 
-// employees
-app.use('/json/employees',     require('./router_json/rjEmployees.js')) 
-app.use('/view/employeesList', require('./router_view/rvEmployeesList.js')) 
-app.use('/view/employeesOne', require('./router_view/rvEmployee.js')) 
+// employee(s)
+app.use('/json/employees',     require('./rt_json/rjEmployees.js')) 
+app.use('/view/employeesList', require('./rt_view/rvEmployeesList.js')) 
+app.use('/view/employee',      require('./rt_view/rvEmployee.js')) 
+
 
 
 //

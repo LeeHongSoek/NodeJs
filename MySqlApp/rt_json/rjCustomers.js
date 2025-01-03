@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const pool = require('../_MySqlDatabase/connection')                                 
-const customersInfo = require('../router_info/iCustomers')
-const pageInfo = require('../router_info/iPageInfo')
+const customersInfo = require('../rt_info/iCustomers')
+const pageInfo = require('../rt_info/iPageInfo')
 
 // 사용예 : >curl -X GET localhost:3000/json/customers/?
 // 사용예 : >curl -X DELETE localhost:3000/json/customers/?
