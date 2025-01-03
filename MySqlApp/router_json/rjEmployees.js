@@ -4,6 +4,73 @@ const pool = require('../_MySqlDatabase/connection')
 const employeesInfo = require('../router_info/iEmployees')
 const pageInfo = require('../router_info/iPageInfo')
 
+// 사용예 : >curl -X GET localhost:3000/json/employees/?
+// 사용예 : >curl -X DELETE localhost:3000/json/employees/?
+router.use('/:employeeNumber', (req, res) => {
+    
+    console.log(` ${req.originalUrl} [${req.method}] 요청 `)
+    console.log(` req.params.employeeNumber = ${req.params.employeeNumber}`)
+
+    if (pool.isConnected === false) {
+        console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
+        return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
+    }
+
+    pool.getConnection((err, connection) => {
+        
+        if (req.method === 'GET') {
+            connection.query(employeesInfo.selectSqlOne, [req.params.employeeNumber], (err, result, fields) => {
+                if(err) {
+                    console.log(`sql에 에러 발생 : ${err}`)
+
+                    res.status(500).send({
+                        seccess : false, 
+                        message : 'sql에 에러 발생',
+                        sql     : employeesInfo.selectSql,
+                        err
+                    })                
+                }
+                else
+                {
+                    console.info(`실행 : ${employeesInfo.selectSql}`)
+                    console.info(`Row수 : ${result.length}`)
+                    //console.info(`result : ${ JSON.stringify(result,null,2)}`)
+
+                    res.status(200).send({
+                        success : true,
+                        message : `${result.length}개의 레코드를 리턴합니다.`,
+                        length  : result.length,
+                        result
+                    });
+
+                    console.info(`sql 정싱실행!`)
+                }
+            })            
+        }
+        
+        if (req.method === 'DELETE') {
+            connection.query(deleteSqlOne, [req.params.employeeNumber], (err,rows, fields) => {
+                if(err) {
+                    console.log(`sql에 에러 발생 : ${err}`)
+
+                    res.status(500).send({
+                        seccess : false, 
+                        message : `sql에러 : ${err}`,
+                        sql     : employeesInfo.deleteSqlOne,
+                    })                
+                } 
+                else {
+                    res.status(200).send({
+                        success : true,
+                        message: `${rows.affectedRows} 개의 레코드가 적용되었습니다.`
+                    });
+                }
+            })    
+        }
+        connection.release()
+    })    
+})
+
 // 사용예 : >curl -X GET localhost:3000/json/employeesList
 router.use('/', (req, res) => {
 
@@ -98,73 +165,6 @@ router.use('/', (req, res) => {
             }
         })
         
-        connection.release()
-    })    
-})
-
-// 사용예 : >curl -X GET localhost:3000/json/employees/?
-// 사용예 : >curl -X DELETE localhost:3000/json/employees/?
-router.use('/:employeeNumber', (req, res) => {
-    
-    console.log(` ${req.originalUrl} [${req.method}] 요청 `)
-    console.log(` req.params.employeeNumber = ${req.params.employeeNumber}`)
-
-    if (pool.isConnected === false) {
-        console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
-        return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
-    }
-
-    pool.getConnection((err, connection) => {
-        
-        if (req.method === 'GET') {
-            connection.query(employeesInfo.selectSqlOne, [req.params.employeeNumber], (err, result, fields) => {
-                if(err) {
-                    console.log(`sql에 에러 발생 : ${err}`)
-
-                    res.status(500).send({
-                        seccess : false, 
-                        message : 'sql에 에러 발생',
-                        sql     : employeesInfo.selectSql,
-                        err
-                    })                
-                }
-                else
-                {
-                    console.info(`실행 : ${employeesInfo.selectSql}`)
-                    console.info(`Row수 : ${result.length}`)
-                    //console.info(`result : ${ JSON.stringify(result,null,2)}`)
-
-                    res.status(200).send({
-                        success : true,
-                        message : `${result.length}개의 레코드를 리턴합니다.`,
-                        length  : result.length,
-                        result
-                    });
-
-                    console.info(`sql 정싱실행!`)
-                }
-            })            
-        }
-        
-        if (req.method === 'DELETE') {
-            connection.query(deleteSqlOne, [req.params.employeeNumber], (err,rows, fields) => {
-                if(err) {
-                    console.log(`sql에 에러 발생 : ${err}`)
-
-                    res.status(500).send({
-                        seccess : false, 
-                        message : `sql에러 : ${err}`,
-                        sql     : employeesInfo.deleteSqlOne,
-                    })                
-                } 
-                else {
-                    res.status(200).send({
-                        success : true,
-                        message: `${rows.affectedRows} 개의 레코드가 적용되었습니다.`
-                    });
-                }
-            })    
-        }
         connection.release()
     })    
 })

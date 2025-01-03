@@ -143,6 +143,7 @@ const pageInfo = {
             currBlock: this.currBlock,
             limitFrom: this.limitFrom,
 
+            startBlockPage: null,
             prevBlockPage: this.prevBlockPage,
             prevPage: this.prevPage,
             
@@ -150,13 +151,7 @@ const pageInfo = {
 
             nextPage: this.nextPage,
             nextBlockPage: this.nextBlockPage,
-
-
-
-            startBlock: null,
-            prevBlock: null,            
-            nextBlock: null,
-            endBlock: null
+            endBlockPage: null
         };
     }
 

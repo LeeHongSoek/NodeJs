@@ -25,13 +25,13 @@ const tableInfo = {
     
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다.. // require('./getTotalRowSql')
 
-    selectSqlKeys : `
+    selectSqlKeys : ` /* selectSqlKeys */
                     SELECT customerNumber
                       FROM customers
                      WHERE del = 'N' 
                    `,
 
-    selectSql : `
+    selectSql : ` /* selectSql */
                 SELECT customerNumber
                      , customerName
                      , contactLastName
@@ -48,8 +48,10 @@ const tableInfo = {
                   FROM customers
                  WHERE del = 'N' 
              `,
+    ackType : '', // edit, view, insert
+    pk_value : '',
 
-    selectSqlOne : `
+    selectSqlOne : ` /* selectSqlOne */
                      SELECT customerNumber
                           , customerName
                           , contactLastName
@@ -68,7 +70,7 @@ const tableInfo = {
                         AND customerNumber = ?  
                   `,
 
-    deleteSqlOne : `
+    deleteSqlOne : ` /* deleteSqlOne */
                     UPDATE customers 
                        SET del = 'Y'   
                      WHERE customerNumber = ?  
