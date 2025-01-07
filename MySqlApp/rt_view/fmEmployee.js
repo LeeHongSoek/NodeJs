@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
     res.status(404).send(`
         <script>
             alert('잘못된 경로입니다.');
-            window.location.href = '/employeesList';
+            window.location.href = '/form/employeesList';
         </script>
     `);
 })

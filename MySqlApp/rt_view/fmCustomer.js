@@ -7,10 +7,10 @@ router.get('/', (req, res) => {
     res.status(404).send(`
         <script>
             alert('잘못된 경로입니다.');
-            window.location.href = '/customersList';
+            window.location.href = '/form/customersList';
         </script>
     `);
-    //res.redirect('/view/customersList');  // '/home' 경로로 리디렉션
+    //res.redirect('/form/customersList');  // '/home' 경로로 리디렉션
 })
 
 // 사용예 : >curl localhost:3000/
@@ -20,7 +20,7 @@ router.get('/:ackType/:customerNumber', (req, res) => {
     console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view, delete
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
 
-    tableInfo.ackType = req.params.ackType // edit, view, delete
+    tableInfo.ackType = req.params.ackType // edit, view
     tableInfo.pk_value = req.params.customerNumber
 
     return res.render('fmCustomer', { tableInfo })

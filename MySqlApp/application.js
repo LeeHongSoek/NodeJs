@@ -34,16 +34,16 @@ app.use(express.json());
 // /json/ : json, /pop/ : popup
 //
 
-app.use('/json/customers', require('./rt_json/rjCustomers.js')) 
+app.use('/json/customers', require('./rt_json/jnCustomers.js')) 
 // customer(s)
-app.use('/customersList', require('./rt_view/fmCustomersList.js')) 
-app.use('/customer',      require('./rt_view/fmCustomer.js')) 
+app.use('/form/customersList', require('./rt_view/fmCustomersList.js')) 
+app.use('/form/customer',      require('./rt_view/fmCustomer.js')) 
 
 
-app.use('/json/employees', require('./rt_json/rjEmployees.js')) 
+app.use('/json/employees', require('./rt_json/jnEmployees.js')) 
 // employee(s)
-app.use('/employeesList', require('./rt_view/fmEmployeesList.js')) 
-app.use('/employee',      require('./rt_view/fmEmployee.js')) 
+app.use('/form/employeesList', require('./rt_view/fmEmployeesList.js')) 
+app.use('/form/employee',      require('./rt_view/fmEmployee.js')) 
 
 //
 
