@@ -162,11 +162,11 @@ router.use('/', (req, res) => {
                             result
                         });    
                         
-                        console.info(`sqlLastSelect 정싱실행!`)
+                        console.info(`sqlLastSelect 정상실행!`)
                     }
                 })
 
-                console.info(`totalRowSql 정싱실행!`)
+                console.info(`totalRowSql 정상실행!`)
             }
         })
         
