@@ -23,7 +23,7 @@ router.get('/:ackType/:customerNumber', (req, res) => {
     tableInfo.ackType = req.params.ackType // edit, view, delete
     tableInfo.pk_value = req.params.customerNumber
 
-    return res.render('hCustomer', { tableInfo })
+    return res.render('fmCustomer', { tableInfo })
 })
 
 // 사용예 : >curl localhost:3000/
@@ -34,7 +34,7 @@ router.get('/insert', (req, res) => {
 
     tableInfo.ackType = 'insert'
 
-    return res.render('hCustomer', { tableInfo })
+    return res.render('fmCustomer', { tableInfo })
 })
 
 module.exports = router

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/dir_statics/css/style.css" rel="stylesheet" type="text/css">
+    <script src="/dir_statics/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
+
+    <style>
+    #customer-edit-form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .save-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .save-button:hover {
+        background-color: #45a049;
+    }
+
+    #customer-info {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        max-width: 400px;
+        background-color: #f9f9f9;
+    }
+    #customer-info p {
+        margin: 5px 0;
+    }
+    #customer-info strong {
+        color: #333;
+    }
+    </style>
+
+    <title>Document</title>
+
+    <%
+    // 코어 자바스크립트 > 자료구조와 자료형 Object.keys, values, entries
+    // https://ko.javascript.info/keys-values-entries 
+    const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
+    %>
+
+
+    <script>
+        function callAjax() {
+                $.ajax({ url        : '/json/customers/<%=tableInfo.pk_value%>', // 요청 할 주소 
+                         async      : true, // false 일 경우 동기 요청으로 변경
+                         type       : 'GET', // GET, PUT
+                         data       : { 
+                                      }, // 전송할 데이터                
+                         dataType   : 'json', // xml, json, script, html                
+                         beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
+                         success    : function(jqXHR) { // 요청 완료 시        
+                            
+                            console.log(jqXHR);
+
+                            const customer = jqXHR.result[0]; // 단일 레코드, 첫 번째 값에 접근
+                    
+                            // 데이터 바인딩
+                            <%
+                            if (tableInfo.ackType == 'view')
+                            {
+                                %>
+                                $("#customerNumber").text(customer.customerNumber);
+                                $("#customerName").text(customer.customerName);
+                                $("#contactNme").text(`${customer.contactLastName} ${customer.contactFirstName}`);
+                                $("#phone").text(customer.phone);
+                                $("#address").text(customer.addressLine1);
+                                $("#city").text(customer.city);
+                                $("#state").text(customer.state || "N/A");
+                                $("#country").text(customer.country);
+                                $("#creditLimit").text(customer.creditLimit || "0");
+                                <%
+                            }
+                            if (tableInfo.ackType == 'edit')
+                            {
+                                %>
+                                // 데이터 바인딩
+                                $("#customerNumber").val(customer.customerNumber).prop('readonly', true);
+                                $("#customerName").val(customer.customerName);
+                                $("#contactLastName").val(customer.contactLastName);
+                                $("#contactFirstName").val(customer.contactFirstName);
+                                $("#phone").val(customer.phone);
+                                $("#addressLine1").val(customer.addressLine1);
+                                $("#addressLine2").val(customer.addressLine2);
+                                $("#city").val(customer.city);
+                                $("#state").val(customer.state || "");
+                                $("#postalCode").val(customer.postalCode);
+                                $("#country").val(customer.country);
+                                $("#creditLimit").val(customer.creditLimit || "0");
+                                $("#salesRepEmployeeNumber").val(customer.salesRepEmployeeNumber);
+                                <%
+                            }
+                            %>    
+
+                            // jqXHR의 result에 접근
+                            const results = jqXHR.result;
+
+                            // result 배열의 각 요소를 반복하여 출력
+                            results.forEach(function(customer) {
+                                console.log("Customer Number: " + customer.customerNumber);
+                                console.log("Customer Name: " + customer.customerName);
+                                console.log("Contact Last Name: " + customer.contactLastName);
+                                console.log("Contact First Name: " + customer.contactFirstName);
+                                console.log("Phone: " + customer.phone);
+                                console.log("Address Line 1: " + customer.addressLine1);
+                                console.log("Address Line 2: " + customer.addressLine2);
+                                console.log("postalCode: " + customer.postalCode);
+                                console.log("City: " + customer.city);
+                                console.log("State: " + customer.state);
+                                console.log("Country: " + customer.country);
+                                console.log("Credit Limit: " + customer.creditLimit);
+                                console.log("------------------------------");
+                            });
+                            
+                            
+                         }, 
+                         error      : function(jqXHR) {}, // 요청 실패.                
+                         complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                       }
+                       })
+        }
+
+        callAjax()
+
+
+        $(document).ready(function() {
+            $('#customer-edit-form').on('submit', function(event) {
+                event.preventDefault(); // 폼의 기본 제출 동작을 막음
+
+                // 폼 데이터를 수집
+                var formData = new FormData(this);
+
+                // FormData를 Object로 변환
+                var data = {};
+                formData.forEach(function(value, key){
+                    data[key] = value;
+                });
+
+                // JSON으로 변환
+                var jsonData = JSON.stringify(data);
+
+                // 서버로 JSON 데이터를 POST 요청
+                $.ajax({
+                    url: '/json/customers',
+                    type: ($('#ackType').val()=='insert') ? 'POST' : 'PUT',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function(data) {
+                        console.log(data);
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <%
+    if (tableInfo.ackType == 'view') // 보기일때
+    {
+        %>
+        <h1>고객 정보 보기</h1>
+
+        <!-- 고객 정보를 표시할 영역 -->
+        <div id="customer-info">
+            <p><strong>고객 번호:</strong> <b><span id="customerNumber"></span></b>  </p>
+            <p><strong>고객명:</strong>       <span id="customerName"></span>        </p>
+            <p><strong>연락 이름:</strong>    <span id="contactNme"></span>         </p>
+            <p><strong>전화번호:</strong>     <span id="phone"></span>                </p>
+            <p><strong>주소:</strong>         <span id="address"></span>              </p>
+            <p><strong>도시:</strong>         <span id="city"></span>                 </p>
+            <p><strong>주:</strong>           <span id="state"></span>                </p>
+            <p><strong>국가:</strong>         <span id="country"></span>              </p>
+            <p><strong>신용 한도:</strong>    <span id="creditLimit"></span>         </p>
+        </div>
+        <%
+    }
+
+    if (tableInfo.ackType == 'edit') // 수정일때
+    {
+        %>
+        <h1>고객 정보 편집</h1>
+
+        <!-- 고객 정보 편집 폼 -->
+        <form id="customer-edit-form">
+            <div class="form-group">
+                <label for="customerNumber"><strong>고객 번호:</strong></label>
+                <input type="text" id="customerNumber" name="customerNumber" readonly>
+            </div>
+            <div class="form-group">
+                <label for="customerName"><strong>고객명:</strong></label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="contactNme"><strong>연락 이름:</strong></label>
+                <input type="text" id="contactLastName" name="contactLastName" required>
+                <input type="text" id="contactFirstName" name="contactFirstName" required>
+            </div>
+            <div class="form-group">
+                <label for="phone"><strong>전화번호:</strong></label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address"><strong>주소:</strong></label>
+                <input type="text" id="addressLine1" name="addressLine1" required>
+                <input type="text" id="addressLine2" name="addressLine2">
+            </div>
+            <div class="form-group">
+                <label for="postalCode"><strong>우편번호:</strong></label>
+                <input type="text" id="postalCode" name="postalCode" required>
+            </div>
+            <div class="form-group">
+                <label for="city"><strong>도시:</strong></label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state"><strong>주:</strong></label>
+                <input type="text" id="state" name="state">
+            </div>
+            <div class="form-group">
+                <label for="country"><strong>국가:</strong></label>
+                <input type="text" id="country" name="country" required>
+            </div>
+            <div class="form-group">
+                <label for="creditLimit"><strong>신용 한도:</strong></label>
+                <input type="number" id="creditLimit" name="creditLimit" required>
+            </div>
+            <div class="form-group">
+                <label for="sales-rep-employee-number"><strong>	담당영업사원번호:</strong></label>
+                <input type="number" id="salesRepEmployeeNumber" name="salesRepEmployeeNumber" required>
+            </div>
+
+            <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
+            
+            <button type="submit" class="save-button">저장</button>
+        </form>
+
+        <%
+    }
+
+    if (tableInfo.ackType == 'insert') // 추가일때
+    {
+        %>
+        <h1>고객 정보 추가</h1>
+
+        <!-- 고객 정보 편집 폼 -->
+        <form id="customer-edit-form">
+            <div class="form-group">
+                <label for="customerName"><strong>고객명:</strong></label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="contactNme"><strong>연락 이름:</strong></label>
+                <input type="text" id="contactLastName" name="contactLastName" required>
+                <input type="text" id="contactFirstName" name="contactFirstName" required>
+            </div>
+            <div class="form-group">
+                <label for="phone"><strong>전화번호:</strong></label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address"><strong>주소:</strong></label>
+                <input type="text" id="addressLine1" name="addressLine1" required>
+                <input type="text" id="addressLine2" name="addressLine2">
+            </div>
+            <div class="form-group">
+                <label for="postalCode"><strong>우편번호:</strong></label>
+                <input type="text" id="postalCode" name="postalCode" required>
+            </div>
+            <div class="form-group">
+                <label for="city"><strong>도시:</strong></label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state"><strong>주:</strong></label>
+                <input type="text" id="state" name="state">
+            </div>
+            <div class="form-group">
+                <label for="country"><strong>국가:</strong></label>
+                <input type="text" id="country" name="country" required>
+            </div>
+            <div class="form-group">
+                <label for="creditLimit"><strong>신용 한도:</strong></label>
+                <input type="number" id="creditLimit" name="creditLimit" required>
+            </div>
+            <div class="form-group">
+                <label for="sales-rep-employee-number"><strong>	담당영업사원번호:</strong></label>
+                <input type="number" id="salesRepEmployeeNumber" name="salesRepEmployeeNumber" required>
+            </div>
+
+            <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
+            
+            <button type="submit" class="save-button">저장</button>
+        </form>
+
+        <%
+    }
+    %>
+
+</body>
+
+</html>

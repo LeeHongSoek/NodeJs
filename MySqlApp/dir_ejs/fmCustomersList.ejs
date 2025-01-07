@@ -184,6 +184,12 @@
             callAjax();
         };
 
+
+        function insert()
+        {
+            window.location.href = '/customer/insert';     
+        }      
+
     </script>
 </head>
 <body>   
@@ -201,7 +207,7 @@
     </table>
 
     <table id="resultTable" class="type02" style="width: 90%;">
-        <caption><%= tableInfo.tableNameKor %> 리스트 <input id="btnInsert" type="button" value="추가" /></caption>
+        <caption><%= tableInfo.tableNameKor %> 리스트 <input id="btnInsert" type="button" onClick="insert();" value="추가" /></caption>
         <thead>
             <tr style="height: 20px;">
                 <% 
