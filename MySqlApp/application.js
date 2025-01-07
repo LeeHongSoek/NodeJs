@@ -1,7 +1,6 @@
 //////////////////
 // 
-const express = require('express') // npm install express ---save
-const bodyParser = require('body-parser') // npm install body-parser
+const express = require('express') // npm install express ---save 
 
 app = express()
 app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
@@ -24,11 +23,6 @@ app.get('/',(req, res) => {
 
 // JSON 요청 본문 파싱 미들웨어
 app.use(express.json());
-
-
-// body-parser를 사용하여 JSON 데이터를 파싱
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
 
 //
 // /json/ : json, /pop/ : popup
