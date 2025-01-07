@@ -79,8 +79,7 @@ const tableInfo = {
 
     updateSqlOne : ` /* updateSqlOne */
                        UPDATE customers 
-                          SET customerNumber         = ?
-                            , customerName           = ?
+                          SET customerName           = ?
                             , contactLastName        = ?
                             , contactFirstName       = ?
                             , phone                  = ?
@@ -94,7 +93,7 @@ const tableInfo = {
                             , creditLimit            = ?
                         WHERE customerNumber = ?  
                    `,
-                   
+
     insertSqlOne : ` /* insertSqlOne */
                     INSERT INTO customers ( customerNumber
                                           , customerName
@@ -110,7 +109,7 @@ const tableInfo = {
                                           , salesRepEmployeeNumber
                                           , creditLimit
                                           ) 
-                                   VALUES ( (SELECT COALESCE(MAX(customerNumber), 1000) + 1 FROM (SELECT customerNumber FROM customers_test order by customerNumber desc limit 1) AS temp)
+                                   VALUES ( (SELECT COALESCE(MAX(customerNumber), 1000) + 1 FROM (SELECT customerNumber FROM customers order by customerNumber desc limit 1) AS temp)
                                           , ?
                                           , ?
                                           , ?
