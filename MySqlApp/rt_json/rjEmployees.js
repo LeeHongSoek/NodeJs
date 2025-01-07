@@ -43,7 +43,7 @@ router.use('/:employeeNumber', (req, res) => {
                         result
                     });
 
-                    console.info(`sql 정싱실행!`)
+                    console.info(`sql 정상실행!`)
                 }
             })            
         }
@@ -157,11 +157,11 @@ router.use('/', (req, res) => {
                             result
                         });    
                         
-                        console.info(`sqlLastSelect 정싱실행!`)
+                        console.info(`sqlLastSelect 정상실행!`)
                     }
                 })
 
-                console.info(`totalRowSql 정싱실행!`)
+                console.info(`totalRowSql 정상실행!`)
             }
         })
         

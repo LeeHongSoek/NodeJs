@@ -43,7 +43,7 @@ router.use('/:customerNumber', (req, res) => {
                         result
                     });
 
-                    console.info(`sql 정싱실행!`)
+                    console.info(`sql 정상실행!`)
                 }
             })            
         }
