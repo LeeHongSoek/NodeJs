@@ -25,11 +25,11 @@ const tableInfo = {
     
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다.. // require('./getTotalRowSql')
 
-    selectSqlKeys : ` /* selectSqlKeys */
+    selectSqlKeys : `  /* selectSqlKeys */
                     SELECT customerNumber
                       FROM customers
                      WHERE del = 'N' 
-                   `,
+                    `,
 
     selectSql : ` /* selectSql */
                 SELECT customerNumber
@@ -75,7 +75,57 @@ const tableInfo = {
                     UPDATE customers 
                        SET del = 'Y'   
                      WHERE customerNumber = ?  
-                  `
+                  `,
+
+    updateSqlOne : ` /* updateSqlOne */
+                       UPDATE customers 
+                          SET customerNumber         = ?
+                            , customerName           = ?
+                            , contactLastName        = ?
+                            , contactFirstName       = ?
+                            , phone                  = ?
+                            , addressLine1           = ?
+                            , addressLine2           = ?
+                            , city                   = ?
+                            , state                  = ?
+                            , postalCode             = ?
+                            , country                = ?
+                            , salesRepEmployeeNumber = ?
+                            , creditLimit            = ?
+                        WHERE customerNumber = ?  
+                   `,
+                   
+    insertSqlOne : ` /* insertSqlOne */
+                    INSERT INTO customers ( customerNumber
+                                          , customerName
+                                          , contactLastName
+                                          , contactFirstName
+                                          , phone
+                                          , addressLine1
+                                          , addressLine2
+                                          , city
+                                          , state
+                                          , postalCode
+                                          , country
+                                          , salesRepEmployeeNumber
+                                          , creditLimit
+                                          ) 
+                                   VALUES ( (SELECT COALESCE(MAX(customerNumber), 1000) + 1 FROM (SELECT customerNumber FROM customers_test order by customerNumber desc limit 1) AS temp)
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          ) 
+                   `
+                              
 }
 
 module.exports = tableInfo
