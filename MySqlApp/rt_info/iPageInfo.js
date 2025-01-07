@@ -67,7 +67,7 @@ const pageInfo = {
 
         this._lastPage = parseInt(this._totalRow / this._rowPerPage)
         this._lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
-        if (lastPage < this._currPage){
+        if (_lastPage < this._currPage){
             this._currPage = this._lastPage
         }
         return this._currPage
