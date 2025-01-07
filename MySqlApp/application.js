@@ -1,6 +1,7 @@
 //////////////////
 // 
 const express = require('express') // npm install express ---save
+const bodyParser = require('body-parser') // npm install body-parser
 
 app = express()
 app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
@@ -19,20 +20,30 @@ app.get('/',(req, res) => {
     return  res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
 })
 
+
+
+// JSON 요청 본문 파싱 미들웨어
+app.use(express.json());
+
+
+// body-parser를 사용하여 JSON 데이터를 파싱
+//app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: true }));
+
 //
 // /json/ : json, /pop/ : popup
 //
 
 app.use('/json/customers', require('./rt_json/rjCustomers.js')) 
 // customer(s)
-app.use('/customersList', require('./rt_view/rvCustomersList.js')) 
-app.use('/customer',      require('./rt_view/rvCustomer.js')) 
+app.use('/customersList', require('./rt_view/fmCustomersList.js')) 
+app.use('/customer',      require('./rt_view/fmCustomer.js')) 
 
 
 app.use('/json/employees', require('./rt_json/rjEmployees.js')) 
 // employee(s)
-app.use('/employeesList', require('./rt_view/rvEmployeesList.js')) 
-app.use('/employee',      require('./rt_view/rvEmployee.js')) 
+app.use('/employeesList', require('./rt_view/fmEmployeesList.js')) 
+app.use('/employee',      require('./rt_view/fmEmployee.js')) 
 
 //
 
