@@ -56,8 +56,8 @@ app.use('/form/employee',      require('./rt_view/fmEmployee.js'))
 
 function makeInfoFile(res) 
 {
-    pool.getConnection((err, connection) => {
-        connection.query('show tables ', (err, result, fields) => {
+    
+        pool.connect.query('show tables ', (err, result, fields) => {
             if (err) {
                 console.log(`sql에 에러 발생 : ${err}`);
 
@@ -83,7 +83,7 @@ function makeInfoFile(res)
                         const fileName = `if${row.Tables_in_classicmodels.charAt(0).toUpperCase() + row.Tables_in_classicmodels.slice(1)}.js`;
                         const filePath = path.join(rtInfoDir, fileName);
 
-                        connection.query('show columns from '+row.Tables_in_classicmodels, (err, result, fields) => {
+                        pool.connect.query('show columns from '+row.Tables_in_classicmodels, (err, result, fields) => {
                             if (err) {
                                 console.log(`sql에 에러 발생 : ${err}`);
                 
@@ -152,7 +152,7 @@ function makeInfoFile(res)
                 console.info(`sql 정상실행!`);
             }
         });
-    });
+    
 }
 
 

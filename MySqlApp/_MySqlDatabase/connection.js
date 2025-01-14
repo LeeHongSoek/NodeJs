@@ -2,7 +2,7 @@ const path = require('path')
 require('dotenv').config({path : path.join(__dirname, 'config_local.env')}) // npm install dotenv
 //require('dotenv').config({path : path.join(__dirname, 'config_remote.env')})
 
-const connection = {
+const connectInfo = {
     host            : process.env.DB_HOST,
     user            : process.env.DB_USER,
     password        : process.env.DB_PASS,
@@ -11,8 +11,9 @@ const connection = {
     connectionLimit : 30
 }
 
-pool = require('mysql').createPool(connection) // npm install -S mysql
+pool = require('mysql').createPool(connectInfo) // npm install -S mysql
 pool.isConnected = false
+pool.connect = null
 pool.chkConnection = function () {
     pool.getConnection((err, connection) => {
         if(err) {
@@ -22,6 +23,7 @@ pool.chkConnection = function () {
         else {
             console.log('MySql 데이터베이스에 정상적으로 접속되었습니다.')
             pool.isConnected = true 
+            pool.connect = connection
     
             connection.release()
         }    
