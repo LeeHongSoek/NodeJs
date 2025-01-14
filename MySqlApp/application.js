@@ -53,105 +53,109 @@ app.use('/form/employee',      require('./rt_view/fmEmployee.js'))
 
 //
 
+const extractNumber = (input) => {
+    try {
+    const match = input.match(/\((\d+)\)/);
+    return match ? parseInt(match[1], 10) : null;
+    }
+    catch {
+        return 0
+    }
+  };
 
 function makeInfoFile(res) 
 {
-    
-        pool.connect.query('show tables ', (err, result, fields) => {
-            if (err) {
-                console.log(`sql에 에러 발생 : ${err}`);
 
-                res.status(500).send({
-                    seccess: false,
-                    message: 'sql에 에러 발생',
-                    sql: 'show tables ',
-                    err
-                });
-            }
+    pool.connect.query('show tables ', (err, result, fields) => {
+        if (err) {
+            console.log(`sql에 에러 발생 : ${err}`);
 
-            else {
-                console.info(`실행 : 'show tables '`);
-                console.info(`Row수 : ${result.length}`);
-                
-                
-                result.forEach(row => {
-                    console.info(row.Tables_in_classicmodels);
+            res.status(500).send({
+                seccess: false,
+                message: 'sql에 에러 발생',
+                sql: 'show tables ',
+                err
+            });
+        }
 
-                    if (row.Tables_in_classicmodels == 'offices') {
+        else {
+            console.info(`실행 : 'show tables ' / Row수 : ${result.length}`);            
+            
+            result.forEach(row => {
+                console.info(row.Tables_in_classicmodels);
 
-                        const rtInfoDir = path.join(__dirname, 'rt_info');
-                        const fileName = `if${row.Tables_in_classicmodels.charAt(0).toUpperCase() + row.Tables_in_classicmodels.slice(1)}.js`;
-                        const filePath = path.join(rtInfoDir, fileName);
+                if (row.Tables_in_classicmodels == 'offices') {
 
-                        pool.connect.query('show columns from '+row.Tables_in_classicmodels, (err, result, fields) => {
-                            if (err) {
-                                console.log(`sql에 에러 발생 : ${err}`);
-                
-                                res.status(500).send({
-                                    seccess: false,
-                                    message: 'sql에 에러 발생',
-                                    sql: 'show tables ',
-                                    err
-                                });
-                            }
-                
-                            else {
+                    const rtInfoDir = path.join(__dirname, 'rt_info');
+                    const fileName = `if${row.Tables_in_classicmodels.charAt(0).toUpperCase() + row.Tables_in_classicmodels.slice(1)}.js`;
+                    const filePath = path.join(rtInfoDir, fileName);
 
-                                try {
-                                    if (!fs.existsSync(rtInfoDir)) {
-                                        fs.mkdirSync(rtInfoDir);
-                                    }
-        
-                                    fs.writeFileSync(filePath, 'const getTotalRowSql = require(\'./getTotalRowSql\')   \n');
-                                    fs.appendFileSync(filePath, '                                                      \n');
-                                    fs.appendFileSync(filePath, ' const tableInfo = {                                  \n');
-                                    fs.appendFileSync(filePath, '                                                      \n');
-                                    fs.appendFileSync(filePath, '     tableName : \'' + row.Tables_in_classicmodels + '\', \n');
-                                    fs.appendFileSync(filePath, '     tableNameKor : \'\',                             \n');
+                    pool.connect.query('show columns from '+row.Tables_in_classicmodels, (err, result, fields) => {
+                        if (err) {
+                            console.log(`sql에 에러 발생 : ${err}`);
+            
+                            res.status(500).send({
+                                seccess: false,
+                                message: 'sql에 에러 발생',
+                                sql: 'show tables ',
+                                err
+                            });
+                        }
+            
+                        else {
 
-                                    const Field = result.map(row => row.Field);
-                                    const Type = result.map(row => row.Type);
-                                    const Null = result.map(row => row.Null);
-                                    const Key = result.map(row => row.Key);
-                                    const Default = result.map(row => row.Default);
-                                    const Extra = result.map(row => row.Extra);
-    
-                                    fs.appendFileSync(filePath, '                                                      \n');
-                                    fs.appendFileSync(filePath, '  fields :  {                                         \n');
-                                    
-                                    Field.forEach((field,idx) => {                                
-                                        if (field != 'del') {
-                                            fs.appendFileSync(filePath, ` ${field} : { pk:${(Key[idx]=='PRI')?'true':'false'},     nameKor: '', isListView: true, maxLength:  } `);
-                                            fs.appendFileSync(filePath, ' ,\n');
-                                        }                                            
-                                    });
-                                    fs.appendFileSync(filePath, '            },                                        \n');    
-                                    fs.appendFileSync(filePath, '                                                      \n');
-                                    fs.appendFileSync(filePath, ' }                                                    \n');
-                                    fs.appendFileSync(filePath, '                                                      \n');
-                                    fs.appendFileSync(filePath, ' module.exports = tableInfo                           \n');
-        
-        
-        
-                                    console.log(`File ${fileName} created successfully`);
-                                } catch (error) {
-                                    console.error('Error creating file:', error);
+                            try {
+                                if (!fs.existsSync(rtInfoDir)) {
+                                    fs.mkdirSync(rtInfoDir);
                                 }
+    
+                                fs.writeFileSync(filePath, 'const getTotalRowSql = require(\'./getTotalRowSql\')   \n');
+                                fs.appendFileSync(filePath, '                                                      \n');
+                                fs.appendFileSync(filePath, ' const tableInfo = {                                  \n');
+                                fs.appendFileSync(filePath, '                                                      \n');
+                                fs.appendFileSync(filePath, '     tableName : \'' + row.Tables_in_classicmodels + '\', \n');
+                                fs.appendFileSync(filePath, '     tableNameKor : \'\',                             \n');
 
+                                const Field = result.map(row => row.Field);
+                                const Type = result.map(row => row.Type); 
+                                const Null = result.map(row => row.Null);
+                                const Key = result.map(row => row.Key);
+                                const Default = result.map(row => row.Default);
+                                const Extra = result.map(row => row.Extra);
 
-                               
-                            }
-                        })
+                                fs.appendFileSync(filePath, '                                                      \n');
+                                fs.appendFileSync(filePath, '  fields :  {                                         \n');
+                                
+                                Field.forEach((field,idx) => {                                
+                                    if (field != 'del') {
+                                        const Size = extractNumber(Type[idx]);
 
-                        
+                                        fs.appendFileSync(filePath, ` ${field} : { pk:${(Key[idx]=='PRI')?'true':'false'},     nameKor: '', isListView: true, maxLength: ${Size} } `);
+                                        fs.appendFileSync(filePath, ' ,\n');
+                                    }                                            
+                                });
+                                fs.appendFileSync(filePath, '            },                                        \n');    
+                                fs.appendFileSync(filePath, '                                                      \n');
+                                fs.appendFileSync(filePath, 'getTotalRowSql, // 전체 레코드수를 구하는 쿼리          \n');    
+                                fs.appendFileSync(filePath, '                                                      \n');
+                                fs.appendFileSync(filePath, ' }                                                    \n');
+                                fs.appendFileSync(filePath, '                                                      \n');
+                                fs.appendFileSync(filePath, ' module.exports = tableInfo                           \n');
+    
+    
+    
+                                console.log(` ${fileName} 파일 생성`);
 
-                        
-                    }
-                });
-
-                console.info(`sql 정상실행!`);
-            }
-        });
+                            } 
+                            catch (error) {
+                                console.error('Error creating file:', error);
+                            }                           
+                        }
+                    })                    
+                }
+            });
+        }
+    });
     
 }
 
