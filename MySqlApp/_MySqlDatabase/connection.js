@@ -41,10 +41,10 @@ const pool = {
                 // Get all table names
                 return pool.connect.execute('SHOW TABLES');
             })
-            .then(([tables]) => {
-                console.log('Tables:', tables);
+            .then(([showTables]) => {
+                console.log('Tables:', showTables);
 
-                const tablePromises = tables.map((table) => {
+                const tablePromises = showTables.map((table) => {
                     const tableName = table[`Tables_in_classicmodels`];
                     const rtInfoDir = path.join(__dirname, '..', 'rt_info');
                     const fileName = `if${tableName.charAt(0).toUpperCase() + tableName.slice(1)}._js`;
