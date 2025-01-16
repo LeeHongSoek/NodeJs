@@ -6,10 +6,11 @@ const pageInfo = require('../rt_info/ifPage')
 
 // 사용예 : >curl -X GET localhost:3000/json/customers/?
 // 사용예 : >curl -X DELETE localhost:3000/json/customers/?
-router.use('/:customerNumber', (req, res) => {
-    
-    console.log(` ${req.originalUrl} [${req.method}] [/:customerNumber] 요청 `)
+router.use('/:customerNumber', (req, res) => 
+{    
+    console.log(`요청 [/:customerNumber] ${req.originalUrl} [${req.method}]`)
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
+   
 
     if (pool.isConnected === false) {
         console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
@@ -73,22 +74,74 @@ router.use('/:customerNumber', (req, res) => {
 
 
 // 사용예 : >curl -X GET localhost:3000/json/customersList
-router.use('/', (req, res) => {
-
+router.use('/', (req, res) => 
+{
     //var a = req.query.customerName;
     //var b = req.query.contactLastName; 
     //console.log("a : " + a + " / b : " + b)    
 
-    console.log(` ${req.originalUrl} [${req.method}] [/] 요청 `)
+    console.log(`요청 [/] ${req.originalUrl} [${req.method}]`)
     console.log( JSON.stringify(req.query))
 
-    if (pool.isConnected === false) {
-        console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
-        return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
-    }
+    if (req.method === 'GET') 
+    {            
+        var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
+        var sqlLastSelectKeys = customersInfo.selectSqlKeys // select 문!!
+        var sqlLastSelect = customersInfo.selectSql // select 문!!
 
+        pool.connect = pool.connectStart()
+                        .then((connect)=>{                             
+                            var keysQuery = Object.keys(req.query); // 검색 키 값들을 화면에서 가져옵니다.
+                            for (var keyQuery in keysQuery) {
+                                
+                                var fieldName = keysQuery[keyQuery]
+                                console.log("req.json 키=값 : " + fieldName + "=" + req.query[fieldName])
+                    
+                                if (fieldName==='currPage') {
+                                    currPage = eval(req.query[fieldName])              
+                                    pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)  
+                                }
+                    
+                                var keysSearchs = Object.keys(customersInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
+                                for (var keysSearchs in keysSearchs) {
+                                    if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
+                                        sqlLastSelectKeys = sqlLastSelectKeys + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                                        sqlLastSelect     = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                                    }
+                                }
+                            }
+                            var totalRowSql = customersInfo.getTotalRowSql(sqlLastSelectKeys)  // 총 건수를 구하기 위한 쿼리를 구성한다
+
+                            console.info(`실행 : ${totalRowSql}`)
+                            return connect.execute(totalRowSql)                            
+                        })
+                        .then(([counters]) => {                                
+                            pageInfo.totalRow = counters[0].total_row // 총 레코드 수
+
+                            sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
+
+                            console.info(`실행 : ${sqlLastSelect}`)
+                            return pool.connect.execute(sqlLastSelect)
+                        })
+                        .then(([data]) => {
+                            //data.map((data) => {console.info(`data.customerNumber : ${data.customerNumber}`)})
+                            pool.connect.end()
+
+                            res.status(200).send({
+                                success : true,
+                                message : `${data.length}개의 레코드를 리턴합니다.`,
+                                length  : data.length,
+                                pageInfo,
+                                result : data        
+                            });    
+                        })
+                        .catch((error) => {
+                            console.error('Error occurred:', error);
+                        });
+    }
+ 
     
-    
+    /************************
     if (req.method === 'PUT') {
         // req.body에서 폼 데이터를 받음
         const formData = req.body; // app.use(express.json()); // 해 줘야 함
@@ -284,7 +337,8 @@ router.use('/', (req, res) => {
                 console.info(`totalRowSql 정상실행!`)
             }
         })
-    }        
+           
+    }        *********/
 })
 
 
