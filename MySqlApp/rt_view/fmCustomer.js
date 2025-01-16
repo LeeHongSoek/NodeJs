@@ -3,7 +3,7 @@ const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/N
 const tableInfo = require('../rt_info/ifCustomers')
 
 router.get('/', (req, res) => {
-    console.log(` ${req.originalUrl} [${req.method}] 요청 `)    
+    console.log(`요청 ${req.originalUrl} [${req.method}] `)    
     res.status(404).send(`
         <script>
             alert('잘못된 경로입니다.');
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 // 사용예 : >curl localhost:3000/
 router.get('/:ackType/:customerNumber', (req, res) => {
     
-    console.log(` ${req.originalUrl} [${req.method}] 요청 (hCustomer)`)
+    console.log(`요청 (hCustomer) ${req.originalUrl} [${req.method}]`)
     console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view, delete
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
 
@@ -29,7 +29,7 @@ router.get('/:ackType/:customerNumber', (req, res) => {
 // 사용예 : >curl localhost:3000/
 router.get('/insert', (req, res) => {
     
-    console.log(` ${req.originalUrl} [${req.method}] 요청 (hCustomer)`)
+    console.log(`요청 (hCustomer) ${req.originalUrl} [${req.method}]`)
     console.log(` req.params.ackType = insert`)
 
     tableInfo.ackType = 'insert'

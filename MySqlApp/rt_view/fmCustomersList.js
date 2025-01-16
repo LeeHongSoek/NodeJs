@@ -3,7 +3,7 @@ const router = express.Router() // {mergeParams: true} https://velog.io/@nittre/
 const tableInfo = require('../rt_info/ifCustomers')
 
 router.get('/', (req, res) => {
-    console.log(` ${req.originalUrl} [${req.method}] 요청 (hCustomersList) `)    
+    console.log(`요청 (hCustomersList) : ${req.originalUrl} [${req.method}]`)    
     return res.render('fmCustomersList',{ tableInfo })
 })
 
