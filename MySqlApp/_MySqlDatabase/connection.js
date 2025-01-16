@@ -22,6 +22,16 @@ const extractNumber = (input) => {
 };
 
 const pool = {
+    connect: null,
+    
+    connectStart: () => {
+        return mysql.createConnection(connectInfo)
+            .then((connection) => {
+                pool.connect = connection;
+
+                return connection;
+            })
+    },
     connectRunQueries: () => {
 
         return mysql.createConnection(connectInfo)
@@ -94,27 +104,18 @@ const pool = {
                         .catch((error) => {
                             console.error(`Error processing table ${tableName}:`, error);
                         });
-                });
+                });                
 
                 return Promise.all(tablePromises);
+            })
+            .then(() => {
+                console.error(`pool.connect.end()`);
+                pool.connect.end()
             })
             .catch((error) => {
                 console.error('Error occurred:', error);
             });
-    },
-
-    connectEnd: () => {
-        if (pool.connect) {
-            return pool.connect.end()
-                .then(() => {
-                    pool.connect = null;
-                })
-                .catch((error) => {
-                    console.error('Error closing connection:', error);
-                });
-        }
-        return Promise.resolve();
-    },
+    }
 };
 
 //pool.connectRunQueries
