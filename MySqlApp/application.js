@@ -9,15 +9,16 @@ app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
 const path = require('path')
 require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // npm i dotenv
-const pool = require('./_MySqlDatabase/connection')
-pool.connectRunQueries()
-pool.connectEnd()
+
 
 app.get('/',(req, res) => {    
-
+    return res.render('fmIndex')
 })
 
-
+app.get('/makeJsFile',(req, res) => {    
+    const pool = require('./_MySqlDatabase/connection')
+    pool.connectRunQueries()
+})
 
 // JSON 요청 본문 파싱 미들웨어
 app.use(express.json());
