@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 const tableInfo = require('../rt_info/ifCustomers')
 
-router.get('/', (req, res) => {
+router.get('/', (req, res) => 
+{
     console.log(`요청 ${req.originalUrl} [${req.method}] `)    
     res.status(404).send(`
         <script>
@@ -14,8 +15,8 @@ router.get('/', (req, res) => {
 })
 
 // 사용예 : >curl localhost:3000/
-router.get('/:ackType/:customerNumber', (req, res) => {
-    
+router.get('/:ackType/:customerNumber', (req, res) =>  // edit, view, delete
+{    
     console.log(`요청 [${req.method}] (hCustomer) ${req.originalUrl}`)
     console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view, delete
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
@@ -27,8 +28,8 @@ router.get('/:ackType/:customerNumber', (req, res) => {
 })
 
 // 사용예 : >curl localhost:3000/
-router.get('/insert', (req, res) => {
-    
+router.get('/insert', (req, res) => // insert
+{    
     console.log(`요청 [${req.method}] (hCustomer) ${req.originalUrl}`)
     console.log(` req.params.ackType = insert`)
 

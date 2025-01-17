@@ -11,17 +11,12 @@ const path = require('path')
 require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // npm i dotenv
 
 
-app.get('/',(req, res) => {    
-    return res.render('ejsIndex')
-})
-
-app.get('/makeJsFile',(req, res) => {    
-    const pool = require('./_MySqlDatabase/connection')
-    pool.connectRunQueries()
-})
-
 // JSON 요청 본문 파싱 미들웨어
 app.use(express.json());
+
+
+app.get('/',(req, res) => {  return res.render('ejsIndex') })
+app.get('/makeJsFile',(req, res) => {  require('./_MySqlDatabase/connection').connectRunQueries() })
 
 //
 // /json/ : json, /pop/ : popup
