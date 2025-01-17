@@ -8,68 +8,68 @@ const pageInfo = require('../rt_info/ifPage')
 // 사용예 : >curl -X DELETE localhost:3000/json/customers/?
 router.use('/:customerNumber', (req, res) => 
 {    
-    console.log(`요청 [/:customerNumber] ${req.originalUrl} [${req.method}]`)
+    console.log(`요청 [${req.method}] [/:customerNumber] ${req.originalUrl}`)
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
-   
-
-    if (pool.isConnected === false) {
-        console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
-        return res.status(200).send(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)
-    }
     
+    if (req.method === 'GET') // 1 건 읽기 ..
+    {            
+        pool.connect = pool.connectStart()
+                            .then((connect)=>{                             
+                                console.info(`실행 : ${connect.format(customersInfo.selectSqlOne, [req.params.customerNumber])}`)
+                                return connect.execute(customersInfo.selectSqlOne, [req.params.customerNumber])
+                            })
+                            .then(([result]) => {
+                                pool.connect.end()
 
-    if (req.method === 'GET') {            
-        pool.connect.query(customersInfo.selectSqlOne, [req.params.customerNumber], (err, result, fields) => {
-            if(err) {
-                console.log(`sql에 에러 발생 : ${err}`)
+                                console.info(`Row수 : ${result.length}`)
 
-                res.status(500).send({
-                    seccess : false, 
-                    message : 'sql에 에러 발생',
-                    sql     : pool.connect.format(customersInfo.selectSqlOne, [req.params.customerNumber]),
-                    err
-                })                
-            }
-            else
-            {
-                console.info(`실행 : ${pool.connect.format(customersInfo.selectSqlOne, [req.params.customerNumber])}`)
-                console.info(`Row수 : ${result.length}`)
-                //console.info(`result : ${ JSON.stringify(result,null,2)}`)
+                                res.status(200).send({
+                                    success : true,
+                                    message : `${result.length}개의 레코드를 리턴합니다.`,
+                                    length  : result.length,
+                                    result
+                                });
+                            })
+                            .catch((error) => {
+                                console.error('sql에 에러 발생 : ', error);
 
-                res.status(200).send({
-                    success : true,
-                    message : `${result.length}개의 레코드를 리턴합니다.`,
-                    length  : result.length,
-                    result
-                });
+                                res.status(500).send({
+                                    seccess : false, 
+                                    message : 'sql에 에러 발생',
+                                    sql     : `${connect.format(customersInfo.selectSqlOne, [req.params.customerNumber])}`, 
+                                    err
+                                })                
+                            });
+    } // if (req.method === 'GET') // 1 건 읽기 ..
 
-                console.info(`sql 정상실행!`)
-            }
-        })            
-    }
-    
-    if (req.method === 'DELETE') {
-        pool.connect.query(customersInfo.deleteSqlOne, [req.params.customerNumber], (err,rows, fields) => {
-            if(err) {
-                console.log(`sql에 에러 발생 : ${err}`)
+    if (req.method === 'DELETE')  // 1 건 삭제 ..
+    {
+        pool.connect = pool.connectStart()
+                            .then((connect)=>{                             
+                                console.info(`실행 : ${connect.format(customersInfo.deleteSqlOne, [req.params.customerNumber])}`)
+                                return connect.execute(customersInfo.deleteSqlOne, [req.params.customerNumber])
+                            })
+                            .then(([result]) => {
+                                pool.connect.end()
 
-                res.status(500).send({
-                    seccess : false, 
-                    message : `sql에러 : ${err}`,
-                    sql     : pool.connect.format(customersInfo.deleteSqlOne, [req.params.customerNumber])
-                })                
-            } 
-            else {
-                console.info(`실행 : ${pool.connect.format(customersInfo.deleteSqlOne, [req.params.customerNumber])}`)
+                                console.info(`반영된 Row수 : ${result.affectedRows}`)
 
-                res.status(200).send({
-                    success : true,
-                    message: `${rows.affectedRows} 개의 레코드가 적용되었습니다.`
-                });
-            }
-        })    
-    }
+                                res.status(200).send({
+                                    success : true,
+                                    message: `${rows.affectedRows} 개의 레코드가 적용되었습니다.`
+                                });
+                            })
+                            .catch((error) => {
+                                console.error('sql에 에러 발생 : ', error);
 
+                                res.status(500).send({
+                                    seccess : false, 
+                                    message : 'sql에 에러 발생',
+                                    sql     : `${connect.format(customersInfo.deleteSqlOne, [req.params.customerNumber])}`,
+                                    err
+                                })                
+                            });
+    } // if (req.method === 'DELETE')  // 1 건 삭제 ..
 })
 
 
@@ -80,10 +80,11 @@ router.use('/', (req, res) =>
     //var b = req.query.contactLastName; 
     //console.log("a : " + a + " / b : " + b)    
 
-    console.log(`요청 [/] ${req.originalUrl} [${req.method}]`)
-    console.log( JSON.stringify(req.query))
+    console.log(`요청 [${req.method}] [/] ${req.originalUrl}`)
+    console.log(`req.query : `);
+    console.dir(req.query, { depth: null, colors: true });
 
-    if (req.method === 'GET') 
+    if (req.method === 'GET') // 페이지 단위로 리스트 읽기 ...
     {            
         var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
         var sqlLastSelectKeys = customersInfo.selectSqlKeys // select 문!!
@@ -136,209 +137,164 @@ router.use('/', (req, res) =>
                             });    
                         })
                         .catch((error) => {
-                            console.error('Error occurred:', error);
+                            console.error('sql에 에러 발생 : ', error);
+
+                            res.status(500).send({
+                                seccess : false, 
+                                message : 'sql에 에러 발생',
+                                sql     : `${sqlLastSelect}`,
+                                err
+                            })                
                         });
-    }
+    } // if (req.method === 'GET') // 페이지 단위로 리스트 읽기 ...
+
+    if (req.method === 'PUT') // 1 건 갱신 ...
+    {
+        console.log(`req.body : `);
+        console.dir(req.body, { depth: null, colors: true });
+        const formData = req.body; // app.use(express.json()); // 해 줘야 함
+
+        pool.connect = pool.connectStart()
+                            .then((connect)=>{                            
+                                console.info(`실행 : ${connect.format(customersInfo.updateSqlOne, [ formData.customerName
+                                                                                                    , formData.contactLastName
+                                                                                                    , formData.contactFirstName
+                                                                                                    , formData.phone
+                                                                                                    , formData.addressLine1
+                                                                                                    , formData.addressLine2
+                                                                                                    , formData.city
+                                                                                                    , formData.state
+                                                                                                    , formData.postalCode
+                                                                                                    , formData.country
+                                                                                                    , formData.salesRepEmployeeNumber
+                                                                                                    , formData.creditLimit
+                                                                                                    , formData.customerNumber
+                                                                                                    ])}`)
+                                return connect.execute(customersInfo.updateSqlOne, [ formData.customerName
+                                                                                    , formData.contactLastName
+                                                                                    , formData.contactFirstName
+                                                                                    , formData.phone
+                                                                                    , formData.addressLine1
+                                                                                    , formData.addressLine2
+                                                                                    , formData.city
+                                                                                    , formData.state
+                                                                                    , formData.postalCode
+                                                                                    , formData.country
+                                                                                    , formData.salesRepEmployeeNumber
+                                                                                    , formData.creditLimit
+                                                                                    , formData.customerNumber
+                                                                                    ]) 
+                            })
+                            .then(([result]) => {
+                                pool.connect.end()
+
+                                console.info(`반영된 Row수 : ${result.affectedRows}`)
+
+                                res.status(200).send({
+                                    success : true,
+                                    message : `${result.affectedRows}개의 레코드가 반영되었습니다.`,
+                                    length  : result.affectedRows,
+                                    formData
+                                });    
+                            })
+                            .catch((error) => {
+                                console.error('sql에 에러 발생 : ', error);
+
+                                res.status(500).send({
+                                    seccess : false, 
+                                    message : 'sql에 에러 발생',
+                                    sql     : `${connect.format(customersInfo.updateSqlOne, [ formData.customerName
+                                                                                            , formData.contactLastName
+                                                                                            , formData.contactFirstName
+                                                                                            , formData.phone
+                                                                                            , formData.addressLine1
+                                                                                            , formData.addressLine2
+                                                                                            , formData.city
+                                                                                            , formData.state
+                                                                                            , formData.postalCode
+                                                                                            , formData.country
+                                                                                            , formData.salesRepEmployeeNumber
+                                                                                            , formData.creditLimit
+                                                                                            , formData.customerNumber
+                                                                                            ])}` ,
+                                    err
+                                })                
+                            });
+    } // if (req.method === 'PUT') // 1 건 갱신 ...
  
-    
-    /************************
-    if (req.method === 'PUT') {
+    if (req.method === 'POST') // 새로운 1 건 등록 ..
+    {
         // req.body에서 폼 데이터를 받음
+        console.log(`req.body : `);
+        console.dir(req.body, { depth: null, colors: true });
+
         const formData = req.body; // app.use(express.json()); // 해 줘야 함
 
-        console.log(req.body);
-        
-        pool.connect.query(customersInfo.updateSqlOne, [ formData.customerName
-                                                       , formData.contactLastName
-                                                       , formData.contactFirstName
-                                                       , formData.phone
-                                                       , formData.addressLine1
-                                                       , formData.addressLine2
-                                                       , formData.city
-                                                       , formData.state
-                                                       , formData.postalCode
-                                                       , formData.country
-                                                       , formData.salesRepEmployeeNumber
-                                                       , formData.creditLimit
-                                                       , formData.customerNumber
-                                                       ], (err, result, fields) => {
-            if(err) {
-                console.log(`sql에 에러 발생 : ${err}`)
+        pool.connect = pool.connectStart()
+                            .then((connect)=>{                            
+                                console.info(`실행 : ${connect.format(customersInfo.insertSqlOne, [ formData.customerName
+                                                                                                  , formData.contactLastName
+                                                                                                  , formData.contactFirstName
+                                                                                                  , formData.phone
+                                                                                                  , formData.addressLine1
+                                                                                                  , formData.addressLine2
+                                                                                                  , formData.city
+                                                                                                  , formData.state
+                                                                                                  , formData.postalCode
+                                                                                                  , formData.country
+                                                                                                  , formData.salesRepEmployeeNumber
+                                                                                                  , formData.creditLimit
+                                                                                                  ])}`)
+                                return connect.execute(customersInfo.insertSqlOne, [ formData.customerName
+                                                                                   , formData.contactLastName
+                                                                                   , formData.contactFirstName
+                                                                                   , formData.phone
+                                                                                   , formData.addressLine1
+                                                                                   , formData.addressLine2
+                                                                                   , formData.city
+                                                                                   , formData.state
+                                                                                   , formData.postalCode
+                                                                                   , formData.country
+                                                                                   , formData.salesRepEmployeeNumber
+                                                                                   , formData.creditLimit
+                                                                                   ]) 
+                            })
+                            .then(([result]) => {
+                                pool.connect.end()
 
-                res.status(500).send({
-                    seccess : false, 
-                    message : 'sql에 에러 발생',
-                    sql     : customersInfo.updateSqlOne,
-                    err
-                })                
-            }
-            else
-            {
-                console.info(`실행 : ${pool.connect.format(customersInfo.updateSqlOne, [ formData.customerName
-                                                                                       , formData.contactLastName
-                                                                                       , formData.contactFirstName
-                                                                                       , formData.phone
-                                                                                       , formData.addressLine1
-                                                                                       , formData.addressLine2
-                                                                                       , formData.city
-                                                                                       , formData.state
-                                                                                       , formData.postalCode
-                                                                                       , formData.country
-                                                                                       , formData.salesRepEmployeeNumber
-                                                                                       , formData.creditLimit
-                                                                                       , formData.customerNumber
-                                                                                       ])}`)
-                console.info(`반영된 Row수 : ${result.affectedRows}`)
+                                console.info(`반영된 Row수 : ${result.affectedRows}`)
 
-                res.status(200).send({
-                    success : true,
-                    message : `${result.affectedRows}개의 레코드가 반영되었습니다.`,
-                    length  : result.affectedRows,
-                    formData
-                });
+                                res.status(200).send({
+                                    success : true,
+                                    message : `${result.affectedRows}개의 레코드가 반영되었습니다.`,
+                                    length  : result.affectedRows,
+                                    formData
+                                });    
+                            })
+                            .catch((error) => {
+                                console.error('sql에 에러 발생 : ', error);
 
-                console.info(`sql 정상실행!`)
-            }                                                            
-        })
-    }
-    if (req.method === 'POST') {
-        // req.body에서 폼 데이터를 받음
-        const formData = req.body; // app.use(express.json()); // 해 줘야 함
-
-        console.log(req.body);
-        
-        pool.connect.query(customersInfo.insertSqlOne, [ formData.customerName
-                                                       , formData.contactLastName
-                                                       , formData.contactFirstName
-                                                       , formData.phone
-                                                       , formData.addressLine1
-                                                       , formData.addressLine2
-                                                       , formData.city
-                                                       , formData.state
-                                                       , formData.postalCode
-                                                       , formData.country
-                                                       , formData.salesRepEmployeeNumber
-                                                       , formData.creditLimit
-                                                       ], (err, result, fields) => {
-            if(err) {
-                console.log(`sql에 에러 발생 : ${err}`)
-
-                res.status(500).send({
-                    seccess : false, 
-                    message : 'sql에 에러 발생',
-                    sql     : customersInfo.insertSqlOne,
-                    err
-                })                
-            }
-            else
-            {
-                console.info(`실행 : ${pool.connect.format(customersInfo.insertSqlOne, [ formData.customerName
-                                                                                       , formData.contactLastName
-                                                                                       , formData.contactFirstName
-                                                                                       , formData.phone
-                                                                                       , formData.addressLine1
-                                                                                       , formData.addressLine2
-                                                                                       , formData.city
-                                                                                       , formData.state
-                                                                                       , formData.postalCode
-                                                                                       , formData.country
-                                                                                       , formData.salesRepEmployeeNumber
-                                                                                       , formData.creditLimit
-                                                                                       ])}`)
-                console.info(`반영된 Row수 : ${result.affectedRows}`)
-
-                res.status(200).send({
-                    success : true,
-                    message : `${result.affectedRows}개의 레코드가 반영되었습니다.`,
-                    length  : result.affectedRows,
-                    formData
-                });
-
-                console.info(`sql 정상실행!`)
-            }                                                            
-        })
-    }
-    if (req.method === 'GET') {            
-        var sqlLastSelectKeys = customersInfo.selectSqlKeys // select 문!!
-        var sqlLastSelect = customersInfo.selectSql // select 문!!
-        var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
-        
-        var keysQuery = Object.keys(req.query); // 검색 키 값들을 화면에서 가져옵니다.
-        for (var keyQuery in keysQuery) {
-            
-            var fieldName = keysQuery[keyQuery]
-            console.log("req.json 키=값 : " + fieldName + "=" + req.query[fieldName])
-
-            if (fieldName==='currPage') {
-                currPage = eval(req.query[fieldName])              
-                pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)  
-            }
-
-            var keysSearchs = Object.keys(customersInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
-            for (var keysSearchs in keysSearchs) {
-                if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
-                    sqlLastSelectKeys = sqlLastSelectKeys + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
-                    sqlLastSelect     = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
-                }
-            }
-        }  
-
-        var totalRowSql = customersInfo.getTotalRowSql(sqlLastSelectKeys)  // 총 건수를 구하기 위한 쿼리를 구성한다
-        pool.connect.query(totalRowSql, (err, result, fields) => {
-            if(err) {
-                console.log(`totalRowSql 에 에러 발생 : ${err}`)
-
-                res.status(500).send({
-                    seccess : false, 
-                    message : 'totalRowSql 에 에러 발생',
-                    sql     : totalRowSql,
-                    err
-                })
-            }
-            else
-            {
-                console.info(`실행 : ${totalRowSql}`)
-                console.info(`Row수 : ${result.length}`)
-
-                pageInfo.totalRow = result[0].total_row // 총 레코드 수
-
-                sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
-
-                pool.connect.query(sqlLastSelect, (err, result, fields) => {
-                    if(err) {
-                        console.log(`sqlLastSelect 에 에러 발생 : ${err}`)
-        
-                        res.status(500).send({
-                            seccess : false, 
-                            message : 'sqlLastSelect 에 에러 발생',
-                            sql     : sqlLastSelect,
-                            err
-                        })
-                    }
-                    else
-                    {
-                        console.info(`실행 : ${sqlLastSelect}`)
-                        console.info(`Row수 : ${result.length}`)
-                        console.info(`res.pageInfo : ${JSON.stringify(pageInfo,null,2)}`)
-                        //console.info(`res.result : ${JSON.stringify(result,null,2)}`)
-        
-                        res.status(200).send({
-                            success : true,
-                            message : `${result.length}개의 레코드를 리턴합니다.`,
-                            length  : result.length,
-                            pageInfo,
-                            result
-                        });    
-                        
-                        console.info(`sqlLastSelect 정상실행!`)
-                    }
-                })
-
-                console.info(`totalRowSql 정상실행!`)
-            }
-        })
-           
-    }        *********/
+                                res.status(500).send({
+                                    seccess : false, 
+                                    message : 'sql에 에러 발생',
+                                    sql     :  `${connect.format(customersInfo.insertSqlOne, [ formData.customerName
+                                                                                             , formData.contactLastName
+                                                                                             , formData.contactFirstName
+                                                                                             , formData.phone
+                                                                                             , formData.addressLine1
+                                                                                             , formData.addressLine2
+                                                                                             , formData.city
+                                                                                             , formData.state
+                                                                                             , formData.postalCode
+                                                                                             , formData.country
+                                                                                             , formData.salesRepEmployeeNumber
+                                                                                             , formData.creditLimit
+                                                                                             ])}`,
+                                    err
+                                })                
+                            });
+    } // if (req.method === 'POST') // 새로운 1 건 등록 ..
+ 
 })
 
 

@@ -77,7 +77,8 @@ router.use('/', (req, res) => {
     //console.log("a : " + a + " / b : " + b)    
 
     console.log(` ${req.originalUrl} [${req.method}] 요청 `)
-    console.log( JSON.stringify(req.query))
+    console.log(`req.query : `);
+    console.dir(req.query, { depth: null, colors: true });
 
     if (pool.isConnected === false) {
         console.log(`지금 MySql 데이터베이스 접속이 ${pool.isConnected} 입니다.`)    
