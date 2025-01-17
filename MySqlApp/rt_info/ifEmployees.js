@@ -20,7 +20,7 @@ const tableInfo = {
     
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
 
-    selectSql : ` /* selectSql */
+    selectSqlList : ` /* selectSqlList */
                   SELECT employeeNumber
                        , lastName
                        , firstName

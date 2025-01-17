@@ -17,7 +17,7 @@ router.get('/', (req, res) =>
 // 사용예 : >curl localhost:3000/
 router.get('/:ackType/:customerNumber', (req, res) =>  // edit, view, delete
 {    
-    console.log(`요청 [${req.method}] (hCustomer) ${req.originalUrl}`)
+    console.log(`요청 [${req.method}] (ejsCustomer) ${req.originalUrl}`)
     console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view, delete
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
 
@@ -30,7 +30,7 @@ router.get('/:ackType/:customerNumber', (req, res) =>  // edit, view, delete
 // 사용예 : >curl localhost:3000/
 router.get('/insert', (req, res) => // insert
 {    
-    console.log(`요청 [${req.method}] (hCustomer) ${req.originalUrl}`)
+    console.log(`요청 [${req.method}] (ejsCustomer) ${req.originalUrl}`)
     console.log(` req.params.ackType = insert`)
 
     tableInfo.ackType = 'insert'

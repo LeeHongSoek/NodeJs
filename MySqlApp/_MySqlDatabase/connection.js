@@ -57,7 +57,7 @@ const pool = {
                             const selectSqlKeys = `SELECT ${primaryKeys.length > 0 ? primaryKeys.map((pk) => pk.Field).join('\n, ') : '*'} 
                                                      FROM ${tableName} 
                                                     WHERE del = 'N';`;
-                            const selectSql = `SELECT ${columns.map((col) => col.Field).join('\n, ')}     
+                            const selectSqlList = `SELECT ${columns.map((col) => col.Field).join('\n, ')}     
                                                  FROM ${tableName} 
                                                 WHERE del = 'N' ;`;
                             const selectSqlOne = `SELECT ${columns.map((col) => col.Field).join('\n, ')}   
@@ -72,7 +72,7 @@ const pool = {
                                                      SET del = 'Y'
                                                    WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n AND ') : 'id = ?'};`;
 
-                            console.log('Generated SQL Statements:', { selectSqlKeys, selectSql, selectSqlOne, insertSqlOne, updateSqlOne, deleteSqlOne });
+                            console.log('Generated SQL Statements:', { selectSqlKeys, selectSqlList, selectSqlOne, insertSqlOne, updateSqlOne, deleteSqlOne });
 
                             if (!fs.existsSync(rtInfoDir)) {
                                 fs.mkdirSync(rtInfoDir);
@@ -88,7 +88,7 @@ const pool = {
                             });
                             fs.appendFileSync(filePath, `    },\n`);
                             fs.appendFileSync(filePath, `    selectSqlKeys: \`${selectSqlKeys}\`,\n`);
-                            fs.appendFileSync(filePath, `    selectSql: \`${selectSql}\`,\n`);
+                            fs.appendFileSync(filePath, `    selectSqlList: \`${selectSqlList}\`,\n`);
                             fs.appendFileSync(filePath, `    selectSqlOne: \`${selectSqlOne}\`,\n`);
                             fs.appendFileSync(filePath, `    insertSqlOne: \`${insertSqlOne}\`,\n`);
                             fs.appendFileSync(filePath, `    updateSqlOne: \`${updateSqlOne}\`,\n`);

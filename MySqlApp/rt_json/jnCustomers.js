@@ -64,7 +64,7 @@ router.use('/:customerNumber', (req, res) =>
 
                 res.status(200).send({
                     success : true,
-                    message: `${rows.affectedRows} 개의 레코드가 적용되었습니다.`
+                    message: `${result.affectedRows} 개의 레코드가 적용되었습니다.`
                 });
             })
             .catch((error) => {
@@ -74,7 +74,7 @@ router.use('/:customerNumber', (req, res) =>
                     seccess : false, 
                     message : 'sql에 에러 발생',
                     sql     : `${connect.format(customersInfo.deleteSqlOne, [req.params.customerNumber])}`,
-                    eerrorrr
+                    error
                 })                
             });
     } // if (req.method === 'DELETE')  // 해당건 1 건 삭제 ..
@@ -98,7 +98,7 @@ router.use('/', (req, res) =>
     {            
         var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
         var sqlLastSelectKeys = customersInfo.selectSqlKeys // select 문!!
-        var sqlLastSelect = customersInfo.selectSql // select 문!!
+        var sqlLastSelectList = customersInfo.selectSqlList // select 문!!
 
         let connect // mariaDB 커넥션..
 
@@ -121,7 +121,7 @@ router.use('/', (req, res) =>
                     for (var keysSearchs in keysSearchs) {
                         if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
                             sqlLastSelectKeys = sqlLastSelectKeys + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
-                            sqlLastSelect     = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                            sqlLastSelectList = sqlLastSelectList + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
                         }
                     }
                 }
@@ -133,10 +133,10 @@ router.use('/', (req, res) =>
             .then(([counters]) => {                                
                 pageInfo.totalRow = counters[0].total_row // 총 레코드 수
 
-                sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
+                sqlLastSelectList += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 
-                console.info(`실행 : ${sqlLastSelect}`)
-                return connect.execute(sqlLastSelect)
+                console.info(`실행 : ${sqlLastSelectList}`)
+                return connect.execute(sqlLastSelectList)
             })
             .then(([data]) => {
                 //data.map((data) => {console.info(`data.customerNumber : ${data.customerNumber}`)})
@@ -156,7 +156,7 @@ router.use('/', (req, res) =>
                 res.status(500).send({
                     seccess : false, 
                     message : 'sql에 에러 발생',
-                    sql     : `${sqlLastSelect}`,
+                    sql     : `${sqlLastSelectList}`,
                     error
                 })                
             });

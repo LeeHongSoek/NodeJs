@@ -26,13 +26,13 @@ router.use('/:employeeNumber', (req, res) => {
                 res.status(500).send({
                     seccess : false, 
                     message : 'sql에 에러 발생',
-                    sql     : employeesInfo.selectSql,
+                    sql     : employeesInfo.selectSqlOne,
                     err
                 })                
             }
             else
             {
-                console.info(`실행 : ${employeesInfo.selectSql}`)
+                console.info(`실행 : ${employeesInfo.selectSqlOne}`)
                 console.info(`Row수 : ${result.length}`)
                 //console.info(`result : ${ JSON.stringify(result,null,2)}`)
 
@@ -87,7 +87,7 @@ router.use('/', (req, res) => {
 
     
         
-    var sqlLastSelect = employeesInfo.selectSql // select 문!!
+    var sqlLastSelectList = employeesInfo.selectSqlList // select 문!!
     var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
     
     var keysQuery = Object.keys(req.query); // 검색 키 값들을 화면에서 가져옵니다.
@@ -104,12 +104,12 @@ router.use('/', (req, res) => {
         var keysSearchs = Object.keys(employeesInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
         for (var keysSearchs in keysSearchs) {
             if ((keyQuery === keysSearchs) && (req.query[fieldName] !='')) {
-                sqlLastSelect = sqlLastSelect + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
+                sqlLastSelectList = sqlLastSelectList + `\n   AND  ${fieldName} like '${req.query[fieldName]}%' `
             }
         }
     }  
 
-    var totalRowSql = employeesInfo.getTotalRowSql(sqlLastSelect)  // 총 건수를 구하기 위한 쿼리를 구성한다
+    var totalRowSql = employeesInfo.getTotalRowSql(sqlLastSelectList)  // 총 건수를 구하기 위한 쿼리를 구성한다
     pool.connect.query(totalRowSql, (err, result, fields) => {
         if(err) {
             console.log(`totalRowSql 에 에러 발생 : ${err}`)
@@ -128,22 +128,22 @@ router.use('/', (req, res) => {
 
             pageInfo.totalRow = result[0].total_row // 총 레코드 수
 
-            sqlLastSelect += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
+            sqlLastSelectList += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 
-            pool.connect.query(sqlLastSelect, (err, result, fields) => {
+            pool.connect.query(sqlLastSelectList, (err, result, fields) => {
                 if(err) {
                     console.log(`sqlLastSelect 에 에러 발생 : ${err}`)
     
                     res.status(500).send({
                         seccess : false, 
                         message : 'sqlLastSelect 에 에러 발생',
-                        sql     : sqlLastSelect,
+                        sql     : sqlLastSelectList,
                         err
                     })
                 }
                 else
                 {
-                    console.info(`실행 : ${sqlLastSelect}`)
+                    console.info(`실행 : ${sqlLastSelectList}`)
                     console.info(`Row수 : ${result.length}`)
                     console.info(`res.pageInfo : ${JSON.stringify(pageInfo,null,2)}`)
                     //console.info(`res.result : ${JSON.stringify(result,null,2)}`)
