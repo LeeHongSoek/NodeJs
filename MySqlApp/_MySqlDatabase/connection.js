@@ -22,24 +22,21 @@ const extractNumber = (input) => {
 };
 
 const pool = {
-    connect: null,
-    
     connectStart: () => {
         return mysql.createConnection(connectInfo)
             .then((connection) => {
-                pool.connect = connection;
-
                 return connection;
             })
     },
     connectRunQueries: () => {
+        let connect
 
         return mysql.createConnection(connectInfo)
             .then((connection) => {
-                pool.connect = connection;
-
+                connect = connection
+                
                 // Get all table names
-                return pool.connect.execute('SHOW TABLES');
+                return connect.execute('SHOW TABLES');
             })
             .then(([showTables]) => {
                 console.log('Tables:', showTables);
@@ -50,7 +47,7 @@ const pool = {
                     const fileName = `if${tableName.charAt(0).toUpperCase() + tableName.slice(1)}._js`;
                     const filePath = path.join(rtInfoDir, fileName);
 
-                    return pool.connect.execute(`SHOW COLUMNS FROM ${tableName}`)
+                    return connect.execute(`SHOW COLUMNS FROM ${tableName}`)
                         .then(([rawColumns]) => {
                             const columns = rawColumns.filter((col) => col.Field !== 'del');
                             console.log(`Columns for ${tableName}:`, columns);
@@ -109,17 +106,21 @@ const pool = {
                 return Promise.all(tablePromises);
             })
             .then(() => {
-                console.error(`pool.connect.end()`);
-                pool.connect.end()
+                console.error(`connect.end()`);
+                connect.end()
             })
             .catch((error) => {
-                console.error('Error occurred:', error);
+                console.error('sql에 에러 발생 : ', error);
+
+                res.status(500).send({
+                    seccess : false, 
+                    message : 'sql에 에러 발생',
+                    sql     : `SHOW COLUMNS FROM []`, 
+                    error
+                })        
             });
     }
 };
-
-//pool.connectRunQueries
-//pool.connectEnd
 
 module.exports = pool
 
