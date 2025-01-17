@@ -4,7 +4,7 @@ const tableInfo = require('../rt_info/ifCustomers')
 
 router.get('/', (req, res) => {
     console.log(`요청 [${req.method}] (hCustomersList) : ${req.originalUrl}`)    
-    return res.render('fmCustomersList',{ tableInfo })
+    return res.render('ejsCustomersList',{ tableInfo })
 })
 
 module.exports = router

@@ -12,7 +12,7 @@ require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // np
 
 
 app.get('/',(req, res) => {    
-    return res.render('fmIndex')
+    return res.render('ejsIndex')
 })
 
 app.get('/makeJsFile',(req, res) => {    
