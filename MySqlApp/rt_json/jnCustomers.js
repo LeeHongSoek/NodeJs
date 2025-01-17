@@ -12,7 +12,7 @@ router.use('/:customerNumber', (req, res) =>
     console.log(`요청 [${req.method}] [/:customerNumber] ${req.originalUrl}`)
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
     
-    if (req.method === 'GET') // 1 건 읽기 ..
+    if (req.method === 'GET') // 해당건 1 건 읽기 ..
     {            
         let connect // mariaDB 커넥션..
 
@@ -45,9 +45,9 @@ router.use('/:customerNumber', (req, res) =>
                     error
                 })                
             });
-    } // if (req.method === 'GET') // 1 건 읽기 ..
+    } // if (req.method === 'GET') // 해당건 1 건 읽기 ..
 
-    if (req.method === 'DELETE')  // 1 건 삭제 ..
+    if (req.method === 'DELETE')  // 해당건 1 건 삭제 ..
     {
         let connect // mariaDB 커넥션..
         pool.connectStart()
@@ -77,11 +77,13 @@ router.use('/:customerNumber', (req, res) =>
                     eerrorrr
                 })                
             });
-    } // if (req.method === 'DELETE')  // 1 건 삭제 ..
+    } // if (req.method === 'DELETE')  // 해당건 1 건 삭제 ..
 })
 
 
 // 사용예 : >curl -X GET localhost:3000/json/customersList
+// 사용예 : >curl -X PUT localhost:3000/json/customersList
+// 사용예 : >curl -X POST localhost:3000/json/customersList
 router.use('/', (req, res) => 
 {
     //var a = req.query.customerName;
@@ -160,7 +162,7 @@ router.use('/', (req, res) =>
             });
     } // if (req.method === 'GET') // 페이지 단위로 리스트 읽기 ...
 
-    if (req.method === 'PUT') // 1 건 갱신 ...
+    if (req.method === 'PUT') // 기존건 1 건 갱신 ...
     {
         console.log(`req.body : `);
         console.dir(req.body, { depth: null, colors: true });
@@ -236,7 +238,7 @@ router.use('/', (req, res) =>
                                                                             error
                 })                
             });
-    } // if (req.method === 'PUT') // 1 건 갱신 ...
+    } // if (req.method === 'PUT') // 기존건 1 건 갱신 ...
  
     if (req.method === 'POST') // 새로운 1 건 등록 ..
     {
