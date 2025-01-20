@@ -113,7 +113,7 @@ const pool = {
                 console.error('sql에 에러 발생 : ', error);
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     : `SHOW COLUMNS FROM []`, 
                     error
