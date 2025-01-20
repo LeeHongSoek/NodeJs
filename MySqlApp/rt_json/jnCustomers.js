@@ -39,11 +39,14 @@ router.use('/:customerNumber', (req, res) =>
                 console.error('sql에 에러 발생 : ', error);
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     : `${connect.format(customersInfo.selectSqlOne, [req.params.customerNumber])}`, 
                     error
                 })                
+            })
+            .finally(() => {
+                if (connect) connect.end();
             });
     } // if (req.method === 'GET') // 해당건 1 건 읽기 ..
 
@@ -61,21 +64,28 @@ router.use('/:customerNumber', (req, res) =>
                 connect.end()
 
                 console.info(`반영된 Row수 : ${result.affectedRows}`)
-
-                res.status(200).send({
-                    success : true,
-                    message: `${result.affectedRows} 개의 레코드가 적용되었습니다.`
-                });
+                
+                if (result.affectedRows === 0) {
+                    res.status(404).send({ success: false, message: '삭제할 레코드를 찾을 수 없습니다.' });
+                } else {
+                    res.status(200).send({
+                        success: true,
+                        message: `${result.affectedRows}개의 레코드가 삭제되었습니다.`,
+                    });
+                }
             })
             .catch((error) => {
                 console.error('sql에 에러 발생 : ', error);
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     : `${connect.format(customersInfo.deleteSqlOne, [req.params.customerNumber])}`,
                     error
                 })                
+            })
+            .finally(() => {
+                if (connect) connect.end();
             });
     } // if (req.method === 'DELETE')  // 해당건 1 건 삭제 ..
 })
@@ -154,11 +164,14 @@ router.use('/', (req, res) =>
                 console.error('sql에 에러 발생 : ', error);
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     : `${sqlLastSelectList}`,
                     error
                 })                
+            })
+            .finally(() => {
+                if (connect) connect.end();
             });
     } // if (req.method === 'GET') // 페이지 단위로 리스트 읽기 ...
 
@@ -219,7 +232,7 @@ router.use('/', (req, res) =>
                 console.error('sql에 에러 발생 : ', error);
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     : `${connect.format(customersInfo.updateSqlOne, [ formData.customerName
                                                                             , formData.contactLastName
@@ -237,6 +250,9 @@ router.use('/', (req, res) =>
                                                                             ])}` ,
                                                                             error
                 })                
+            })
+            .finally(() => {
+                if (connect) connect.end();
             });
     } // if (req.method === 'PUT') // 기존건 1 건 갱신 ...
  
@@ -297,7 +313,7 @@ router.use('/', (req, res) =>
                 console.error('sql에 에러 발생 : ', error);
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     :  `${connect.format(customersInfo.insertSqlOne, [ formData.customerName
                                                                              , formData.contactLastName
@@ -314,6 +330,9 @@ router.use('/', (req, res) =>
                                                                              ])}`,
                     error
                 })                
+            })
+            .finally(() => {
+                if (connect) connect.end();
             });
     } // if (req.method === 'POST') // 새로운 1 건 등록 ..
  

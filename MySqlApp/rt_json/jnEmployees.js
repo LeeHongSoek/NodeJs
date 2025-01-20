@@ -24,7 +24,7 @@ router.use('/:employeeNumber', (req, res) => {
                 console.log(`sql에 에러 발생 : ${err}`)
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : 'sql에 에러 발생',
                     sql     : employeesInfo.selectSqlOne,
                     err
@@ -54,7 +54,7 @@ router.use('/:employeeNumber', (req, res) => {
                 console.log(`sql에 에러 발생 : ${err}`)
 
                 res.status(500).send({
-                    seccess : false, 
+                    success : false, 
                     message : `sql에러 : ${err}`,
                     sql     : employeesInfo.deleteSqlOne,
                 })                
@@ -115,7 +115,7 @@ router.use('/', (req, res) => {
             console.log(`totalRowSql 에 에러 발생 : ${err}`)
 
             res.status(500).send({
-                seccess : false, 
+                success : false, 
                 message : 'totalRowSql 에 에러 발생',
                 sql     : totalRowSql,
                 err
@@ -135,7 +135,7 @@ router.use('/', (req, res) => {
                     console.log(`sqlLastSelect 에 에러 발생 : ${err}`)
     
                     res.status(500).send({
-                        seccess : false, 
+                        success : false, 
                         message : 'sqlLastSelect 에 에러 발생',
                         sql     : sqlLastSelectList,
                         err
