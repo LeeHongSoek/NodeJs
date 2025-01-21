@@ -1,55 +1,319 @@
+/* 통합 스타일 시트 */
+
+/* 공통 스타일 */
+body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
 table.type02 {
-    table-layout:fixed;
-    word-break:break-all;
-    border-collapse: separate;
-    border-spacing: 0;
-    text-align: left;
-    line-height: 1.5;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    margin : 10px 5px;
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border-collapse: separate; /* separate으로 변경 */
+    border-spacing: 0; /* border-spacing을 0으로 설정 */
+    border-radius: 10px; /* 둥근 테두리 */
+    overflow: hidden; /* 내용이 테두리를 넘어가지 않도록 숨김 */
 }
-table.type02 caption {
-    padding: 10px;
-    font-size: 10;
-    font-weight: bold;
-    vertical-align: top;
-    text-align: center;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    background: #ddd;
+
+table.type02 th, table.type02 td {
+    border: 1px solid #555;
+    padding: 8px;
+    
 }
-table.type02 tfoot {
-    padding: 10px;
-    font-size: 10;
-    font-weight: bold;
-    vertical-align: top;
-    text-align: center;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    background: #eee;
-}
+
 table.type02 th {
-    padding: 10px;
-    font-weight: bold;
-    vertical-align: middle;
-    text-align: center;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #fff;
-    border-left: 1px solid #fff;
-    background: #eee;
+    background-color: #3a3a3a;
+    color: #ffffff;
 }
+
 table.type02 td {
-    padding: 5px;
-    vertical-align: top;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    color: #ffffff;
 }
-table.type02 td.center {
-    text-align: center;   
+
+table.type02 input[type="text"],
+table.type02 input[type="button"],
+table.type02 input[type="tel"],
+table.type02 input[type="number"] {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+table.type02 input[type="text"]:focus,
+table.type02 input[type="tel"]:focus,
+table.type02 input[type="number"]:focus{
+    background-color: #555;
+}
+
+
+table.type02 input[type="button"]:hover {
+    background-color: #555;
+}
+
+table.type02 a, a:link, a:visited {
+    color: #95c0e1;
+}
+
+table.type02 a:hover {
+    color: #ccebff;
+}
+
+table.type02 button {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: 1px solid #555;
+    cursor: pointer;
+    margin-left: 3px;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+table.type02 button:hover {
+    background-color: #555;
+}
+
+#resultTable tbody tr:nth-child(odd) {
+    background-color: #383838;
+}
+
+#resultTable tbody tr:nth-child(even) {
+    background-color: #2c2c2c;
+}
+
+table.type02 tfoot {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+table.type02 caption {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 8px;
+}
+
+
+/* 다크 모드 스타일 */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+body.dark-mode table.type02 {
+    background-color: #2c2c2c;
+    color: #ffffff;
+}
+
+body.dark-mode table.type02 th,
+body.dark-mode table.type02 td {
+    border: 1px solid #555;
+}
+
+body.dark-mode table.type02 th {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+body.dark-mode table.type02 td {
+    color: #ffffff;
+}
+
+body.dark-mode table.type02 input[type="text"],
+body.dark-mode table.type02 input[type="button"],
+body.dark-mode table.type02 input[type="tel"],
+body.dark-mode table.type02 input[type="number"] {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+body.dark-mode table.type02 input[type="text"]:focus,
+body.dark-mode table.type02 input[type="tel"]:focus,
+body.dark-mode table.type02 input[type="number"]:focus {
+    background-color: #555;
+}
+
+body.dark-mode table.type02 input[type="button"]:hover {
+    background-color: #555;
+}
+
+body.dark-mode table.type02 a,
+body.dark-mode a:link,
+body.dark-mode a:visited {
+    color: #95c0e1;
+}
+
+body.dark-mode table.type02 a:hover {
+    color: #ccebff;
+}
+
+body.dark-mode table.type02 button {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: 1px solid #555;
+    cursor: pointer;
+    margin-left: 3px;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+body.dark-mode table.type02 button:hover {
+    background-color: #555;
+}
+
+body.dark-mode #resultTable tbody tr:nth-child(odd) {
+    background-color: #383838;
+}
+
+body.dark-mode #resultTable tbody tr:nth-child(even) {
+    background-color: #2c2c2c;
+}
+
+body.dark-mode table.type02 tfoot {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+body.dark-mode table.type02 caption {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+/* 폼 스타일 */
+
+/* 추가: 폼 관련 스타일 */
+#customer-edit-form {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px; /* 폼 패딩 */
+    border: 1px solid #555; /* 어두운 테두리 */
+    border-radius: 5px;
+    background-color: #2c2c2c;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ffffff; /* 라벨 색상 */
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="number"] {
+    width: calc(100% - 18px); /* 전체 너비에서 패딩 및 보더만큼 제외 */
+    padding: 8px;
+    border: 1px solid #555; /* 약간 밝은 테두리 */
+    border-radius: 4px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group input[type="number"]:focus{
+    background-color: #555; /* 포커스 시 밝게 */
+}
+
+.save-button {
+    background-color: #327437; /* 녹색 유지 */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #45a049; /* 호버 시 약간 어둡게 */
+}
+
+
+
+/* 버튼 스타일 */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.button-container input[type="button"] {
+    margin-left: 10px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    flex: 1;
+    text-align: center;
+    min-width: 100px;
+    box-sizing: border-box;
+    background-color: #327437;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.button-container input[type="button"].cancel-button {
+    background-color: #6c757d;
+}
+.button-container input[type="button"]:hover {
+    background-color: #45a049;
+}
+
+.button-container input[type="button"].cancel-button:hover {
+     background-color: #5a6268;
+}
+
+/* 고객 정보 표시 영역 */
+#customer-info {
+    background-color: #2c2c2c; /* 어두운 배경 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.1); /* 하얀 그림자 */
+    margin-bottom: 20px;
+}
+
+#customer-info p {
+    padding: 5px;
+    color: #eee; /* 밝은 글자색 */
+}
+
+#customer-info strong {
+    font-weight: bold;
+    color: #ddd; /* 조금 더 밝은 색 */
+    display: inline-block;
+    width: 100px;
+}
+#customer-info span {
+    color: #fff; /* 밝은 글자색 */
+}
+
+
+/* 확인 버튼 스타일 */
+#btnOk {
+    background-color: #327437;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin: 10px auto;
+}
+#btnOk:hover {
+    background-color: #45a049;
 }

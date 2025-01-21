@@ -5,15 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="/dir_statics/css/style.css" rel="stylesheet" type="text/css">
     <!-- 다크 모드 스타일시트 링크 -->
-    <link href="/dir_statics/css/dark-mode.css" rel="stylesheet" type="text/css">
+    <link href="/dir_statics/css/style.css" rel="stylesheet" type="text/css">
 
     <script src="/dir_statics/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
     <title>Document</title>
 
-    <%
+   <%
     // 코어 자바스크립트 > 자료구조와 자료형 Object.keys, values, entries
     // https://ko.javascript.info/keys-values-entries 
     const fields = Object.keys(tableInfo.fields) //키를 가져옵니다. 이때, keys 는 반복가능한 객체가 됩니다.
@@ -127,11 +126,19 @@
                     data: jsonData,
                     success: function(data) {
                         console.log(data);
+                        alert('수정되었습니다.');
+
+                        window.location.href = '/form/customersList?refresh=true';
                     },
                     error: function(error) {
                         console.error('Error:', error);
                     }
                 });
+            });
+
+            // 저장 버튼을 클릭했을 때의 이벤트 핸들러
+            $('.save-button').on('click', function(event) {
+                $('#customer-edit-form').submit();
             });
         });
     </script>
@@ -155,6 +162,7 @@
             <p><strong>국가:</strong>         <span id="country"></span>              </p>
             <p><strong>신용 한도:</strong>    <span id="creditLimit"></span>         </p>
         </div>
+        <input id="btnOk" type="button" clase="btnBack" onclick="window.history.back();" value="확인" />
         <%
     }
 
@@ -214,7 +222,10 @@
 
             <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
             
-            <button type="submit" class="save-button">저장</button>
+            <div class="button-container">
+               <input type="button" class="save-button" value="저장">
+               <input id="btnCancel" type="button" class="cancel-button" onclick="window.history.back();" value="취소" />
+           </div>
         </form>
 
         <%
@@ -272,7 +283,10 @@
 
             <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
             
-            <button type="submit" class="save-button">저장</button>
+            <div class="button-container">
+                <input type="button" class="save-button" value="저장">
+                <input id="btnCancel" type="button" class="cancel-button" onclick="window.history.back();" value="취소" />
+            </div>
         </form>
 
         <%
