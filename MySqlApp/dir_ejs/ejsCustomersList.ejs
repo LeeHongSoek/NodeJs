@@ -30,7 +30,7 @@
         })
 
         function callAjax() {
-            $.ajax({url        : '/json/customers', // 요청 할 주소 
+            $.ajax({url        : '/json/customer', // 요청 할 주소 
                     async      : true, // false 일 경우 동기 요청으로 변경
                     type       : 'GET', // GET, PUT
                     data       : { <%
@@ -161,7 +161,7 @@
                                                     })
                                                     $('button.buttonDelete').on('click', function(e){ 
                                                         
-                                                        $.ajax({ url        : '/json/customers/' + $(this).attr('pk_key'), // 요청 할 주소 
+                                                        $.ajax({ url        : '/json/customer/' + $(this).attr('pk_key'), // 요청 할 주소 
                                                                 async      : false, // false 일 경우 동기 요청으로 변경
                                                                 type       : 'DELETE', // DELETE
                                                                 data       : { hideCurrPage: $('input[name=hideCurrPage]').val()},
@@ -205,7 +205,7 @@
             <th><%=tableInfo.searchs.contactLastName.nameKor%></th>
             <td><input name="contactLastName" type="text" maxLength="<%=tableInfo.searchs.contactLastName.maxLength%>"></td>
             
-            <td><input id="btnSearch" type="button" value="검색" /></td>
+            <td><input id="btnSearch" type="button" value="검색" onclick="clickSearch();" /></td>
         </tr>
     </table>
 

@@ -2,13 +2,8 @@ const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
 
 router.get('/', (req, res) => {
-    console.log(` ${req.originalUrl} [${req.method}] 요청 `)    
-    res.status(404).send(`
-        <script>
-            alert('잘못된 경로입니다.');
-            window.location.href = '/form/employeesList';
-        </script>
-    `);
+    console.log(` ${req.originalUrl} [${req.method}] 요청 (ejsEmployeesList)`)
+    return res.render('ejsEmployeesList',{ tableInfo });
 })
 
 // 사용예 : >curl localhost:3000/

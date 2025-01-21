@@ -69,7 +69,7 @@ router.use('/:employeeNumber', (req, res) => {
     }
 })
 
-// 사용예 : >curl -X GET localhost:3000/json/employeesList
+// 사용예 : >curl -X GET localhost:3000/json/employee
 router.use('/', (req, res) => {
 
     //var a = req.query.employeeName;

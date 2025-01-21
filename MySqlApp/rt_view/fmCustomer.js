@@ -4,14 +4,15 @@ const tableInfo = require('../rt_info/ifCustomers')
 
 router.get('/', (req, res) => 
 {
-    console.log(`요청 ${req.originalUrl} [${req.method}] `)    
-    res.status(404).send(`
-        <script>
-            alert('잘못된 경로입니다.');
-            window.location.href = '/form/customersList';
-        </script>
-    `);
-    //res.redirect('/form/customersList');  // '/home' 경로로 리디렉션
+    const currPage = req.query.currPage || 1; // currPage 값이 없으면 기본값으로 1을 설정
+
+    console.log(`요청 [${req.method}] (ejsCustomersList) : ${req.originalUrl}`)    
+    console.log(` req.query.currPage = ${currPage}`);
+
+    tableInfo.currPage = currPage
+
+    return res.render('ejsCustomersList',{ tableInfo })
+
 })
 
 // 사용예 : >curl localhost:3000/

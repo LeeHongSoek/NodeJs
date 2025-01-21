@@ -21,7 +21,7 @@
 
     <script>
         function callAjax() {
-                $.ajax({ url        : '/json/customers/<%=tableInfo.pk_value%>', // 요청 할 주소 
+                $.ajax({ url        : '/json/customer/<%=tableInfo.pk_value%>', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { 
@@ -120,7 +120,7 @@
 
                 // 서버로 JSON 데이터를 POST 요청
                 $.ajax({
-                    url: '/json/customers',
+                    url: '/json/customer',
                     type: ($('#ackType').val()=='insert') ? 'POST' : 'PUT',
                     contentType: 'application/json',
                     data: jsonData,
@@ -128,7 +128,7 @@
                         console.log(data);
                         alert('수정되었습니다.');
 
-                        window.location.href = '/form/customersList?currPage='+$('input[name=currPage]').val();
+                        window.location.href = '/form/customer?currPage='+$('input[name=currPage]').val();
                     },
                     error: function(error) {
                         console.error('Error:', error);

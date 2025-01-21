@@ -92,8 +92,8 @@ router.use('/:customerNumber', (req, res) =>
 
 
 // 사용예 : >curl -X GET localhost:3000/json/customersList
-// 사용예 : >curl -X PUT localhost:3000/json/customersList
-// 사용예 : >curl -X POST localhost:3000/json/customersList
+// 사용예 : >curl -X PUT localhost:3000/json/
+// 사용예 : >curl -X POST localhost:3000/json/
 router.use('/', (req, res) => 
 {
     //var a = req.query.customerName;
