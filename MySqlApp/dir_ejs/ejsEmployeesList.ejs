@@ -73,7 +73,7 @@
                                                         $("<a>", {
                                                             href: 'javascript:void(0)',
                                                             class: 'aView',
-                                                            pk_key: item.customerNumber,
+                                                            pk_key: item.employeeNumber,
                                                             text: item.<%=field%>
                                                         })
                                                     )
@@ -87,12 +87,12 @@
                                             $("<td>").append(
                                                 $("<button>", {
                                                     class: 'buttonEdit',
-                                                    pk_key: item.customerNumber,
+                                                    pk_key: item.employeeNumber,
                                                     text: '수정'
                                                 }),
                                                 $("<button>", {
                                                     class: 'buttonDelete',
-                                                    pk_key: item.customerNumber,
+                                                    pk_key: item.employeeNumber,
                                                     text: '삭제'
                                                 })
                                             )
@@ -170,14 +170,14 @@
                                                         callAjax();                                         // 자기자신을 호출 
                                                     })
                                                     $('a.aView').on('click', function(e){  
-                                                        window.location.href = '/form/customer/view/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
+                                                        window.location.href = '/form/employee/view/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
                                                     })
                                                     $('button.buttonEdit').on('click', function(e){ 
-                                                        window.location.href = '/form/customer/edit/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
+                                                        window.location.href = '/form/employee/edit/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
                                                     })
                                                     $('button.buttonDelete').on('click', function(e){ 
                                                         
-                                                        $.ajax({ url        : '/json/customer/' + $(this).attr('pk_key'), // 요청 할 주소 
+                                                        $.ajax({ url        : '/json/employee/' + $(this).attr('pk_key'), // 요청 할 주소 
                                                                 async      : false, // false 일 경우 동기 요청으로 변경
                                                                 type       : 'DELETE', // DELETE
                                                                 data       : { hideCurrPage: $('input[name=hideCurrPage]').val()},
@@ -206,7 +206,7 @@
 
         function clickInsert() // '추가' 버튼
         {
-            window.location.href = '/form/customer/insert';     
+            window.location.href = '/form/employee/insert';     
         }      
 
     </script>

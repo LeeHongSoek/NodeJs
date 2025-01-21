@@ -3,8 +3,14 @@ const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/N
 const tableInfo = require('../rt_info/ifEmployees')
 
 router.get('/', (req, res) => {
-    console.log(` ${req.originalUrl} [${req.method}] 요청 (ejsEmployeesList)`)
-    return res.render('ejsEmployeesList',{ tableInfo });
+    const currPage = req.query.currPage || 1; // currPage 값이 없으면 기본값으로 1을 설정
+
+    console.log(`요청 [${req.method}] (ejsEmployeesList) : ${req.originalUrl}`)    
+    console.log(` req.query.currPage = ${currPage}`);
+
+    tableInfo.currPage = currPage
+
+    return res.render('ejsEmployeesList',{ tableInfo })
 })
 
 // 사용예 : >curl localhost:3000/
