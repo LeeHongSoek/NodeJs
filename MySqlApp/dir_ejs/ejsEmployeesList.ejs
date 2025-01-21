@@ -13,7 +13,7 @@
     
     <!-- 다크 모드 스타일시트 링크 -->
     <link href="/dir_statics/css/style.css" rel="stylesheet" type="text/css">
-
+     
     <script src="/dir_statics/js/jquery-3.6.0.min.js">/*jquery 최신버전 사용*/</script>
 
     <%
@@ -25,118 +25,189 @@
 
     <script>
 
-        function callAjax() {
-            $.ajax({ url        : '/json/employees', // 요청 할 주소 
-                         async      : true, // false 일 경우 동기 요청으로 변경
-                         type       : 'GET', // GET, PUT
-                         data       : { <%
-                                        console.log("검색항목 : ")
-                                        for (key in searchs) {
-                                            console.log("키 : " + key + ", 값 : " + searchs[key])
-                                            var search = searchs[key]
-                                            %> <%=search%> : $('input[name=<%=search%>]').val(),
-                                            <%
-                                        }
-                                        %>
-                                        currPage: $('input[name=hideCurrPage]').val()
-                                      }, // 전송할 데이터                
-                         dataType   : 'json', // xml, json, script, html                
-                         beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
-                         success    : function(jqXHR) { // 요청 완료 시        
-                            
-                            if(jqXHR.result.length === 0) {
-                                $('tbody#tbodyNodata').show();
-                                $('tbody#tbodyData').hide()
-                            } 
-                            else {
-                                $('tbody#tbodyNodata').hide()
-                                $('tbody#tbodyData').show();
-                            }
-                                
-                            $("#resultTable").find('tbody#tbodyData').children().remove ();
-                            
-                            $.each(jqXHR.result, function(idx, item){                                
-
-                                var $tr = $("<tr>",{});
-                                <%                                 
-                                for (key in fields) {                                    
-                                    var field = fields[key]
-                                    
-                                    if (tableInfo.fields[field].isListView==true) {
-                                        %> $tr.append( $("<td>", {text: item.<%=field%> }) );
-                                        <% 
-                                    }
-                                }
-                                %>
-                                $("#resultTable").find('tbody#tbodyData').append($tr);
-                            });
-
-                            //append("<td>"+item.<%=field%>+"&nbsp;</td>");
-
-                            var pageList  = jqXHR.pageInfo.currPagelist;
-                            var currPage  = jqXHR.pageInfo.currPage;
-                            var currBlock = jqXHR.pageInfo.currBlock;
-                            var lastBlock = jqXHR.pageInfo.lastBlock;
-                            var lastPage  = jqXHR.pageInfo.lastPage;
-                            
-                            $('td#tdPages').empty();
-                            if (jqXHR.pageInfo.prevBlockPage != 0) {
-                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevBlockPage}'>` ;
-                                var e = `</a>` ;
-
-                                $('td#tdPages').append(d+"<<"+e+"&nbsp;");
-                            }
-                            if (jqXHR.pageInfo.prevPage != 0) {
-                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevPage}'>` ;
-                                var e = `</a>` ;
-
-                                $('td#tdPages').append(d+"<"+e+"&nbsp;");
-                            }
-                            var first = 0;
-                            for(page in pageList) {
-                                var a = (pageList[page] == currPage) ?'[' :'' ;
-                                var b = (pageList[page] == currPage) ?']' :'' ;
-
-                                var c = (first > 0) ?', ' :'' ;
-
-                                var d = (pageList[page] != currPage) ?`<a  href='javascript:void(0)' class='aPage' targetPage='${pageList[page]}'>` :'' ;
-                                var e = (pageList[page] != currPage) ?`</a>` :'' ;
-
-                                $('td#tdPages').append(c+a+d+pageList[page]+e+b+"&nbsp;");
-                                first++;
-                            }
-                            if (jqXHR.pageInfo.nextPage != 0) {
-                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextPage}'>` ;
-                                var e = `</a>` ;
-
-                                $('td#tdPages').append(d+">"+e+"&nbsp;");
-                            }
-                            if (jqXHR.pageInfo.nextBlockPage != 0) {
-                                var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextBlockPage}'>` ;
-                                var e = `</a>` ;
-
-                                $('td#tdPages').append(d+">>"+e+"&nbsp;");
-                            }
-                         }, 
-                         error      : function(jqXHR) {}, // 요청 실패.                
-                         complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
-                                                          $('a.aPage').on('click', function(){               // 각자의 페이지를 클릭할때....
-                                                              $('input[name=hideCurrPage]').val($(this).attr('targetPage'));  // 새로운 페이지를 갱신하고..
-                                                              callAjax();                                         // 자기자신을 호출 
-                                                          })
-                                                      }
-                       })
-        }        
-
         $(document).ready(function(){
-            clickSearch(); // 리스트를 무조건 한번한다.
-            $('input#btnSearch').click(clickSearch);
+            callAjax();
         })
 
-        function clickSearch() {
-            $('input[name=hideCurrPage]').val(1);
+        function callAjax() {
+            $.ajax({url        : '/json/employee', // 요청 할 주소 
+                    async      : true, // false 일 경우 동기 요청으로 변경
+                    type       : 'GET', // GET, PUT
+                    data       : { <%
+                                console.log("검색항목 : ")
+                                for (key in searchs) {
+                                    console.log("키 : " + key + ", 값 : " + searchs[key])
+                                    var search = searchs[key]
+                                    %> <%=search%> : $('input[name=<%=search%>]').val(),
+                                    <%
+                                }
+                                %>
+                                currPage: $('input[name=hideCurrPage]').val()
+                                }, // 전송할 데이터                
+                    dataType   : 'json', // xml, json, script, html                
+                    beforeSend : function(jqXHR) {}, // 서버 요청 전 호출 되는 함수 return false; 일 경우 요청 중단                
+                    success    : function(jqXHR) { // 요청 완료 시        
+                                    
+                                    if(jqXHR.result.length === 0) {
+                                        $('tbody#tbodyNodata').show();
+                                        $('tbody#tbodyData').hide()
+                                    } 
+                                    else {
+                                        $('tbody#tbodyNodata').hide()
+                                        $('tbody#tbodyData').show();
+                                    }
+                                        
+                                    $("#resultTable").find('tbody#tbodyData').children().remove ();
+                                    
+                                    $.each(jqXHR.result, function(idx, item){                                
+
+                                        var $tr = $("<tr>",{});
+                                        <%                                 
+                                        for (key in fields) {                                    
+                                            var field = fields[key]
+                                            
+                                            if (tableInfo.fields[field].isListView==true) {
+                                                %> 
+                                                $tr.append(
+                                                    $("<td>").append(
+                                                        $("<a>", {
+                                                            href: 'javascript:void(0)',
+                                                            class: 'aView',
+                                                            pk_key: item.customerNumber,
+                                                            text: item.<%=field%>
+                                                        })
+                                                    )
+                                                );
+                                                
+                                                <% 
+                                            }
+                                        }
+                                        %>
+                                        $tr.append(
+                                            $("<td>").append(
+                                                $("<button>", {
+                                                    class: 'buttonEdit',
+                                                    pk_key: item.customerNumber,
+                                                    text: '수정'
+                                                }),
+                                                $("<button>", {
+                                                    class: 'buttonDelete',
+                                                    pk_key: item.customerNumber,
+                                                    text: '삭제'
+                                                })
+                                            )
+                                        );
+                                        $("#resultTable").find('tbody#tbodyData').append($tr);
+                                    });
+
+                                    //append("<td>"+item.<%=field%>+"&nbsp;</td>");
+
+                                    var pageList  = jqXHR.pageInfo.currPagelist;
+                                    var currPage  = jqXHR.pageInfo.currPage;
+                                    var currBlock = jqXHR.pageInfo.currBlock;
+                                    var lastBlock = jqXHR.pageInfo.lastBlock;
+                                    var lastPage  = jqXHR.pageInfo.lastPage;
+                                    
+                                    $('td#tdPages').empty();
+                                    if (jqXHR.pageInfo.prevBlockPage != 0) {
+                                        var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevBlockPage}'>` ;
+                                        var e = `</a>` ;
+
+                                        $('td#tdPages').append(d+"<<"+e+"&nbsp;");
+                                    }
+                                    else
+                                    {
+                                        $('td#tdPages').append("<<"+"&nbsp;");
+                                    }
+                                    if (jqXHR.pageInfo.prevPage != 0) {
+                                        var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.prevPage}'>` ;
+                                        var e = `</a>` ;
+
+                                        $('td#tdPages').append(d+"<"+e+"&nbsp;");
+                                    }
+                                    else
+                                    {
+                                        $('td#tdPages').append("<"+"&nbsp;");
+                                    }
+                                    var first = 0;
+                                    for(page in pageList) {
+                                        var a = (pageList[page] == currPage) ?'[' :'' ;
+                                        var b = (pageList[page] == currPage) ?']' :'' ;
+
+                                        var c = (first > 0) ?', ' :'' ;
+
+                                        var d = (pageList[page] != currPage) ?`<a  href='javascript:void(0)' class='aPage' targetPage='${pageList[page]}'>` :'' ;
+                                        var e = (pageList[page] != currPage) ?`</a>` :'' ;
+
+                                        $('td#tdPages').append(c+a+d+pageList[page]+e+b+"&nbsp;");
+                                        first++;
+                                    }
+                                    if (jqXHR.pageInfo.nextPage != 0) {
+                                        var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextPage}'>` ;
+                                        var e = `</a>` ;
+
+                                        $('td#tdPages').append(d+">"+e+"&nbsp;");
+                                    }
+                                    else
+                                    {
+                                        $('td#tdPages').append(">"+"&nbsp;");
+                                    }
+                                    if (jqXHR.pageInfo.nextBlockPage != 0) {
+                                        var d = `<a  href='javascript:void(0)' class='aPage' targetPage='${jqXHR.pageInfo.nextBlockPage}'>` ;
+                                        var e = `</a>` ;
+
+                                        $('td#tdPages').append(d+">>"+e+"&nbsp;");
+                                    }
+                                    else
+                                    {
+                                        $('td#tdPages').append(">>"+"&nbsp;");
+                                    }
+                                 }, 
+                    error      : function(jqXHR) {}, // 요청 실패.                
+                    complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                    $('a.aPage').on('click', function(){               // 각자의 페이지를 클릭할때....
+                                                        $('input[name=hideCurrPage]').val($(this).attr('targetPage'));  // 새로운 페이지를 갱신하고..
+                                                        callAjax();                                         // 자기자신을 호출 
+                                                    })
+                                                    $('a.aView').on('click', function(e){  
+                                                        window.location.href = '/form/customer/view/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
+                                                    })
+                                                    $('button.buttonEdit').on('click', function(e){ 
+                                                        window.location.href = '/form/customer/edit/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
+                                                    })
+                                                    $('button.buttonDelete').on('click', function(e){ 
+                                                        
+                                                        $.ajax({ url        : '/json/customer/' + $(this).attr('pk_key'), // 요청 할 주소 
+                                                                async      : false, // false 일 경우 동기 요청으로 변경
+                                                                type       : 'DELETE', // DELETE
+                                                                data       : { hideCurrPage: $('input[name=hideCurrPage]').val()},
+                                                                error      : function(jqXHR) {}, // 요청 실패.                
+                                                                complete   : function(jqXHR) { // 요청의 실패, 성공과 상관 없이 완료 될 경우 호출});
+                                                                                            // alert($(this).attr('pk_key')+'삭제가.....');
+                                                                                            //console.log(jqXHR.success);
+                                                                                            if (jqXHR.responseJSON.success) {
+                                                                                                alert(jqXHR.responseJSON.message); 
+                                                                                                callAjax(); 
+                                                                                            }; 
+                                                                                        }
+                                                        })
+                                                    })
+                                                }
+                })
+        }        
+
+
+        function clickSearch()  // '검색' 버튼
+        {
+            $('input[name=hideCurrPage]').val(1); // 검색은 1페이지 부터
             callAjax();
         };
+
+
+        function clickInsert() // '추가' 버튼
+        {
+            window.location.href = '/form/customer/insert';     
+        }      
 
     </script>
 </head>
@@ -150,12 +221,14 @@
             <th><%=tableInfo.searchs.jobTitle.nameKor%></th>
             <td><input name="jobTitle" type="text" maxLength="<%=tableInfo.searchs.jobTitle.maxLength%>"></td>
             
-            <td><input id="btnSearch" type="button" value="검색" /></td>
+            <td><input id="btnSearch" type="button" value="검색" onclick="clickSearch();" /></td>
         </tr>
     </table>
 
+    <p>
+
     <table id="resultTable" class="type02" style="width: 90%;">
-        <caption><%= tableInfo.tableNameKor %> 리스트</caption>
+        <caption><%= tableInfo.tableNameKor %> 리스트 <input id="btnInsert" type="button" onClick="clickInsert();" value="추가" /></caption>
         <thead>
             <tr style="height: 20px;">
                 <% 
@@ -172,8 +245,9 @@
                         <% 
                         colLength++
                     }
-                }
+                }                
                 %>
+                <th>수정</th> <% colLength++ %>
             </tr>
         </thead>
         <tbody id="tbodyNodata">
@@ -190,7 +264,7 @@
         </tfoot>
     </table>
     
-    <input name="hideCurrPage" type="hidden" value="1"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
+    <input name="hideCurrPage" type="hidden" value="<%=tableInfo.currPage%>"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
 
 </body>
 </html>
