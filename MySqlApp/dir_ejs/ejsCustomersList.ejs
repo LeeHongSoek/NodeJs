@@ -25,6 +25,10 @@
 
     <script>
 
+        $(document).ready(function(){
+            callAjax();
+        })
+
         function callAjax() {
             $.ajax({url        : '/json/customers', // 요청 할 주소 
                     async      : true, // false 일 경우 동기 요청으로 변경
@@ -150,10 +154,10 @@
                                                         callAjax();                                         // 자기자신을 호출 
                                                     })
                                                     $('a.aView').on('click', function(e){  
-                                                        window.location.href = '/form/customer/view/' + $(this).attr('pk_key');
+                                                        window.location.href = '/form/customer/view/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
                                                     })
                                                     $('button.buttonEdit').on('click', function(e){ 
-                                                        window.location.href = '/form/customer/edit/' + $(this).attr('pk_key');
+                                                        window.location.href = '/form/customer/edit/' + $(this).attr('pk_key')+'?currPage='+$('input[name=hideCurrPage]').val();
                                                     })
                                                     $('button.buttonDelete').on('click', function(e){ 
                                                         
@@ -176,18 +180,15 @@
                 })
         }        
 
-        $(document).ready(function(){
-            clickSearch(); // 리스트를 무조건 한번한다.
-            $('input#btnSearch').click(clickSearch);
-        })
 
-        function clickSearch() {
-            $('input[name=hideCurrPage]').val(1);
+        function clickSearch()  // '검색' 버튼
+        {
+            $('input[name=hideCurrPage]').val(1); // 검색은 1페이지 부터
             callAjax();
         };
 
 
-        function insert()
+        function clickInsert() // '추가' 버튼
         {
             window.location.href = '/form/customer/insert';     
         }      
@@ -211,7 +212,7 @@
     <p>
 
     <table id="resultTable" class="type02" style="width: 90%;">
-        <caption><%= tableInfo.tableNameKor %> 리스트 <input id="btnInsert" type="button" onClick="insert();" value="추가" /></caption>
+        <caption><%= tableInfo.tableNameKor %> 리스트 <input id="btnInsert" type="button" onClick="clickInsert();" value="추가" /></caption>
         <thead>
             <tr style="height: 20px;">
                 <% 
@@ -247,7 +248,7 @@
         </tfoot>
     </table>
     
-    <input name="hideCurrPage" type="hidden" value="1"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
+    <input name="hideCurrPage" type="hidden" value="<%=tableInfo.currPage%>"/> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
 
 </body>
 </html>

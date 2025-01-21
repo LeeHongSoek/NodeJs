@@ -17,12 +17,16 @@ router.get('/', (req, res) =>
 // 사용예 : >curl localhost:3000/
 router.get('/:ackType/:customerNumber', (req, res) =>  // edit, view, delete
 {    
+    const currPage = req.query.currPage || 1; // currPage 값이 없으면 기본값으로 1을 설정
+
     console.log(`요청 [${req.method}] (ejsCustomer) ${req.originalUrl}`)
     console.log(` req.params.ackType = ${req.params.ackType}`) // edit, view, delete
     console.log(` req.params.customerNumber = ${req.params.customerNumber}`)
+    console.log(` req.query.currPage = ${currPage}`);
 
     tableInfo.ackType = req.params.ackType // edit, view
     tableInfo.pk_value = req.params.customerNumber
+    tableInfo.currPage = currPage
 
     return res.render('ejsCustomer', { tableInfo })
 })

@@ -128,7 +128,7 @@
                         console.log(data);
                         alert('수정되었습니다.');
 
-                        window.location.href = '/form/customersList?refresh=true';
+                        window.location.href = '/form/customersList?currPage='+$('input[name=currPage]').val();
                     },
                     error: function(error) {
                         console.error('Error:', error);
@@ -221,6 +221,7 @@
             </div>
 
             <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
+            <input type="hidden" name="currPage" value=<%=tableInfo.currPage%> /> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
             
             <div class="button-container">
                <input type="button" class="save-button" value="저장">
@@ -282,6 +283,7 @@
             </div>
 
             <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
+            <input type="hidden" name="currPage" value=<%=tableInfo.currPage%> /> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
             
             <div class="button-container">
                 <input type="button" class="save-button" value="저장">

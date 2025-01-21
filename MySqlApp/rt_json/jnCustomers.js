@@ -106,7 +106,7 @@ router.use('/', (req, res) =>
 
     if (req.method === 'GET') // 페이지 단위로 리스트 읽기 ...
     {            
-        var currPage = 1 // 초기 페이지 (첫페이지 & 변동가능)
+        var currPage = req.query.currPage || 1; // currPage 값이 없으면 기본값으로 1을 설정 // 초기 페이지 (첫페이지 & 변동가능)
         var sqlLastSelectKeys = customersInfo.selectSqlKeys // select 문!!
         var sqlLastSelectList = customersInfo.selectSqlList // select 문!!
 
