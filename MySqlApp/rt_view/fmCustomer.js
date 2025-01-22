@@ -15,7 +15,6 @@ router.get('/', (req, res) =>
 
 })
 
-// 사용예 : >curl localhost:3000/
 router.get('/:ackType/:customerNumber', (req, res) =>  // edit, view, delete
 {    
     const currPage = req.query.currPage || 1; // currPage 값이 없으면 기본값으로 1을 설정
@@ -32,7 +31,6 @@ router.get('/:ackType/:customerNumber', (req, res) =>  // edit, view, delete
     return res.render('ejsCustomer', { tableInfo })
 })
 
-// 사용예 : >curl localhost:3000/
 router.get('/insert', (req, res) => // insert
 {    
     console.log(`요청 [${req.method}] (ejsCustomer) ${req.originalUrl}`)

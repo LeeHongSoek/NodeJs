@@ -4,9 +4,6 @@ const pool = require('../_MySqlDatabase/connection')
 const customersInfo = require('../rt_info/ifCustomers')
 const pageInfo = require('../rt_info/ifPage')
 
-
-// 사용예 : >curl -X GET localhost:3000/json/customers/?
-// 사용예 : >curl -X DELETE localhost:3000/json/customers/?
 router.use('/:customerNumber', (req, res) => 
 {    
     console.log(`요청 [${req.method}] [/:customerNumber] ${req.originalUrl}`)
@@ -90,10 +87,50 @@ router.use('/:customerNumber', (req, res) =>
     } // if (req.method === 'DELETE')  // 해당건 1 건 삭제 ..
 })
 
+/*
+2. **두 메서드가 함께 사용될 때의 동작**:
+   - `router.use()`로 정의된 미들웨어는 해당 경로로 들어오는 모든 요청에 대해 실행됩니다. 그 후, `router.get()`으로 정의된 GET 요청에 대한 핸들러가 실행됩니다. 
+   즉, GET 요청이 들어오면 먼저 `router.use()`의 미들웨어가 실행되고, 그 다음에 `router.get()`의 핸들러가 실행됩니다.
 
-// 사용예 : >curl -X GET localhost:3000/json/customersList
-// 사용예 : >curl -X PUT localhost:3000/json/
-// 사용예 : >curl -X POST localhost:3000/json/
+3. **예시 코드**:   
+   const express = require('express');
+   const router = express.Router();
+
+   // 모든 요청에 대해 실행되는 미들웨어
+   router.use('/', (req, res, next) => {
+       console.log('모든 요청에 대해 실행되는 미들웨어');
+       next(); // 다음 미들웨어 또는 라우터로 넘어감
+   });
+
+   // GET 요청에 대한 핸들러
+   router.get('/', (req, res) => {
+       res.send('GET 요청에 대한 응답');
+   });
+
+   module.exports = router;
+   
+
+4. **Express.js의 라우팅 개념**:
+   Express.js에서 라우팅은 클라이언트의 요청 URL과 HTTP 메서드에 따라 적절한 핸들러 함수를 호출하는 과정을 의미합니다. 
+   라우터는 특정 경로에 대한 요청을 처리하는 방법을 정의하며, 이를 통해 API 엔드포인트를 구성할 수 있습니다. 
+   라우팅은 웹 애플리케이션의 구조를 명확히 하고, 요청을 효율적으로 처리하는 데 중요한 역할을 합니다.
+
+이와 같이 `router.use()`와 `router.get()`을 함께 사용하면, 
+특정 경로에 대한 모든 요청을 처리하는 미들웨어와 특정 HTTP 메서드에 대한 요청을 처리하는 핸들러를 
+조합하여 유연한 라우팅을 구현할 수 있습니다.
+*/
+
+/**
+ *  @swagger
+ *  /json/customer:
+ *    get:
+ *      tags:
+ *      - product
+ *      description: ㅁㅁㅁ
+ *      responses:
+ *        200:
+ *          description: 성공적으로 제품을 조회했습니다.
+ */ 
 router.use('/', (req, res) => 
 {
     //var a = req.query.customerName;

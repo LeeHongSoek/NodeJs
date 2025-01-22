@@ -1,6 +1,12 @@
 const express = require('express') // npm install express ---save 
 
 app = express()
+
+// 샘플 API 라우트
+app.get('/api/hello', (req, res) => {
+    res.json({ message: 'Hello World!' });
+});
+
 app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
 // app.use(express.static(__dirname + '/html_ejs'))
 app.set('view engine','ejs');
@@ -9,7 +15,6 @@ app.engine('html', require('ejs').renderFile); // npm install ejs ---save
 
 const path = require('path')
 require('dotenv').config({path: path.join(__dirname, './env/server.env')}) // npm i dotenv
-
 
 // JSON 요청 본문 파싱 미들웨어
 app.use(express.json());
@@ -30,16 +35,13 @@ app.use('/form/customer', require('./rt_view/fmCustomer.js'))
 app.use('/json/employee', require('./rt_json/jnEmployee.js')) 
 app.use('/form/employee', require('./rt_view/fmEmployee.js')) 
 
-
 //
 // server = app.listen(3000) 웹서버 기동
 //
 const port = process.env.WEB_PORT || 3000
 server = app.listen(port, () => console.log(`Server Start Listening on port ${port}`))
 
-
 setTimeout(() => {  }, 500);
-
 
 var readline = require('readline')
 const { route } = require('../RestfulAPITDD/lec_07_app')
