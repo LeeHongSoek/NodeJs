@@ -1,5 +1,5 @@
 const express = require('express') // npm install express ---save 
-const { swaggerUi, specs } = require('./modules/swagger');
+const { swaggerUi, specs } = require('./modules/swagger.js');
 
 app = express()
 app.get('/', (req, res) => {
@@ -28,7 +28,7 @@ server = app.listen(port, () => console.log(`Server Start Listening on port ${po
 
 
 var readline = require('readline')
-const { route } = require('../RestfulAPITDD/lec_07_app')
+const { route } = require('../RestfulAPITDD/lec_07_app.js')
 var r = readline.createInterface({ input:process.stdin, output:process.stdout }) 
 r.question("종료를 하려면 Return키를 누르시요\n", function(answer) { 
     console.log('프로그램을 종료합니다!!', answer) 
