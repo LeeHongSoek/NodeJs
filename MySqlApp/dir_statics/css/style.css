@@ -102,6 +102,9 @@ table.type02 caption {
     padding: 8px;
 }
 
+table.type02 #tdPages {
+    text-align: center;
+}
 
 /* 다크 모드 스타일 */
 body.dark-mode {

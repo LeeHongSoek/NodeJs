@@ -8,10 +8,10 @@ const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/N
  *    get:
  *      tags:
  *      - product
- *      description: 모든 제품 조회
+ *      description: 이건 테스트 입니다.
  *      responses:
  *        200:
- *          description: 성공적으로 제품을 조회했습니다.
+ *          description: 성공적으로 테스트를 조회했습니다.
  */ 
 router.get('/', (req, res) => {
     console.log(`요청 [${req.method}] [/] ${req.originalUrl}`)
