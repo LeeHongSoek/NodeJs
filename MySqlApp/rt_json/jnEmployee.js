@@ -21,7 +21,20 @@ router.use('/', (req, res, next) => {
  *      tags:
  *      - product
  *      description: 페이지 단위로 리스트 읽기 ...
- *      responses:
+ *      parameters:
+ *        - in: query
+ *          name: lastName
+ *          schema:
+ *            type: string
+ *          required: false
+ *          description: 직원명_성
+ *        - in: query
+ *          name: jobTitle
+ *          schema:
+ *            type: string
+ *          required: false
+ *          description: 직군
+*      responses:
  *        200:
  *          description: (n) 개의 레코드를 리턴합니다.
  */ 
