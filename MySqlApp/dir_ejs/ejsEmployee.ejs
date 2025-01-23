@@ -21,7 +21,7 @@
 
     <script>
         function callAjax() {
-                $.ajax({ url        : '/json/employees/<%=tableInfo.pk_value%>', // 요청 할 주소 
+                $.ajax({ url        : '/json/employee/<%=tableInfo.pk_value%>', // 요청 할 주소 
                          async      : true, // false 일 경우 동기 요청으로 변경
                          type       : 'GET', // GET, PUT
                          data       : { 
@@ -35,15 +35,39 @@
                             const employee = jqXHR.result[0]; // 단일 레코드, 첫 번째 값에 접근
                     
                             // 데이터 바인딩
-                            $("#employee-number").text(employee.employeeNumber);
-                            $("#employee-name").text(employee.employeeName);
-                            $("#contact-name").text(`${employee.contactLastName} ${employee.contactFirstName}`);
-                            $("#phone").text(employee.phone);
-                            $("#address").text(employee.addressLine1);
-                            $("#city").text(employee.city);
-                            $("#state").text(employee.state || "N/A");
-                            $("#country").text(employee.country);
-                            $("#credit-limit").text(employee.creditLimit || "0");
+                            <%
+                            if (tableInfo.ackType == 'view')
+                            {
+                                %>
+                                $("#employee-number").text(employee.employeeNumber);
+                                $("#employee-last-name").text(employee.lastName);
+                                $("#employee-first-name").text(employee.firstName);
+                                $("#extension").text(employee.extension);
+                                $("#email").text(employee.email);
+                                $("#").text(employee.);
+                                $("#state").text(employee.state || "N/A");
+                                $("#country").text(employee.country);
+                                $("#credit-limit").text(employee.creditLimit || "0");
+                                <%
+                            }
+                            if (tableInfo.ackType == 'edit')
+                            {
+                                %>
+                                // 데이터 바인딩
+                                $("#employee-number").val(employee.employeeNumber).prop('readonly', true);
+                                $("#employee-last-name").val(employee.lastName);
+                                $("#employee-first-name").val(employee.firstName);
+                                $("#contact-name").val(`${employee.contactLastName} ${employee.contactFirstName}`);
+                                $("#phone").val(employee.phone);
+                                $("#email").val(employee.email);
+                                $("#").val(employee.);
+                                $("#state").val(employee.state || "N/A");
+                                $("#country").val(employee.country);
+                                $("#credit-limit").val(employee.creditLimit || "0");
+                                <%
+                            }
+                            %>    
+                            
 
                             // jqXHR의 result에 접근
                             const results = jqXHR.result;
@@ -55,8 +79,8 @@
                                 console.log("Contact Last Name: " + employee.contactLastName);
                                 console.log("Contact First Name: " + employee.contactFirstName);
                                 console.log("Phone: " + employee.phone);
-                                console.log("Address Line 1: " + employee.addressLine1);
-                                console.log("City: " + employee.city);
+                                console.log("Address Line email: " + employee.email);
+                                console.log(": " + employee.);
                                 console.log("State: " + employee.state);
                                 console.log("Country: " + employee.country);
                                 console.log("Credit Limit: " + employee.creditLimit);
@@ -71,7 +95,47 @@
                        })
         }
 
-        callAjax()
+        callAjax();
+
+        $(document).ready(function() {
+            $('#object-edit-form').on('submit', function(event) {
+                event.preventDefault(); // 폼의 기본 제출 동작을 막음
+
+                // 폼 데이터를 수집
+                var formData = new FormData(this);
+
+                // FormData를 Object로 변환
+                var data = {};
+                formData.forEach(function(value, key){
+                    data[key] = value;
+                });
+
+                // JSON으로 변환
+                var jsonData = JSON.stringify(data);
+
+                // 서버로 JSON 데이터를 POST 요청
+                $.ajax({
+                    url: '/json/employee',
+                    type: ($('#ackType').val()=='insert') ? 'POST' : 'PUT',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function(data) {
+                        console.log(data);
+                        alert('수정되었습니다.');
+
+                        window.location.href = '/form/employee?currPage='+$('input[name=currPage]').val();
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+
+            // 저장 버튼을 클릭했을 때의 이벤트 핸들러
+            $('.save-button').on('click', function(event) {
+                $('#object-edit-form').submit();
+            });
+        });
 
     </script>
 </head>
@@ -85,11 +149,12 @@
         <!-- 사원 정보를 표시할 영역 -->
         <div id="object-info">
             <p><strong>사원 번호:</strong> <b><span id="employee-number"></span></b>  </p>
-            <p><strong>사원명:</strong>       <span id="employee-name"></span>        </p>
+            <p><strong>사원명:</strong>       <span id="employee-first-name"></span> <span id="employee-last-name"></span> </p>
             <p><strong>연락 이름:</strong>    <span id="contact-name"></span>         </p>
-            <p><strong>전화번호:</strong>     <span id="phone"></span>                </p>
-            <p><strong>주소:</strong>         <span id="address"></span>              </p>
-            <p><strong>도시:</strong>         <span id="city"></span>                 </p>
+            <p><strong>확장:</strong>         <span id="extension"></span>                </p>
+            <p><strong>메일:</strong>         <span id="email"></span>              </p>
+
+            <p><strong>부서코드:</strong>     <span id=""></span>                 </p>
             <p><strong>주:</strong>           <span id="state"></span>                </p>
             <p><strong>국가:</strong>         <span id="country"></span>              </p>
             <p><strong>신용 한도:</strong>    <span id="credit-limit"></span>         </p>
@@ -99,20 +164,47 @@
     if (tableInfo.ackType == 'edit')
     {
         %>
-        <h1>사원 정보 수정</h1>
+        <h1>사원 정보 편집</h1>
 
-        <!-- 사원 정보를 표시할 영역 -->
-        <div id="object-info">
-            <p><strong>사원 번호:</strong> <b><span id="employee-number"></span></b>  </p>
-            <p><strong>사원명:</strong>       <span id="employee-name"></span>        </p>
-            <p><strong>연락 이름:</strong>    <span id="contact-name"></span>         </p>
-            <p><strong>전화번호:</strong>     <span id="phone"></span>                </p>
-            <p><strong>주소:</strong>         <span id="address"></span>              </p>
-            <p><strong>도시:</strong>         <span id="city"></span>                 </p>
-            <p><strong>주:</strong>           <span id="state"></span>                </p>
-            <p><strong>국가:</strong>         <span id="country"></span>              </p>
-            <p><strong>신용 한도:</strong>    <span id="credit-limit"></span>         </p>
-        </div>
+        <!-- 사원 정보 편집 폼 -->
+        <form id="object-edit-form">
+            <div class="form-group">
+                <label for="employeeName"><strong>사원명:</strong></label>
+                <input type="text" id="employeeName" name="employeeName" required>
+
+            </div>
+
+            <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
+            <input type="hidden" name="currPage" value=<%=tableInfo.currPage%> /> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
+            
+            <div class="button-container">
+               <input type="button" class="save-button" value="저장">
+               <input id="btnCancel" type="button" class="cancel-button" onclick="window.history.back();" value="취소" />
+           </div>
+        </form>
+        <%
+    }
+
+    if (tableInfo.ackType == 'insert') // 추가일때
+    {
+        %>
+        <h1>사원 정보 추가</h1>
+
+        <!-- 사원 정보 편집 폼 -->
+        <form id="object-edit-form">
+            <div class="form-group">
+                <label for="employeeName"><strong>사원명:</strong></label>
+                <input type="text" id="employeeName" name="employeeName" required>
+            </div>
+            <input type="hidden" name="ackType" id="ackType" value=<%=tableInfo.ackType%>>
+            <input type="hidden" name="currPage" value=<%=tableInfo.currPage%> /> <!-- 현재 페이지를 화면에서 기억하도록 한다.. -->
+            
+            <div class="button-container">
+                <input type="button" class="save-button" value="저장">
+                <input id="btnCancel" type="button" class="cancel-button" onclick="window.history.back();" value="취소" />
+            </div>
+        </form>
+
         <%
     }
     %>
