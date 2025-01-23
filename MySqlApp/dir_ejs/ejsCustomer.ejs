@@ -103,7 +103,7 @@
 
 
         $(document).ready(function() {
-            $('#customer-edit-form').on('submit', function(event) {
+            $('#object-edit-form').on('submit', function(event) {
                 event.preventDefault(); // 폼의 기본 제출 동작을 막음
 
                 // 폼 데이터를 수집
@@ -138,7 +138,7 @@
 
             // 저장 버튼을 클릭했을 때의 이벤트 핸들러
             $('.save-button').on('click', function(event) {
-                $('#customer-edit-form').submit();
+                $('#object-edit-form').submit();
             });
         });
     </script>
@@ -151,7 +151,7 @@
         <h1>고객 정보 보기</h1>
 
         <!-- 고객 정보를 표시할 영역 -->
-        <div id="customer-info">
+        <div id="object-info">
             <p><strong>고객 번호:</strong> <b><span id="customerNumber"></span></b>  </p>
             <p><strong>고객명:</strong>       <span id="customerName"></span>        </p>
             <p><strong>연락 이름:</strong>    <span id="contactNme"></span>         </p>
@@ -172,7 +172,7 @@
         <h1>고객 정보 편집</h1>
 
         <!-- 고객 정보 편집 폼 -->
-        <form id="customer-edit-form">
+        <form id="object-edit-form">
             <div class="form-group">
                 <label for="customerNumber"><strong>고객 번호:</strong></label>
                 <input type="text" id="customerNumber" name="customerNumber" readonly>
@@ -238,7 +238,7 @@
         <h1>고객 정보 추가</h1>
 
         <!-- 고객 정보 편집 폼 -->
-        <form id="customer-edit-form">
+        <form id="object-edit-form">
             <div class="form-group">
                 <label for="customerName"><strong>고객명:</strong></label>
                 <input type="text" id="customerName" name="customerName" required>

@@ -197,7 +197,7 @@ body.dark-mode table.type02 caption {
 /* 폼 스타일 */
 
 /* 추가: 폼 관련 스타일 */
-#customer-edit-form {
+#object-edit-form {
     max-width: 500px;
     margin: 20px auto;
     padding: 20px; /* 폼 패딩 */
@@ -281,7 +281,7 @@ body.dark-mode table.type02 caption {
 }
 
 /* 고객 정보 표시 영역 */
-#customer-info {
+#object-info {
     background-color: #2c2c2c; /* 어두운 배경 */
     padding: 20px;
     border-radius: 10px;
@@ -289,18 +289,18 @@ body.dark-mode table.type02 caption {
     margin-bottom: 20px;
 }
 
-#customer-info p {
+#object-info p {
     padding: 5px;
     color: #eee; /* 밝은 글자색 */
 }
 
-#customer-info strong {
+#object-info strong {
     font-weight: bold;
     color: #ddd; /* 조금 더 밝은 색 */
     display: inline-block;
     width: 100px;
 }
-#customer-info span {
+#object-info span {
     color: #fff; /* 밝은 글자색 */
 }
 
