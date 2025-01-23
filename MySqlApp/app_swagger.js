@@ -1,8 +1,16 @@
 const express = require('express') // npm install express ---save 
-const { swaggerUi, specs } = require('./modules/swagger.js');
+const { swaggerUi, specs } = require('./modules/swagger.js');  // npm install swagger-jsdoc swagger-ui-express redoc-express
+const redoc = require('redoc-express');
 
 app = express()
 
+
+
+// 로깅 미들웨어
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
 
 
 
@@ -26,6 +34,21 @@ app.get('/swagger.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(specs);
 });
+
+// Redoc 설정
+app.use('/redoc', redoc({
+    title: 'API Documentation',
+    specUrl: '/swagger.json',
+    redocOptions: {
+        theme: {
+            colors: {
+            primary: {
+                main: '#6EC5AB'
+            }
+            }
+      }
+    }
+}));
 
 
 
