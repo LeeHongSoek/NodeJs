@@ -11,7 +11,7 @@ const options = {
         host: 'smilemax.iptime.org:3200',
         basePath: '/'
     },
-    apis: ['./routes/*.js','./rt_json/*.js','./rt_view/*.js']
+    apis: ['./test/*.js','./rt_json/*.js','./rt_view/*.js']
 };
 
 const specs = swaggereJsdoc(options);
