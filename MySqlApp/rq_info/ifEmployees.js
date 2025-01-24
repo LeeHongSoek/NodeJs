@@ -8,6 +8,7 @@ const tableInfo = {
     searchs : {lastName:    { nameKor: '직원명_성', maxLength: 50 },
                jobTitle:    { nameKor: '직군',    maxLength: 50 }
               },
+              
     fields :  {employeeNumber: { pk:true,  nameKor: '직원번호',    isListView: false,   maxLength: 4 },
                lastName:       { pk:false, nameKor: '직원명_성',   isListView: true,    maxLength: 50 },
                firstName:      { pk:false, nameKor: '직원명_이름', isListView: true,    maxLength: 50 },
@@ -20,29 +21,14 @@ const tableInfo = {
     
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다..
 
-    selectSqlKeys : ` /* selectSqlKeys */
-                      SELECT employeeNumber
-                        FROM employees
-                       WHERE del = 'N' 
-                    `,
+    selectSqlKeys : `
+                     /* selectSqlKeys */
+                     SELECT employeeNumber
+                       FROM employees
+                      WHERE del = 'N'      `,
 
-    selectSqlList : ` /* selectSqlList */
-                  SELECT employeeNumber
-                       , lastName
-                       , firstName
-                       , extension
-                       , email
-                       , officeCode
-                       , reportsTo
-                       , jobTitle
-                    FROM employees 
-                   WHERE del = 'N' 
-               `,
- 
-    ackType : '', // edit, view, insert
-    pk_value : '',
-
-    selectSqlOne : ` /* selectSqlOne */
+    selectSqlList : ` 
+                     /* selectSqlList */
                      SELECT employeeNumber
                           , lastName
                           , firstName
@@ -52,15 +38,62 @@ const tableInfo = {
                           , reportsTo
                           , jobTitle
                        FROM employees 
-                      WHERE del = 'N'
-                        AND employeeNumber = ?   
-                  `,
+                      WHERE del = 'N'      `,
+ 
+    ackType : '', // edit, view, insert
+    pk_value : '',
 
-    deleteSqlOne : ` /* deleteSqlOne */
+    selectSqlOne : `
+                    /* selectSqlOne */
+                    SELECT employeeNumber
+                         , lastName
+                         , firstName
+                         , extension
+                         , email
+                         , officeCode
+                         , reportsTo
+                         , jobTitle
+                      FROM employees 
+                     WHERE del = 'N'
+                       AND employeeNumber = ?   `,
+
+    insertSqlOne : `  
+                    /* insertSqlOne */
+                    INSERT INTO employees ( employeeNumber
+                                          , lastName
+                                          , firstName
+                                          , extension
+                                          , email
+                                          , officeCode
+                                          , reportsTo
+                                          , jobTitle) 
+                                   VALUES ( ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?
+                                          , ?);            `,
+                                 
+    updateSqlOne : ` 
+                     /* updateSqlOne */
                      UPDATE employees 
-                        SET del = 'Y'   
-                      WHERE employeeNumber = ?   
-                  `
-}
+                        SET lastName  = ?
+                         , firstName  = ?
+                         , extension  = ?
+                         , email      = ?
+                         , officeCode = ?
+                         , reportsTo  = ?
+                         , jobTitle   = ? 
+                     WHERE employeeNumber = ?;`,
+
+    deleteSqlOne : `
+                    /* deleteSqlOne */
+                    UPDATE employees 
+                       SET del = 'Y'
+                     WHERE employeeNumber = ?; `,
+   
+ }
 
 module.exports = tableInfo

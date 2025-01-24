@@ -12,6 +12,15 @@ const connectInfo = {
     database        : process.env.DB_DATABASE,
     connectionLimit : 30
 }
+
+
+const mksp = (n) => {
+    if (n <= 0) {
+      return '';
+    }
+    return ' '.repeat(n);
+};
+
 const extractNumber = (input) => {
     try {
         const match = input.match(/\((\d+)\)/);
@@ -43,7 +52,7 @@ const pool = {
 
                 const tablePromises = showTables.map((table) => {
                     const tableName = table[`Tables_in_classicmodels`];
-                    const rtInfoDir = path.join(__dirname, '..', 'rq_info');
+                    const rtInfoDir = path.join(__dirname, '..', 'r__info');
                     const fileName = `if${tableName.charAt(0).toUpperCase() + tableName.slice(1)}._js`;
                     const filePath = path.join(rtInfoDir, fileName);
 
@@ -54,23 +63,41 @@ const pool = {
 
                             const primaryKeys = columns.filter((column) => column.Key === 'PRI');
                             const nonPrimaryColumns = columns.filter((col) => col.Key !== 'PRI' && col.Field !== 'del');
-                            const selectSqlKeys = `SELECT ${primaryKeys.length > 0 ? primaryKeys.map((pk) => pk.Field).join('\n, ') : '*'} 
-                                                     FROM ${tableName} 
-                                                    WHERE del = 'N';`;
-                            const selectSqlList = `SELECT ${columns.map((col) => col.Field).join('\n, ')}     
-                                                 FROM ${tableName} 
-                                                WHERE del = 'N' ;`;
-                            const selectSqlOne = `SELECT ${columns.map((col) => col.Field).join('\n, ')}   
-                                                    FROM ${tableName} 
-                                                   WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n AND ') : 'id = ?'};`;
-                            const insertSqlOne = `INSERT INTO ${tableName} (${columns.map((col) => col.Field).join('\n, ')}) 
-                                                       VALUES (${columns.map(() => '?').join('\n, ')});`;
-                            const updateSqlOne = `UPDATE ${tableName} 
-                                                     SET ${nonPrimaryColumns.map((col) => `${col.Field} = ?`).join('\n, ')} 
-                                                   WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n AND ') : 'id = ?'};`;
-                            const deleteSqlOne = `UPDATE ${tableName} 
-                                                     SET del = 'Y'
-                                                   WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n AND ') : 'id = ?'};`;
+                            
+                            const selectSqlKeys  = `
+                    /* selectSqlKeys */
+                    SELECT ${primaryKeys.length > 0 ? primaryKeys.map((pk) => pk.Field).join('\n'+mksp(25)+', ') : '*'} 
+                      FROM ${tableName} 
+                     WHERE del = 'N' ;    `;
+
+                            const selectSqlList  = `
+                    /* selectSqlList */
+                    SELECT ${columns.map((col) => col.Field).join('\n'+mksp(25)+', ')}     
+                      FROM ${tableName} 
+                     WHERE del = 'N'  ;    `;
+
+                            const selectSqlOne   = `
+                    /* selectSqlOne */
+                    SELECT ${columns.map((col) => col.Field).join('\n'+mksp(25)+', ')}   
+                      FROM ${tableName} 
+                     WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n'+mksp(23)+'AND ') : 'id = ?'} ;    `;
+
+                            const insertSqlOne   = `
+                    /* insertSqlOne */
+                    INSERT INTO ${tableName} ( ${columns.map((col) => col.Field).join('\n'+mksp(tableName.length+33)+', ')} \n${mksp(tableName.length+33)}) 
+                       ${mksp(tableName.length)}   VALUES ( ${columns.map(() => '?').join('\n'+mksp(tableName.length+33)+', ')} \n${mksp(tableName.length+33)}) ;    `;
+
+                            const updateSqlOne   = `
+                    /* updateSqlOne */
+                    UPDATE ${tableName} 
+                       SET ${nonPrimaryColumns.map((col) => `${col.Field} = ?`).join('\n'+mksp(25)+', ')} 
+                     WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n'+mksp(23)+'AND ') : 'id = ?'} ;    `;
+
+                            const deleteSqlOne   = `
+                    /* deleteSqlOne */
+                    UPDATE ${tableName} 
+                       SET del = 'Y'
+                     WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n'+mksp(23)+'AND ') : 'id = ?'} ;    `;
 
                             console.log('Generated SQL Statements:', { selectSqlKeys, selectSqlList, selectSqlOne, insertSqlOne, updateSqlOne, deleteSqlOne });
 
@@ -78,21 +105,32 @@ const pool = {
                                 fs.mkdirSync(rtInfoDir);
                             }
 
-                            fs.writeFileSync(filePath, '');
+                            fs.writeFileSync(filePath, `const getTotalRowSql = require('./getTotalRowSql')\n`);
+                            fs.appendFileSync(filePath, `\n`);
                             fs.appendFileSync(filePath, `const tableInfo = {\n`);
                             fs.appendFileSync(filePath, `    tableName: '${tableName}',\n`);
+                            fs.appendFileSync(filePath, `    tableNameKor : '',\n`);
+                            fs.appendFileSync(filePath, `\n`);
+                            fs.appendFileSync(filePath, `    searchs : {\n`);
+                            fs.appendFileSync(filePath, `                     :   { nameKor: '',    maxLength:  }, \n`);
+                            fs.appendFileSync(filePath, `              },\n\n`);
                             fs.appendFileSync(filePath, `    fields: {\n`);
+                            let maxleng = 0
+                            columns.forEach((col) => {
+                                
+                                maxleng = (maxleng < col.Field.length) ? col.Field.length : maxleng ;
+                            });
                             columns.forEach((col) => {
                                 const size = extractNumber(col.Type);
-                                fs.appendFileSync(filePath, `        ${col.Field}: { pk: ${col.Key === 'PRI'}, maxLength: ${size} },\n`);
+                                fs.appendFileSync(filePath, `${mksp(7)} ${col.Field} ${mksp(maxleng-col.Field.length)}: { pk: ${col.Key === 'PRI'?'true ':'false'},  nameKor: '',  maxLength: ${size} },\n`);
                             });
-                            fs.appendFileSync(filePath, `    },\n`);
-                            fs.appendFileSync(filePath, `    selectSqlKeys: \`${selectSqlKeys}\`,\n`);
-                            fs.appendFileSync(filePath, `    selectSqlList: \`${selectSqlList}\`,\n`);
-                            fs.appendFileSync(filePath, `    selectSqlOne: \`${selectSqlOne}\`,\n`);
-                            fs.appendFileSync(filePath, `    insertSqlOne: \`${insertSqlOne}\`,\n`);
-                            fs.appendFileSync(filePath, `    updateSqlOne: \`${updateSqlOne}\`,\n`);
-                            fs.appendFileSync(filePath, `    deleteSqlOne: \`${deleteSqlOne}\`,\n`);
+                            fs.appendFileSync(filePath, `    },\n\n`);
+                            fs.appendFileSync(filePath, `    selectSqlKeys: \`${selectSqlKeys}\`,\n\n`);
+                            fs.appendFileSync(filePath, `    selectSqlList: \`${selectSqlList}\`,\n\n`);
+                            fs.appendFileSync(filePath, `    selectSqlOne: \`${selectSqlOne}\`,\n\n`);
+                            fs.appendFileSync(filePath, `    insertSqlOne: \`${insertSqlOne}\`,\n\n`);
+                            fs.appendFileSync(filePath, `    updateSqlOne: \`${updateSqlOne}\`,\n\n`);
+                            fs.appendFileSync(filePath, `    deleteSqlOne: \`${deleteSqlOne}\`,\n\n`);
                             fs.appendFileSync(filePath, `};\n`);
                             fs.appendFileSync(filePath, `module.exports = tableInfo;\n`);
 
@@ -126,58 +164,3 @@ module.exports = pool
 
 
 
-
-
-
-
- /**
-
-
-
-// 이 코드는 Node.js 환경에서 MySQL 데이터베이스와 연결하여 여러 쿼리를 체이닝 방식으로 실행하는 예제입니다
-const mysql = require('mysql2/promise');
-
-async function runQueries() {
-  let connection;
-  try {
-    connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'user',
-      password: 'password',
-      database: 'testdb'
-    });
-
-    await connection.execute('CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255))')
-      .then(() => connection.execute('INSERT INTO users (name) VALUES (?)', ['John Doe']))
-      .then(() => connection.execute('INSERT INTO users (name) VALUES (?)', ['Jane Doe']))
-      .then(() => connection.query('SELECT * FROM users'))
-      .then(([rows]) => {
-        console.log('Users:');
-        console.log(rows);
-      })
-      .then(() => connection.execute('UPDATE users SET name = ? WHERE id = ?', ['John Smith', 1]))
-      .then(() => connection.query('SELECT * FROM users WHERE id = ?', [1]))
-      .then(([rows]) => {
-        console.log('Updated user:');
-        console.log(rows[0]);
-      })
-      .then(() => connection.execute('DELETE FROM users WHERE id = ?', [2]))
-      .then(() => connection.query('SELECT COUNT(*) as count FROM users'))
-      .then(([rows]) => {
-        console.log('Remaining users count:');
-        console.log(rows[0].count);
-      });
-
-  } catch (error) {
-    console.error('Error occurred:', error);
-  } finally {
-    if (connection) {
-      await connection.end();
-    }
-  }
-}
-
-runQueries();
-
-             * 
-             */

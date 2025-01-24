@@ -8,6 +8,7 @@ const tableInfo = {
     searchs : {customerName:    { nameKor: '상호명',    maxLength: 50 },
                contactLastName: { nameKor: '담당자_성', maxLength: 50 }
               },
+              
     fields :  {customerNumber:         { pk:true,    nameKor: '고객번호',         isListView: false,   maxLength: 4 },
                customerName:           { pk:false,   nameKor: '상호명',           isListView: true,    maxLength: 50 },
                contactLastName:        { pk:false,   nameKor: '담당자_성',        isListView: true,    maxLength: 50 },
@@ -25,34 +26,14 @@ const tableInfo = {
     
     getTotalRowSql, // 전체 레코드수를 구하는 쿼리를 만드는 함수는 공통으로 뽑았다.. // require('./getTotalRowSql')
 
-    selectSqlKeys : ` /* selectSqlKeys */
-                      SELECT customerNumber
-                        FROM customers
-                       WHERE del = 'N' 
-                    `,
+    selectSqlKeys : `
+                     /* selectSqlKeys */
+                     SELECT customerNumber
+                       FROM customers
+                      WHERE del = 'N'      `,
 
-    selectSqlList : `         /* selectSqlList */
-                SELECT customerNumber
-                     , customerName
-                     , contactLastName
-                     , contactFirstName
-                     , phone
-                     , addressLine1
-                     , addressLine2
-                     , city
-                     , state
-                     , postalCode
-                     , country
-                     , salesRepEmployeeNumber
-                     , creditLimit
-                  FROM customers
-                 WHERE del = 'N' 
-             `,
-             
-    ackType : '', // edit, view, insert
-    pk_value : '',
-
-    selectSqlOne : `           /* selectSqlOne */
+    selectSqlList : `             
+                     /* selectSqlList */
                      SELECT customerNumber
                           , customerName
                           , contactLastName
@@ -67,64 +48,84 @@ const tableInfo = {
                           , salesRepEmployeeNumber
                           , creditLimit
                        FROM customers
-                      WHERE del = 'N'
-                        AND customerNumber = ?  
-                  `,
+                      WHERE del = 'N'              `,
+             
+    ackType : '', // edit, view, insert
+    pk_value : '',
 
-    deleteSqlOne : ` /* deleteSqlOne */
+    selectSqlOne : `
+                    /* selectSqlOne */
+                    SELECT customerNumber
+                         , customerName
+                         , contactLastName
+                         , contactFirstName
+                         , phone
+                         , addressLine1
+                         , addressLine2
+                         , city
+                         , state
+                         , postalCode
+                         , country
+                         , salesRepEmployeeNumber
+                         , creditLimit
+                      FROM customers
+                     WHERE del = 'N'
+                       AND customerNumber = ?      `,
+
+    insertSqlOne : `  
+                     /* insertSqlOne */
+                     INSERT INTO customers ( customerNumber
+                                           , customerName
+                                           , contactLastName
+                                           , contactFirstName
+                                           , phone
+                                           , addressLine1
+                                           , addressLine2
+                                           , city
+                                           , state
+                                           , postalCode
+                                           , country
+                                           , salesRepEmployeeNumber
+                                           , creditLimit
+                                           ) 
+                                    VALUES ( (SELECT COALESCE(MAX(customerNumber), 1000) + 1 FROM (SELECT customerNumber FROM customers order by customerNumber desc limit 1) AS temp)
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           , ?
+                                           )           `,
+                               
+     updateSqlOne : ` 
+                    /* updateSqlOne */
                     UPDATE customers 
-                       SET del = 'Y'   
-                     WHERE customerNumber = ?  
-                  `,
+                       SET customerName           = ?
+                         , contactLastName        = ?
+                         , contactFirstName       = ?
+                         , phone                  = ?
+                         , addressLine1           = ?
+                         , addressLine2           = ?
+                         , city                   = ?
+                         , state                  = ?
+                         , postalCode             = ?
+                         , country                = ?
+                         , salesRepEmployeeNumber = ?
+                         , creditLimit            = ?
+                     WHERE customerNumber = ?          `,
 
-    updateSqlOne : ` /* updateSqlOne */
-                       UPDATE customers 
-                          SET customerName           = ?
-                            , contactLastName        = ?
-                            , contactFirstName       = ?
-                            , phone                  = ?
-                            , addressLine1           = ?
-                            , addressLine2           = ?
-                            , city                   = ?
-                            , state                  = ?
-                            , postalCode             = ?
-                            , country                = ?
-                            , salesRepEmployeeNumber = ?
-                            , creditLimit            = ?
-                        WHERE customerNumber = ?  
-                   `,
-
-    insertSqlOne : ` /* insertSqlOne */
-                    INSERT INTO customers ( customerNumber
-                                          , customerName
-                                          , contactLastName
-                                          , contactFirstName
-                                          , phone
-                                          , addressLine1
-                                          , addressLine2
-                                          , city
-                                          , state
-                                          , postalCode
-                                          , country
-                                          , salesRepEmployeeNumber
-                                          , creditLimit
-                                          ) 
-                                   VALUES ( (SELECT COALESCE(MAX(customerNumber), 1000) + 1 FROM (SELECT customerNumber FROM customers order by customerNumber desc limit 1) AS temp)
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          , ?
-                                          ) 
-                   `
-                              
-}
+     deleteSqlOne : ` 
+                     /* deleteSqlOne */
+                     UPDATE customers 
+                        SET del = 'Y'   
+                      WHERE customerNumber = ?  `,
+ 
+ }
 
 module.exports = tableInfo
