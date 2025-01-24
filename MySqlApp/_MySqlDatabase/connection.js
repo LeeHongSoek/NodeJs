@@ -58,6 +58,7 @@ const pool = {
 
                     return connect.execute(`SHOW COLUMNS FROM ${tableName}`)
                         .then(([rawColumns]) => {
+                            const maxLen = rawColumns.reduce((max, col) => Math.max(max, col.Field.length), 0);
                             const columns = rawColumns.filter((col) => col.Field !== 'del');
                             console.log(`Columns for ${tableName}:`, columns);
 
@@ -90,7 +91,7 @@ const pool = {
                             const updateSqlOne   = `
                     /* updateSqlOne */
                     UPDATE ${tableName} 
-                       SET ${nonPrimaryColumns.map((col) => `${col.Field} = ?`).join('\n'+mksp(25)+', ')} 
+                       SET ${nonPrimaryColumns.map((col) => `${col.Field+mksp(maxLen-col.Field.length) } = ?`).join('\n'+mksp(25)+', ')} 
                      WHERE ${primaryKeys.length > 0 ? primaryKeys.map((pk) => `${pk.Field} = ?`).join('\n'+mksp(23)+'AND ') : 'id = ?'} ;    `;
 
                             const deleteSqlOne   = `
@@ -105,21 +106,15 @@ const pool = {
                                 fs.mkdirSync(rtInfoDir);
                             }
 
-                            fs.writeFileSync(filePath, `const getTotalRowSql = require('./getTotalRowSql')\n`);
-                            fs.appendFileSync(filePath, `\n`);
-                            fs.appendFileSync(filePath, `const tableInfo = {\n`);
+                            fs.writeFileSync(filePath, `const getTotalRowSql = require('./getTotalRowSql')\n\n`);
+                            fs.appendFileSync(filePath, `const tableInfo = {\n\n`);
                             fs.appendFileSync(filePath, `    tableName: '${tableName}',\n`);
-                            fs.appendFileSync(filePath, `    tableNameKor : '',\n`);
-                            fs.appendFileSync(filePath, `\n`);
+                            fs.appendFileSync(filePath, `    tableNameKor : '',\n\n`);
                             fs.appendFileSync(filePath, `    searchs : {\n`);
                             fs.appendFileSync(filePath, `                     :   { nameKor: '',    maxLength:  }, \n`);
                             fs.appendFileSync(filePath, `              },\n\n`);
                             fs.appendFileSync(filePath, `    fields: {\n`);
-                            let maxleng = 0
-                            columns.forEach((col) => {
-                                
-                                maxleng = (maxleng < col.Field.length) ? col.Field.length : maxleng ;
-                            });
+                            const maxleng = columns.reduce((max, col) => Math.max(max, col.Field.length), 0);
                             columns.forEach((col) => {
                                 const size = extractNumber(col.Type);
                                 fs.appendFileSync(filePath, `${mksp(7)} ${col.Field} ${mksp(maxleng-col.Field.length)}: { pk: ${col.Key === 'PRI'?'true ':'false'},  nameKor: '',  maxLength: ${size} },\n`);
