@@ -80,14 +80,14 @@ const tableInfo = {
     updateSqlOne: `
                     /* updateSqlOne */
                     UPDATE products 
-                       SET productName = ?
-                         , productLine = ?
-                         , productScale = ?
-                         , productVendor = ?
+                       SET productName        = ?
+                         , productLine        = ?
+                         , productScale       = ?
+                         , productVendor      = ?
                          , productDescription = ?
-                         , quantityInStock = ?
-                         , buyPrice = ?
-                         , MSRP = ? 
+                         , quantityInStock    = ?
+                         , buyPrice           = ?
+                         , MSRP               = ? 
                      WHERE productCode = ?;`,
 
     deleteSqlOne: `

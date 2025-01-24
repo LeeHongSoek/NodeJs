@@ -66,7 +66,8 @@ const tableInfo = {
                                           , email
                                           , officeCode
                                           , reportsTo
-                                          , jobTitle) 
+                                          , jobTitle
+                                          ) 
                                    VALUES ( ?
                                           , ?
                                           , ?
@@ -74,18 +75,19 @@ const tableInfo = {
                                           , ?
                                           , ?
                                           , ?
-                                          , ?);            `,
+                                          , ?
+                                          ) ;            `,
                                  
     updateSqlOne : ` 
                      /* updateSqlOne */
                      UPDATE employees 
-                        SET lastName  = ?
-                         , firstName  = ?
-                         , extension  = ?
-                         , email      = ?
-                         , officeCode = ?
-                         , reportsTo  = ?
-                         , jobTitle   = ? 
+                        SET lastName   = ?
+                          , firstName  = ?
+                          , extension  = ?
+                          , email      = ?
+                          , officeCode = ?
+                          , reportsTo  = ?
+                          , jobTitle   = ? 
                      WHERE employeeNumber = ?;`,
 
     deleteSqlOne : `
