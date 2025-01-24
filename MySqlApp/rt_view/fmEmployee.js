@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router({mergeParams: true}) // https://velog.io/@nittre/Node.jsExpress-라우터에-req.params-값-넘기기
-const tableInfo = require('../rt_info/ifEmployees')
+const tableInfo = require('../rq_info/ifEmployees')
 
 router.get('/', (req, res) => {
     const currPage = req.query.currPage || 1; // currPage 값이 없으면 기본값으로 1을 설정

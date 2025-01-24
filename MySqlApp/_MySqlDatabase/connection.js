@@ -43,7 +43,7 @@ const pool = {
 
                 const tablePromises = showTables.map((table) => {
                     const tableName = table[`Tables_in_classicmodels`];
-                    const rtInfoDir = path.join(__dirname, '..', 'rt_info');
+                    const rtInfoDir = path.join(__dirname, '..', 'rq_info');
                     const fileName = `if${tableName.charAt(0).toUpperCase() + tableName.slice(1)}._js`;
                     const filePath = path.join(rtInfoDir, fileName);
 
