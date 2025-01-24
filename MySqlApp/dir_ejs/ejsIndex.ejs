@@ -10,13 +10,19 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="/Hello">[GET] /Hello</a><p>
+    <h2>[테스트]</h2>
+    <a href="/Hello">[GET] /Hello</a> app.get('/Hello', (req, res) => { res.json({ message: 'Hello World!' }) }) // json 테스트 <p>
+    <a href="/test">[GET] /test</a> app.use('/test', require('./test')) <p>
+
+    <h2>[restful 관련 swagger]</h2>    
     <a href="/api-docs">[GET] /api-docs</a><p>        
     <a href="/swagger.json">[GET] /swagger.json</a><p>    
     <a href="/redoc">[GET] /redoc</a><p>    
         
-    <a href="/makeJsFile">[GET] /makeJsFile</a><p>
+    <h2>[js 파일만들기]</h2>    
+    <a href="/makeJsFile">[GET] /makeJsFile</a> require('./_MySqlDatabase/connection').connectRunQueries() <p>
 
+    <h2>[실무]</h2>
     <a href="/form/customer">[GET] /form/customer</a><p>
     <a href="/form/employee">[GET] /form/employee</a><p>
 </body>

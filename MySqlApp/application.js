@@ -18,7 +18,7 @@ app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
 
 app.get('/',(req, res) => {  return res.render('ejsIndex') }) // ejsIndex 화면 
 app.get('/Hello', (req, res) => { res.json({ message: 'Hello World!' }) }) // json 테스트
-app.use('/test', require('./test/index.js')) 
+app.use('/test', require('./test')) 
 app.get('/makeJsFile',(req, res) => {  require('./_MySqlDatabase/connection').connectRunQueries() }) // 테이블에서 정보파일 생성
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs)); // swagger
