@@ -4,37 +4,29 @@ const redoc = require('redoc-express');
 
 app = express()
 
-
-// 로깅 미들웨어
-app.use((req, res, next) => {
+app.use((req, res, next) => { // 로깅 미들웨어
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
 });
 
 app.use(express.json()); // JSON 요청 본문 파싱 미들웨어
-app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
 
 app.set('view engine','ejs');
 app.set('views', __dirname+'/dir_ejs');
 app.engine('html', require('ejs').renderFile); // npm install ejs ---save
+app.use('/dir_statics', express.static(__dirname + '/dir_statics'))
 
 app.get('/',(req, res) => {  return res.render('ejsIndex') }) // ejsIndex 화면 
 app.get('/Hello', (req, res) => { res.json({ message: 'Hello World!' }) }) // json 테스트
 app.use('/test', require('./test/index.js')) 
 app.get('/makeJsFile',(req, res) => {  require('./_MySqlDatabase/connection').connectRunQueries() }) // 테이블에서 정보파일 생성
 
-
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// OpenAPI 사양 JSON 제공
-app.get('/swagger.json', (req, res) => {
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs)); // swagger
+app.get('/swagger.json', (req, res) => { // OpenAPI 사양 JSON 제공
     res.setHeader('Content-Type', 'application/json');
     res.send(specs);
 });
-
-// Redoc 설정
-app.use('/redoc', redoc({
+app.use('/redoc', redoc({ // Redoc 설정
     title: 'API Documentation',
     specUrl: '/swagger.json',
     redocOptions: {
