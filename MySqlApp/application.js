@@ -1,8 +1,11 @@
 const express = require('express') // npm install express ---save 
+const cors = require('cors');
 const { swaggerUi, specs } = require('./modules/swagger.js'); // npm install swagger-jsdoc swagger-ui-express redoc-express
 const redoc = require('redoc-express');
 
 app = express()
+// 모든 출처 허용
+app.use(cors());
 
 app.use((req, res, next) => { // 로깅 미들웨어
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
