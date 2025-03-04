@@ -76,8 +76,8 @@ router.get('/', (req, res) => {
         })
         .then(([counters]) => {                                
             pageInfo.totalRow = counters[0].total_row // 총 레코드 수
-
-            sqlLastSelectList += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
+            if (pageInfo.currPage != -1)
+                sqlLastSelectList += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 
             console.info(`실행 : ${sqlLastSelectList}`)
             return connect.execute(sqlLastSelectList)

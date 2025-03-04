@@ -59,17 +59,26 @@ const pageInfo = {
     set lastBlock(value) {
         this._lastBlock = value
     },
-     
+    
     // 현재 페이지
     _currPage: 1,     
     get currPage() { // 현재 페이지를  범위 보정후 리턴한다.
-        if (this._currPage < 1) this._currPage = 1 // 반드시 0 보다 커야함.
-
-        this._lastPage = parseInt(this._totalRow / this._rowPerPage)
-        this._lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
-        if (_lastPage < this._currPage){
-            this._currPage = this._lastPage
+        if (this._currPage == -1) // -1 이면 전체출력을 의미하도록 한다.
+        {
+            this._currPage = -1
+            this._lastPage = -1
         }
+        else
+        {
+            if (this._currPage < 1) this._currPage = 1 // 반드시 0 보다 커야함.
+
+            this._lastPage = parseInt(this._totalRow / this._rowPerPage)
+            this._lastPage += (this._totalRow % this._rowPerPage > 0) ? 1 : 0 
+            if (this._lastPage < this._currPage){
+                this._currPage = this._lastPage
+            }
+        }
+
         return this._currPage
     },
     set currPage(value) {

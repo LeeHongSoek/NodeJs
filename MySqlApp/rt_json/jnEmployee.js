@@ -56,9 +56,9 @@ router.get('/', (req, res) => {
                 var fieldName = keysQuery[keyQuery]
                 console.log("req.json 키=값 : " + fieldName + "=" + req.query[fieldName])
     
-                if (fieldName==='currPage') {
+                if (fieldName==='currPage') {  
                     currPage = eval(req.query[fieldName])              
-                    pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)  
+                    pageInfo.currPage = currPage // 초기 페이지 (첫페이지 & 변동가능)   
                 }
     
                 var keysSearchs = Object.keys(employeesInfo.searchs); // 등록된 검색 키를 대조해서 쿼리를 구성한다.
@@ -76,8 +76,8 @@ router.get('/', (req, res) => {
         })
         .then(([counters]) => {                                
             pageInfo.totalRow = counters[0].total_row // 총 레코드 수
-
-            sqlLastSelectList += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
+            if (pageInfo.currPage != -1)
+                sqlLastSelectList += ` limit ${pageInfo.limitFrom}, ${pageInfo.limitTo} ` // 페이지에 해당하는 limit가 구성되었다...
 
             console.info(`실행 : ${sqlLastSelectList}`)
             return connect.execute(sqlLastSelectList)
@@ -135,23 +135,23 @@ router.put('/', (req, res) => {
             connect = connection
 
             console.info(`실행 : ${connect.format(employeesInfo.updateSqlOne, [ formData.lastName
-                                                                              , formData.firstName
-                                                                              , formData.extension
-                                                                              , formData.email
-                                                                              , formData.officeCode
-                                                                              , formData.reportsTo
-                                                                              , formData.jobTitle
-                                                                              , formData.employeeNumber
-                                                                              ])}`)
+                                                                                , formData.firstName
+                                                                                , formData.extension
+                                                                                , formData.email
+                                                                                , formData.officeCode
+                                                                                , formData.reportsTo
+                                                                                , formData.jobTitle
+                                                                                , formData.employeeNumber
+                                                                                ])}`)
             return connect.execute(employeesInfo.updateSqlOne, [ formData.lastName
-                                                               , formData.firstName
-                                                               , formData.extension
-                                                               , formData.email
-                                                               , formData.officeCode
-                                                               , formData.reportsTo
-                                                               , formData.jobTitle
-                                                               , formData.employeeNumber
-                                                               ]) 
+                                                                , formData.firstName
+                                                                , formData.extension
+                                                                , formData.email
+                                                                , formData.officeCode
+                                                                , formData.reportsTo
+                                                                , formData.jobTitle
+                                                                , formData.employeeNumber
+                                                                ]) 
         })
         .then(([result]) => {
             connect.end()
