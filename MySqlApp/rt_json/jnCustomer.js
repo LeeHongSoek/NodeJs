@@ -414,5 +414,4 @@ router.delete('/:customerNumber', (req, res, next) => {
         });
 })
 
-
 module.exports = router
